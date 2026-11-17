@@ -23,3 +23,17 @@ Klickbarer Demonstrator für Alltags-Gamification in Familien. Gedacht für Gesp
 
 Einmalig GitHub Pages aktivieren: Repository → Settings → Pages → „Deploy from a branch“ → `main` / `/ (root)`.
 Danach erreichbar unter `https://ninaundben.github.io/LifeQuest/`.
+
+## Familien-App (`/app/`)
+
+Lauffähige App für echte Familien: `https://ninaundben.github.io/LifeQuest/app/`
+
+- Mehrere Familien möglich: Jede Familie gründet sich selbst und hat einen eigenen, abgeschotteten Datenbereich. Nur gekoppelte Geräte haben Zugriff.
+- Familien-Onboarding mit gemeinsamen Familienzielen, Familien-Pakt, Belohnungen
+- Agenda, Familienziele, Missionen mit Prüfung: selbst, Peer, Eltern oder QR-Code (ausdruckbar)
+- Editierbare Missions-Bibliothek und eigene Ausstattung (z. B. Teleskop)
+- Technik: eine HTML-Datei ohne Build-Schritt, Firebase (anonyme Anmeldung + Firestore), Geräte-Kopplung per Einmal-Code bzw. QR
+
+Einrichtung: Firebase-Konfiguration in `app/index.html` bei `FB_CONFIG` eintragen und den Inhalt von `app/firestore.rules` in der Firebase-Konsole unter Firestore → Regeln einfügen. Ohne Konfiguration läuft die App im Testmodus (nur lokal, Profilwechsel oben).
+
+Bibliotheken in `app/vendor/`: Firebase JS SDK 10.12.2 (compat), jsQR 1.4.0 (Apache-2.0), qrcode-generator 1.4.4 (MIT).

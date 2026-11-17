@@ -1,0 +1,1265 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LifeQuest</title>
+<meta name="description" content="LifeQuest – Alltags-Abenteuer für die ganze Familie.">
+<meta name="theme-color" content="#5B3BFF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="LifeQuest">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:none;background:none;padding:0}
+svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+body{font-family:var(--font);font-size:var(--fs);color:var(--text);background:var(--bg);min-height:100vh;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.head{font-family:var(--font-head)}
+
+body[data-tier="kid"]{--font:'Baloo 2',ui-rounded,system-ui,sans-serif;--font-head:'Baloo 2',ui-rounded,sans-serif;--fs:17px;
+  --bg:#FFF7E8;--card:#FFFFFF;--card2:#FFF1D6;--text:#1D3557;--muted:#6B7A99;--line:rgba(29,53,87,.08);
+  --accent:#FF4F87;--accent-d:#D93169;--grad:linear-gradient(135deg,#FF7AA8,#FF4F87);--on-accent:#fff;--accent2:#FFC530;
+  --hero:linear-gradient(170deg,#4FC3FF 0%,#7FD8FF 55%,#BDEEFF 100%);--hero-text:#123056;--chip:rgba(255,255,255,.75);--chip-text:#123056;
+  --r:26px;--r-sm:18px;--shadow:0 6px 0 rgba(29,53,87,.07),0 12px 28px rgba(29,53,87,.08);--btn-sh:0 5px 0 var(--accent-d);
+  --ring:#FF4F87;--ring-track:rgba(255,255,255,.7);--done:#22C55E;--track:#FFE4A8}
+body[data-tier="tween"]{--font:'Nunito',system-ui,sans-serif;--font-head:'Fredoka',system-ui,sans-serif;--fs:16px;
+  --bg:#F3F0FF;--card:#FFFFFF;--card2:#F1ECFF;--text:#1C1640;--muted:#6E6896;--line:rgba(108,76,255,.10);
+  --accent:#6C4CFF;--accent-d:#4B2FD6;--grad:linear-gradient(135deg,#7C5CFF,#C04CFF);--on-accent:#fff;--accent2:#FFB020;
+  --hero:linear-gradient(135deg,#5B3BFF 0%,#A64CFF 55%,#FF6FA3 100%);--hero-text:#fff;--chip:rgba(255,255,255,.18);--chip-text:#fff;
+  --r:22px;--r-sm:14px;--shadow:0 10px 30px rgba(76,48,200,.12);--btn-sh:0 4px 0 var(--accent-d);
+  --ring:#FFD34D;--ring-track:rgba(255,255,255,.25);--done:#14C9A0;--track:#E6E0FF}
+body[data-tier="teen"]{--font:'Inter',system-ui,sans-serif;--font-head:'Space Grotesk',system-ui,sans-serif;--fs:15px;
+  --bg:#08080A;--card:rgba(255,255,255,.045);--card2:rgba(255,255,255,.07);--text:#F4F4F5;--muted:#8B8B95;--line:rgba(255,255,255,.08);
+  --accent:#C8FF3D;--accent-d:#A6D82A;--grad:linear-gradient(120deg,#C8FF3D,#5CE1FF);--on-accent:#08080A;--accent2:#5CE1FF;
+  --hero:radial-gradient(120% 90% at 0% 0%,rgba(200,255,61,.28),transparent 55%),radial-gradient(90% 80% at 100% 0%,rgba(92,225,255,.25),transparent 55%),#0B0B0E;--hero-text:#fff;--chip:rgba(255,255,255,.06);--chip-text:#fff;
+  --r:18px;--r-sm:12px;--shadow:none;--btn-sh:none;--ring:#C8FF3D;--ring-track:rgba(255,255,255,.1);--done:#C8FF3D;--track:rgba(255,255,255,.08)}
+body[data-tier="parent"]{--font:'Plus Jakarta Sans',system-ui,sans-serif;--font-head:'Plus Jakarta Sans',system-ui,sans-serif;--fs:15px;
+  --bg:#F5F4F0;--card:#FFFFFF;--card2:#F2F1EC;--text:#17212F;--muted:#6A7383;--line:#E8E6E0;
+  --accent:#2E6BFF;--accent-d:#1F51CC;--grad:linear-gradient(135deg,#3B7BFF,#2E5BFF);--on-accent:#fff;--accent2:#14B87A;
+  --hero:linear-gradient(140deg,#14263F 0%,#1F4A8A 60%,#2E6BFF 100%);--hero-text:#fff;--chip:rgba(255,255,255,.12);--chip-text:#fff;
+  --r:20px;--r-sm:12px;--shadow:0 1px 2px rgba(23,33,47,.04),0 8px 24px rgba(23,33,47,.06);--btn-sh:none;
+  --ring:#5EE0A8;--ring-track:rgba(255,255,255,.2);--done:#14B87A;--track:#ECEAE4}
+
+.app{max-width:460px;margin:0 auto;padding:0 16px 130px;position:relative;padding-top:env(safe-area-inset-top)}
+.row{display:flex;align-items:center;gap:10px}
+.between{justify-content:space-between}
+.grow{flex:1;min-width:0}
+.muted{color:var(--muted)}
+.small{font-size:.82em}
+.card{background:var(--card);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.sec{display:flex;align-items:baseline;justify-content:space-between;margin:26px 2px 12px;gap:10px}
+.sec h2{margin:0;font-size:1.22em;font-weight:700}
+body[data-tier="kid"] .sec h2{font-size:1.32em;font-weight:800}
+.sec .more{font-size:.82em;font-weight:800;color:var(--accent);white-space:nowrap}
+.note{font-size:.76em;color:var(--muted);line-height:1.45}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--grad);color:var(--on-accent);border-radius:999px;padding:13px 20px;font-weight:800;box-shadow:var(--btn-sh);font-family:var(--font-head);transition:transform .08s}
+body[data-tier="teen"] .btn{font-weight:600}
+.btn:active{transform:translateY(3px);box-shadow:none}
+.btn.soft{background:var(--card2);color:var(--text);box-shadow:none}
+.btn.danger{background:#FEE4E2;color:#B42318;box-shadow:none}
+.btn.block{width:100%}
+.btn.sm{padding:8px 14px;font-size:.85em}
+.btn[disabled]{opacity:.4;pointer-events:none}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:999px;background:var(--card2);font-size:.72em;font-weight:700;color:var(--muted);white-space:nowrap}
+.chip.peer{background:color-mix(in srgb,#8B5CF6 14%,transparent);color:#8B5CF6}
+.chip.par{background:color-mix(in srgb,#F59E0B 16%,transparent);color:#B87300}
+.chip.qr{background:color-mix(in srgb,#16A34A 15%,transparent);color:#15803D}
+body[data-tier="teen"] .chip.peer{color:#C4B5FD} body[data-tier="teen"] .chip.par{color:#FBBF24} body[data-tier="teen"] .chip.qr{color:#86EFAC}
+.back{display:inline-flex;align-items:center;gap:6px;font-weight:800;color:var(--accent);margin:18px 0 4px}
+
+/* Hero */
+.hero{position:relative;margin:0 -16px;padding:18px 18px 22px;background:var(--hero);color:var(--hero-text);border-radius:0 0 34px 34px;overflow:hidden}
+.hero .deco{position:absolute;inset:0;pointer-events:none;width:100%;height:100%}
+.hero>*:not(.deco){position:relative}
+.hello{font-family:var(--font-head);font-size:1.6em;font-weight:800;line-height:1.05}
+body[data-tier="teen"] .hello{letter-spacing:-.03em;font-weight:700}
+.hsub{font-size:.85em;opacity:.8;margin-top:3px;font-weight:600}
+.avring{position:relative;width:66px;height:66px;flex:none}
+.avring svg{position:absolute;inset:0}
+.avring .av{position:absolute;inset:7px;border-radius:50%;display:grid;place-items:center;font-size:30px;background:rgba(255,255,255,.92);font-weight:800;color:#1D3557}
+body[data-tier="teen"] .avring .av{background:#18181C;color:var(--accent);font-family:var(--font-head);font-size:22px}
+.avring .lv{position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);background:var(--accent2);color:#1D1D1D;font:800 10px/1 Inter,sans-serif;padding:3px 6px;border-radius:99px;border:2px solid #fff;white-space:nowrap}
+.coin{display:flex;align-items:center;gap:6px;background:var(--chip);color:var(--chip-text);border-radius:999px;padding:8px 12px;font-weight:800;font-family:var(--font-head)}
+.hstats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.hs{background:var(--chip);color:var(--chip-text);border-radius:var(--r-sm);padding:10px 12px}
+body[data-tier="teen"] .hs,body[data-tier="teen"] .coin{border:1px solid var(--line)}
+.hs b{display:block;font-family:var(--font-head);font-size:1.3em;font-weight:800;line-height:1.1}
+.hs span{font-size:.7em;font-weight:700;opacity:.8}
+.iconbtn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--chip);color:var(--chip-text)}
+.banner{display:flex;gap:12px;align-items:center;width:100%;text-align:left;padding:14px;border-radius:var(--r);margin-top:14px;box-shadow:var(--shadow);border:1px solid var(--line);background:var(--card)}
+.banner .bi{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-size:24px;flex:none;background:var(--card2)}
+.banner.peer{background:linear-gradient(135deg,color-mix(in srgb,#8B5CF6 12%,var(--card)),var(--card));border-color:color-mix(in srgb,#8B5CF6 25%,transparent)}
+.banner.gold{background:linear-gradient(135deg,color-mix(in srgb,#FFB020 18%,var(--card)),var(--card));border-color:color-mix(in srgb,#FFB020 35%,transparent)}
+
+/* Quests */
+.tod{display:flex;align-items:center;gap:8px;margin:18px 4px 8px;font-weight:800;font-size:.85em;color:var(--muted);font-family:var(--font-head)}
+.tod::after{content:"";flex:1;height:1px;background:var(--line)}
+.quest{display:flex;align-items:center;gap:12px;padding:12px;background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);border:1px solid var(--line)}
+.quest+.quest{margin-top:10px}
+.tile{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;font-size:24px;flex:none;background:linear-gradient(140deg,var(--c1),var(--c2));box-shadow:inset 0 -3px 0 rgba(0,0,0,.12)}
+body[data-tier="kid"] .tile{width:56px;height:56px;font-size:30px;border-radius:20px}
+body[data-tier="teen"] .tile{background:color-mix(in srgb,var(--c1) 14%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c1) 45%,transparent);font-size:20px;width:44px;height:44px;border-radius:12px}
+body[data-tier="parent"] .tile{width:44px;height:44px;font-size:21px;border-radius:14px;box-shadow:none}
+.qt{font-weight:800;line-height:1.2;font-family:var(--font-head)}
+body[data-tier="teen"] .qt,body[data-tier="parent"] .qt{font-weight:600}
+.qs{display:flex;flex-wrap:wrap;gap:5px;align-items:center;font-size:.76em;color:var(--muted);margin-top:4px}
+.xp{font:800 .72em/1 var(--font-head);color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent);padding:5px 7px;border-radius:99px;flex:none}
+.qbtn{width:42px;height:42px;border-radius:50%;flex:none;display:grid;place-items:center;border:3px solid var(--track);color:transparent;font-weight:900;font-size:18px}
+body[data-tier="kid"] .qbtn{width:48px;height:48px;font-size:22px}
+body[data-tier="teen"] .qbtn{border-width:2px;border-radius:12px;width:38px;height:38px}
+.qbtn.scan{border:none;background:#16A34A;color:#fff;flex-direction:column;line-height:1}
+.qbtn.scan svg{width:18px;height:18px}
+.qbtn.scan span{font:800 9px/1 Inter,sans-serif;margin-top:1px}
+.quest.done{opacity:.6}
+.quest.done .qt{text-decoration:line-through;text-decoration-thickness:2px}
+.quest.done .qbtn{background:var(--done);border-color:var(--done);color:#fff}
+body[data-tier="teen"] .quest.done .qbtn{color:#08080A}
+.quest.pending .qbtn{border-style:dashed;border-color:#8B5CF6;color:#8B5CF6;font-size:16px}
+.who{display:flex;gap:4px;margin-top:8px}
+.who span{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:14px;background:var(--card2);font-weight:800;opacity:.45;border:2px solid transparent}
+.who span.ok{opacity:1;border-color:var(--done)}
+.who span.pend{opacity:1;border-color:#8B5CF6;border-style:dashed}
+
+/* Streak */
+.streak .days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:14px}
+.streak .d{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:.7em;font-weight:800;color:var(--muted)}
+.streak .d i{width:100%;aspect-ratio:1;max-width:40px;border-radius:50%;background:var(--track);display:grid;place-items:center;font-style:normal;font-size:16px}
+body[data-tier="teen"] .streak .d i{border-radius:10px}
+.streak .d.on i{background:linear-gradient(140deg,#FFB020,#FF5A36);box-shadow:0 3px 0 #D9461F}
+body[data-tier="teen"] .streak .d.on i{background:var(--accent);box-shadow:none;color:#08080A}
+.streak .d.today i{outline:3px solid var(--accent);outline-offset:2px}
+.bigflame{font-size:40px;line-height:1}
+
+/* Familie */
+.fam{display:flex;gap:12px;overflow-x:auto;padding:4px 2px 6px;scrollbar-width:none}
+.fam::-webkit-scrollbar{display:none}
+.fam .p{display:flex;flex-direction:column;align-items:center;gap:4px;flex:none;width:62px;font-size:.72em;font-weight:700;text-align:center}
+.rg{position:relative;width:54px;height:54px;flex:none}
+.rg svg{position:absolute;inset:0}
+.rg .av{position:absolute;inset:6px;border-radius:50%;display:grid;place-items:center;font-size:22px;background:var(--card2);font-weight:800}
+body[data-tier="teen"] .rg .av{background:#18181C;font-size:15px;color:var(--accent)}
+.pact{border-radius:var(--r);padding:20px;background:linear-gradient(160deg,#FFF6DA,#FFE7B0);color:#3A2A00;box-shadow:var(--shadow);border:2px solid #F2C45A;position:relative}
+.pact h3{margin:0 0 6px;font-size:1.3em}
+.pact ul{margin:10px 0;padding-left:20px;line-height:1.6}
+.pact .sig{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.pact .sig span{background:rgba(255,255,255,.7);padding:5px 10px;border-radius:99px;font-weight:800;font-size:.8em}
+.pact .sig span.no{opacity:.45}
+
+/* Missionen */
+.search{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:999px;padding:12px 16px;box-shadow:var(--shadow);border:1px solid var(--line);margin-top:16px}
+.search input{border:none;outline:none;background:none;flex:1;min-width:0}
+.bubbles{display:flex;gap:12px;overflow-x:auto;padding:14px 2px 4px;scrollbar-width:none}
+.bubbles::-webkit-scrollbar{display:none}
+.bub{display:flex;flex-direction:column;align-items:center;gap:6px;flex:none;width:66px;font-size:.7em;font-weight:800;text-align:center;line-height:1.1}
+.bub .o{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;font-size:27px;background:linear-gradient(150deg,var(--c),color-mix(in srgb,var(--c) 50%,#fff));box-shadow:0 4px 0 color-mix(in srgb,var(--c) 70%,#000)}
+body[data-tier="teen"] .bub .o{background:color-mix(in srgb,var(--c) 12%,#111);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 50%,transparent)}
+.bub.on .o{outline:3px solid var(--accent);outline-offset:3px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.carousel{display:flex;gap:12px;overflow-x:auto;padding:2px 2px 8px;scrollbar-width:none}
+.carousel::-webkit-scrollbar{display:none}
+.mtile{position:relative;display:flex;flex-direction:column;text-align:left;border-radius:var(--r);padding:14px;min-height:164px;color:#fff;overflow:hidden;background:linear-gradient(155deg,var(--c),color-mix(in srgb,var(--c) 55%,#fff));box-shadow:0 6px 0 color-mix(in srgb,var(--c) 75%,#000),0 12px 22px rgba(0,0,0,.08)}
+body[data-tier="tween"] .mtile,body[data-tier="parent"] .mtile{box-shadow:0 10px 24px color-mix(in srgb,var(--c) 30%,transparent)}
+body[data-tier="teen"] .mtile{background:radial-gradient(120% 90% at 100% 0%,color-mix(in srgb,var(--c) 35%,transparent),transparent 60%),#141418;border:1px solid var(--line);box-shadow:none;color:var(--text)}
+.carousel .mtile{flex:none;width:196px}
+.mtile .me{font-size:44px;line-height:1;margin-bottom:auto}
+.mtile .mt{font-family:var(--font-head);font-weight:800;font-size:1.02em;line-height:1.15;margin-top:12px}
+.mtile .mm{font-size:.72em;font-weight:700;opacity:.88;margin-top:4px}
+.mtile .rib{position:absolute;top:10px;right:10px;background:rgba(255,255,255,.92);color:#111;border-radius:99px;padding:3px 8px;font:800 10px/1.2 Inter,sans-serif}
+body[data-tier="teen"] .mtile .rib{background:var(--accent);color:#08080A}
+.mtile.locked{filter:grayscale(.85);opacity:.6}
+.mtile.add{background:var(--card);color:var(--muted);border:2px dashed var(--line);box-shadow:none;align-items:center;justify-content:center;text-align:center;font-weight:800}
+.mprog{height:7px;background:rgba(255,255,255,.35);border-radius:9px;overflow:hidden;margin-top:10px}
+.mprog i{display:block;height:100%;background:#fff;border-radius:9px}
+body[data-tier="teen"] .mprog i{background:var(--accent)}
+
+/* Listen */
+.li{display:flex;align-items:center;gap:12px;padding:12px 0}
+.li+.li{border-top:1px solid var(--line)}
+.li .av{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:22px;background:var(--card2);flex:none;font-weight:800}
+.menu{display:flex;align-items:center;gap:14px;padding:14px 4px;width:100%;text-align:left;font-weight:700}
+.menu+.menu{border-top:1px solid var(--line)}
+.menu .mi{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:20px;background:var(--card2)}
+.x{width:36px;height:36px;border-radius:50%;background:var(--card2);display:grid;place-items:center;flex:none;font-size:14px}
+
+/* Shop */
+.wallet{border-radius:var(--r);padding:18px;background:linear-gradient(135deg,#FFB020,#FF7A1A);color:#fff;box-shadow:var(--shadow);display:flex;align-items:center;gap:14px;margin-top:16px}
+body[data-tier="teen"] .wallet{background:#141418;border:1px solid var(--line);color:var(--text)}
+.wallet .big{font-family:var(--font-head);font-size:2.2em;font-weight:800;line-height:1}
+.rw{display:flex;flex-direction:column;align-items:flex-start;background:var(--card);border-radius:var(--r);padding:14px;box-shadow:var(--shadow);border:1px solid var(--line);min-height:170px}
+.rw .re{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;font-size:30px;background:var(--card2);margin-bottom:10px}
+.rw .rt{font-family:var(--font-head);font-weight:800;line-height:1.15;flex:1}
+.rw .price{margin-top:10px;width:100%}
+.medals{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.medal{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;font-size:.72em;font-weight:700;line-height:1.15}
+.medal .md{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;font-size:28px;background:linear-gradient(140deg,#FFD866,#FFA51F);box-shadow:0 4px 0 #D98A0A,inset 0 0 0 4px rgba(255,255,255,.4)}
+body[data-tier="teen"] .medal .md{background:#18181C;box-shadow:inset 0 0 0 1px var(--accent);font-size:22px}
+.tagwrap{display:flex;flex-wrap:wrap;gap:8px}
+.tg{padding:8px 12px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-weight:700;font-size:.85em;box-shadow:var(--shadow)}
+.tg.on{background:var(--grad);color:var(--on-accent);border-color:transparent}
+.tg.add{border-style:dashed;box-shadow:none;color:var(--muted)}
+
+/* Nav */
+.nav{position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);width:calc(100% - 24px);max-width:436px;z-index:50;display:grid;grid-template-columns:repeat(5,1fr);align-items:end;padding:8px 6px;background:var(--card);border-radius:28px;border:1px solid var(--line);box-shadow:0 12px 34px rgba(0,0,0,.14)}
+body[data-tier="teen"] .nav{background:rgba(20,20,24,.9);backdrop-filter:blur(16px)}
+.nav button{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--muted);font-size:10.5px;font-weight:800;padding:4px 0;position:relative}
+.nav button .ic{font-size:24px;line-height:1;height:24px;display:grid;place-items:center}
+.nav button.on{color:var(--accent)}
+.nav .badge{position:absolute;top:-2px;left:calc(50% + 6px);background:#FF3B30;color:#fff;border-radius:99px;font:800 9.5px/1 Inter;padding:3px 5px}
+.nav .scanbtn{margin-top:-30px}
+.nav .scanbtn .sc{width:62px;height:62px;border-radius:50%;background:var(--grad);color:var(--on-accent);display:grid;place-items:center;box-shadow:0 8px 20px color-mix(in srgb,var(--accent) 45%,transparent),0 0 0 6px var(--bg)}
+.nav .scanbtn .sc svg{width:28px;height:28px}
+
+/* Sheets */
+.scrim{position:fixed;inset:0;background:rgba(8,10,20,.5);z-index:80;display:flex;align-items:flex-end;justify-content:center;animation:fade .2s}
+.sheet{background:var(--bg);color:var(--text);width:100%;max-width:460px;max-height:92vh;overflow:auto;border-radius:30px 30px 0 0;padding:10px 16px calc(24px + env(safe-area-inset-bottom));animation:up .28s cubic-bezier(.2,.9,.3,1.1)}
+body[data-tier="teen"] .sheet{background:#0E0E11;border:1px solid var(--line)}
+.sheet .grab{width:44px;height:5px;border-radius:9px;background:var(--line);margin:0 auto 12px}
+body[data-tier="teen"] .sheet .grab{background:rgba(255,255,255,.2)}
+.sheet h1{font-size:1.45em;margin:4px 0 6px;line-height:1.1}
+.mhead{margin:-10px -16px 16px;padding:26px 18px 22px;color:#fff;background:linear-gradient(150deg,var(--c),color-mix(in srgb,var(--c) 55%,#fff));border-radius:30px 30px 26px 26px;position:relative;overflow:hidden}
+body[data-tier="teen"] .mhead{background:radial-gradient(110% 100% at 100% 0%,color-mix(in srgb,var(--c) 40%,transparent),transparent 60%),#141418;color:var(--text)}
+.mhead .me{position:absolute;right:10px;bottom:-14px;font-size:96px;line-height:1;transform:rotate(-6deg)}
+.mhead h1{font-size:1.6em;max-width:70%}
+.mhead .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;max-width:72%}
+.mhead .meta span{background:rgba(255,255,255,.22);padding:4px 9px;border-radius:99px;font-size:.72em;font-weight:800}
+@keyframes up{from{transform:translateY(60px);opacity:.4}}
+@keyframes fade{from{opacity:0}}
+.path{position:relative;padding-left:4px}
+.path::before{content:"";position:absolute;left:25px;top:24px;bottom:24px;width:4px;border-radius:4px;background:var(--track)}
+.node{display:flex;gap:14px;align-items:center;padding:8px 0;position:relative}
+.node .nd{width:46px;height:46px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:800;background:var(--card);border:3px solid var(--track);font-family:var(--font-head);z-index:1}
+.node.done .nd{background:var(--done);border-color:var(--done);color:#fff}
+.node.cur .nd{border-color:var(--accent);color:var(--accent);box-shadow:0 0 0 6px color-mix(in srgb,var(--accent) 18%,transparent)}
+.node .nt{font-weight:700;line-height:1.25}
+.node.done .nt{color:var(--muted);text-decoration:line-through}
+
+/* Formulare */
+.f{display:block;font-size:.78em;font-weight:800;color:var(--muted);margin:16px 2px 7px;font-family:var(--font-head)}
+.in{width:100%;padding:13px 14px;border-radius:14px;border:2px solid var(--line);background:var(--card);outline:none;font-weight:600}
+textarea.in{min-height:70px;resize:vertical}
+.in:focus{border-color:var(--accent)}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{flex:1;min-width:64px;padding:10px 6px;border-radius:14px;background:var(--card);border:2px solid var(--line);font-weight:700;font-size:.82em;display:flex;flex-direction:column;align-items:center;gap:2px}
+.seg button .se{font-size:20px}
+.seg button.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--card))}
+.seg.days button{min-width:0;padding:10px 0;border-radius:12px}
+.seg.days button.on{background:var(--grad);color:var(--on-accent);border-color:transparent}
+.seg.mini button{min-width:0;flex:none;width:40px;padding:6px 0;border-radius:10px;font-size:16px}
+.hint{font-size:.8em;color:var(--muted);background:var(--card2);border-radius:14px;padding:11px 13px;margin-top:12px;line-height:1.45}
+.toggle{display:flex;align-items:flex-start;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.toggle:last-child{border-bottom:none}
+.sw{width:48px;height:28px;border-radius:99px;background:var(--track);position:relative;flex:none;margin-top:2px}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.sw.on{background:var(--accent)}
+.sw.on::after{left:23px}
+.stepedit{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px;margin-top:8px}
+.stepedit .row{gap:6px}
+.emo-in{width:64px;text-align:center;font-size:24px;padding:8px}
+.code{font:700 2.1rem/1 'Space Grotesk',monospace;letter-spacing:.14em;text-align:center;padding:14px;border-radius:14px;border:2px dashed var(--line);background:var(--card);user-select:all}
+.qrbox{background:#fff;border-radius:16px;padding:12px;width:220px;margin:0 auto}
+.qrbox svg{display:block;width:100%;height:auto}
+
+/* Scanner */
+.scanner{position:fixed;inset:0;z-index:90;background:#000;color:#fff;display:flex;flex-direction:column;align-items:center;font-family:Inter,system-ui,sans-serif}
+.scanner video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.scanner .top{position:relative;width:100%;max-width:460px;display:flex;align-items:center;justify-content:space-between;padding:calc(16px + env(safe-area-inset-top)) 16px 16px}
+.scanner .top button{width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.45);color:#fff;font-size:18px}
+.finder{position:relative;width:250px;height:250px;margin-top:4vh;border-radius:20px;box-shadow:0 0 0 2000px rgba(0,0,0,.45)}
+.finder .cn{position:absolute;width:44px;height:44px;border:5px solid #fff}
+.finder .cn.a{top:0;left:0;border-right:none;border-bottom:none;border-radius:16px 0 0 0}
+.finder .cn.b{top:0;right:0;border-left:none;border-bottom:none;border-radius:0 16px 0 0}
+.finder .cn.c{bottom:0;left:0;border-right:none;border-top:none;border-radius:0 0 0 16px}
+.finder .cn.d{bottom:0;right:0;border-left:none;border-top:none;border-radius:0 0 16px 0}
+.finder .laser{position:absolute;left:14px;right:14px;height:3px;background:#C8FF3D;box-shadow:0 0 14px 3px rgba(200,255,61,.7);border-radius:3px;animation:laser 2s ease-in-out infinite}
+@keyframes laser{0%,100%{top:16px}50%{top:230px}}
+.scanner .sh{position:relative;margin-top:22px;font-weight:600;font-size:14px;text-align:center;padding:0 30px;text-shadow:0 1px 4px #000}
+.scanner .manual{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:460px;background:rgba(18,18,22,.94);border-radius:24px 24px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom))}
+.scanner .manual input{width:100%;padding:12px;border-radius:12px;border:1px solid #333;background:#1c1c22;color:#fff;font:600 16px Inter;letter-spacing:.08em;text-transform:uppercase}
+
+.toast{position:fixed;left:50%;bottom:120px;transform:translateX(-50%);background:#14161C;color:#fff;padding:11px 18px;border-radius:999px;font-weight:800;font-size:14px;z-index:100;max-width:88vw;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.25);font-family:var(--font-head);animation:fade .2s}
+body[data-tier="kid"] .toast,body[data-tier="tween"] .toast{background:var(--grad)}
+body[data-tier="teen"] .toast{background:var(--accent);color:#08080A}
+.confetti{position:fixed;top:-14px;width:10px;height:14px;z-index:99;pointer-events:none;border-radius:3px;animation:fall 1.4s ease-in forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(760deg)}}
+.onb{padding-top:calc(20px + env(safe-area-inset-top))}
+.stepbar{display:flex;gap:6px;margin-bottom:22px}
+.stepbar i{flex:1;height:6px;border-radius:9px;background:var(--track)}
+.stepbar i.on{background:var(--grad)}
+.onb h1{font-size:1.85em;line-height:1.08;margin:0 0 8px}
+.onbfoot{position:sticky;bottom:0;display:flex;gap:10px;padding:16px 0 calc(16px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 30%);margin-top:20px}
+.bigchoice{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.bigchoice button{background:var(--card);border:3px solid var(--line);border-radius:var(--r);padding:22px 10px;font-weight:800;box-shadow:var(--shadow);font-family:var(--font-head);font-size:1.05em}
+.bigchoice button .e{font-size:46px;display:block;margin-bottom:8px}
+.avgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.avgrid button{aspect-ratio:1;border-radius:50%;background:var(--card);border:3px solid var(--line);font-size:24px;font-weight:800}
+.avgrid button.on{border-color:var(--accent);transform:scale(1.08)}
+.gsug{display:flex;gap:12px;align-items:center;width:100%;text-align:left;padding:12px;background:var(--card);border:2px solid var(--line);border-radius:var(--r-sm);box-shadow:var(--shadow)}
+.gsug+.gsug{margin-top:8px}
+.gsug.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 7%,var(--card))}
+.gsug .ck{width:28px;height:28px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;flex:none;color:transparent;font-weight:900}
+.gsug.on .ck{background:var(--accent);border-color:var(--accent);color:#fff}
+.local{background:#FFF4CC;color:#5B4500;font:600 12px/1.3 Inter,sans-serif;padding:8px 12px;display:flex;gap:8px;align-items:center;overflow-x:auto;white-space:nowrap}
+.local button{background:#fff;border-radius:99px;padding:4px 10px;font-weight:700;flex:none}
+.local button.on{background:#5B4500;color:#fff}
+.err{background:#FEE4E2;color:#912018;font:600 12.5px/1.3 Inter;padding:8px 12px;text-align:center}
+
+/* Druck */
+.printgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.pcard{background:#fff;color:#111;border:2px dashed #bbb;border-radius:14px;padding:12px;text-align:center;break-inside:avoid}
+.pcard svg{width:100%;max-width:170px;height:auto}
+.pcard b{display:block;margin-top:6px;font-size:13px}
+.pcard small{display:block;color:#666;font:600 11px/1.3 Inter;margin-top:3px;letter-spacing:.06em}
+@media print{
+  body{background:#fff!important}
+  .nav,.noprint,.local,.err{display:none!important}
+  .app{max-width:none;padding:0}
+  .printgrid{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body data-tier="parent">
+<div id="root"></div>
+
+<script src="vendor/firebase-app-compat.js"></script>
+<script src="vendor/firebase-auth-compat.js"></script>
+<script src="vendor/firebase-firestore-compat.js"></script>
+<script src="vendor/jsQR.js"></script>
+<script src="vendor/qrcode.js"></script>
+<script src="missions.js"></script>
+<script>
+/* =====================================================================
+   LifeQuest – Familien-App (GitHub Pages + Firebase Firestore)
+   ===================================================================== */
+
+// Firebase-Konfiguration des Projekts (öffentliche Web-Konfiguration, kein Geheimnis).
+// Leer lassen = Testmodus nur auf diesem Gerät.
+const FB_CONFIG = {};
+
+// ---------- Icons ----------
+const IC = {
+  home:'<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  compass:'<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/>',
+  qr:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 14h3v3h-3zM20 14v.01M14 20.5v.01M17.5 17.5H21V21h-3.5z"/>',
+  users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16.5 14.2A5 5 0 0 1 21.5 19"/>',
+  gift:'<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8M12 8v13M12 8S10.5 3 8 3.5 7 8 12 8zm0 0s1.5-5 4-4.5S17 8 12 8z"/>',
+  check:'<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>',
+  menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',
+  gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  left:'<path d="m15 18-6-6 6-6"/>',
+};
+const ic = n => `<svg class="i" viewBox="0 0 24 24">${IC[n]}</svg>`;
+
+// ---------- Stammdaten ----------
+const TYPES = {
+  termin:  {n:'Termin',      e:'📅', c1:'#3E7BFA', c2:'#7AA7FF', xp:10, coins:2},
+  haushalt:{n:'Haushalt',    e:'🧹', c1:'#FF8A3D', c2:'#FFC15C', xp:15, coins:5},
+  habit:   {n:'Mikro-Habit', e:'⚡', c1:'#10B981', c2:'#6EE7B7', xp:5,  coins:1},
+  mission: {n:'Mission',     e:'🚀', c1:'#7C5CFF', c2:'#B39CFF', xp:30, coins:10},
+  goal:    {n:'Familienziel',e:'👪', c1:'#F43F5E', c2:'#FB7185', xp:10, coins:3},
+};
+const CHECKS = {
+  self:  {n:'Selbst',     e:'✋', d:'Vertrauen – selbst abhaken'},
+  peer:  {n:'Peer-Check', e:'🤝', d:'Jemand anderes aus der Familie bestätigt'},
+  parent:{n:'Eltern',     e:'👀', d:'Ein Elternteil bestätigt'},
+  qr:    {n:'QR-Code',    e:'📷', d:'Ausgedruckten QR-Code vor Ort scannen (oder Eltern zeigen den Code)'},
+};
+const DAYS = ['So','Mo','Di','Mi','Do','Fr','Sa'];
+const WEEK_ORDER = [1,2,3,4,5,6,0];
+const ALL = [0,1,2,3,4,5,6];
+const KID_AV = ['🦄','🦊','🐼','🐯','🐸','🐙','🦁','🐨','🐲','🐱','🐶','🦖','🐧','🦉','🐬','🐝','🦋','🐢'];
+const ADULT_AV = ['👩','👨','🧑','👩‍🦰','👨‍🦱','👩‍🦳','🧔','👱‍♀️','👱','🦸','🧙','🌻'];
+const GOAL_SUG = [
+  {title:'Handys ab 21 Uhr weglegen', e:'📵', days:ALL, time:'21:00', mode:'each', check:'self'},
+  {title:'Gemeinsames Frühstück', e:'🥐', days:ALL, time:'07:15', mode:'together', check:'self'},
+  {title:'Gemeinsames Abendbrot', e:'🍽️', days:ALL, time:'18:30', mode:'together', check:'self'},
+  {title:'Handyfreie Mahlzeiten', e:'🚫', days:ALL, time:'18:30', mode:'each', check:'peer'},
+  {title:'10 Minuten gemeinsam aufräumen', e:'🧹', days:ALL, time:'19:00', mode:'together', check:'self'},
+  {title:'Gute-Nacht-Gespräch: Was war heute schön?', e:'💬', days:ALL, time:'20:00', mode:'each', check:'self'},
+  {title:'Familien-Spieleabend', e:'🎲', days:[5], time:'19:00', mode:'together', check:'self'},
+  {title:'Gemeinsam raus an die frische Luft', e:'🌳', days:[0,6], time:'14:00', mode:'together', check:'self'},
+  {title:'Lesezeit statt Bildschirm', e:'📖', days:ALL, time:'19:30', mode:'each', check:'self'},
+];
+const REWARD_SUG = [
+  {title:'Eis essen gehen', e:'🍦', cost:50, kind:'Erlebnis'},
+  {title:'Pfannkuchen-Frühstück nach Wunsch', e:'🥞', cost:60, kind:'Erlebnis'},
+  {title:'Abendessen aussuchen', e:'🍕', cost:80, kind:'Privileg'},
+  {title:'30 Min länger wach (Wochenende)', e:'🌙', cost:100, kind:'Privileg'},
+  {title:'Kinoabend mit der Familie', e:'🎬', cost:150, kind:'Erlebnis'},
+  {title:'Freund:in übernachtet', e:'🏕️', cost:200, kind:'Privileg'},
+  {title:'Ausflug nach Wahl', e:'🗺️', cost:300, kind:'Erlebnis'},
+];
+const { CATS, EQUIP, MISSIONS } = window.LQ_DATA;
+
+// ---------- Helfer ----------
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const CODE_ABC = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+const rand = n => { const a = new Uint32Array(n); crypto.getRandomValues(a); return Array.from(a, x => CODE_ABC[x % CODE_ABC.length]).join(''); };
+const uid6 = () => rand(6);
+const pad = n => String(n).padStart(2,'0');
+const dkey = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const today = () => dkey(new Date());
+const wd = () => new Date().getDay();
+const isEmoji = s => /\p{Extended_Pictographic}/u.test(s||'');
+const clone = o => JSON.parse(JSON.stringify(o));
+function weekStart(d){ const x = new Date(d); x.setHours(12,0,0,0); x.setDate(x.getDate()-((x.getDay()+6)%7)); return x; }
+function weekDates(ref=new Date()){ const s = weekStart(ref); return Array.from({length:7}, (_,i) => { const x = new Date(s); x.setDate(s.getDate()+i); return x; }); }
+const level = xp => Math.floor((xp||0)/250)+1;
+const lvlPct = xp => ((xp||0) % 250)/250;
+function ringSvg(size, stroke, pct, color, track){
+  const r = (size-stroke)/2, C = 2*Math.PI*r;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${track}" stroke-width="${stroke}"/><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${color}" stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-Math.max(0,Math.min(1,pct)))}" transform="rotate(-90 ${size/2} ${size/2})"/></svg>`;
+}
+function qrSvg(text){ const q = qrcode(0, 'M'); q.addData(text); q.make(); return q.createSvgTag({cellSize:4, margin:8, scalable:true}); }
+
+// ---------- Geräte- & App-Zustand ----------
+let DEV = {}; try { DEV = JSON.parse(localStorage.getItem('lq-dev')) || {}; } catch(e) {}
+const saveDev = () => { try { localStorage.setItem('lq-dev', JSON.stringify(DEV)); } catch(e) {} };
+let S = null;          // Familienzustand (geteilt)
+let FAM = null;        // Familien-Dokument (Geräte)
+const UI = {tab:0, page:null, modal:null, onb:null, scan:null, form:{}, cat:null, search:'', err:null, ready:false};
+const LOCAL = !FB_CONFIG.apiKey;
+const me = () => S && S.profiles[DEV.pid];
+const profiles = () => S ? Object.values(S.profiles).sort((a,b) => (a.role===b.role ? (b.age||0)-(a.age||0) : a.role==='parent' ? -1 : 1)) : [];
+const tierOf = p => !p || p.role === 'parent' ? 'parent' : p.age <= 9 ? 'kid' : p.age <= 13 ? 'tween' : 'teen';
+const TIER_NAME = {kid:'Kids-Modus · 6–9', tween:'Tween-Modus · 10–13', teen:'Teen-Modus · 14–17', parent:'Eltern'};
+const isParent = () => me()?.role === 'parent';
+const equipAll = () => ({...EQUIP, ...(S?.equipment||{})});
+const missionsAll = () => [...MISSIONS.filter(m => !(S?.hiddenMissions||[]).includes(m.id)), ...Object.values(S?.customMissions||{}).filter(m => m.status === 'active')];
+const mById = id => MISSIONS.find(m => m.id === id) || S?.customMissions?.[id];
+const stepT = s => typeof s === 'string' ? s : s.t;
+const stepCheck = s => typeof s === 'string' ? 'self' : (s.check || 'self');
+const COPY = {
+  kid:{hello:n=>`Hallo ${n}!`, sub:'Was erleben wir heute? 🌞', done:['Super gemacht! 🎉','Wow, toll! ⭐','Du bist spitze! 🚀'], tabs:['Heute','Abenteuer','Scan','Familie','Schatz'], coin:'⭐', coins:'Sterne'},
+  tween:{hello:n=>`Hey ${n}!`, sub:'Bereit für deine Quests?', done:['Stark! 💪','Nice! +XP','Läuft bei dir! 🔥'], tabs:['Heute','Missionen','Scan','Familie','Shop'], coin:'🪙', coins:'Coins'},
+  teen:{hello:n=>n, sub:null, done:['Erledigt.','Done ✓','Gespeichert'], tabs:['Heute','Missionen','Scan','Familie','Rewards'], coin:'◆', coins:'Credits'},
+  parent:{hello:n=>`Hallo ${n}`, sub:null, done:['Erledigt ✓','Gut gemacht ✓','Vorbild ✓'], tabs:['Heute','Familie','Scan','Checks','Mehr'], coin:'🪙', coins:'Coins'},
+};
+
+// ---------- Datenschicht ----------
+let fdb, fauth, uid, famRef, unsubs = [];
+function freshState(){ return {v:1, created:Date.now(), famName:'Unsere Familie', profiles:{}, agenda:{}, goals:{}, log:{}, customMissions:{}, equipment:{}, hiddenMissions:[], rewards:{}, redemptions:{}, settings:{teenPrivacy:true, kidsOwnGoals:true}}; }
+function prune(st){ const lim = new Date(); lim.setDate(lim.getDate()-200); const k = dkey(lim); Object.keys(st.log||{}).forEach(d => { if (d < k) delete st.log[d]; }); }
+const DB = {
+  async init(){
+    if (LOCAL){
+      uid = 'local';
+      try { S = JSON.parse(localStorage.getItem('lq-local')); } catch(e) { S = null; }
+      if (S && !DEV.pid) DEV.pid = Object.keys(S.profiles)[0];
+      UI.ready = true; render(); return;
+    }
+    try {
+      firebase.initializeApp(FB_CONFIG); fdb = firebase.firestore(); fauth = firebase.auth();
+      uid = await new Promise(res => { let first = true; fauth.onAuthStateChanged(u => { if (u) res(u.uid); else if (first) fauth.signInAnonymously().catch(syncErr); first = false; }); });
+    } catch(e){ syncErr(e); }
+    UI.ready = true;
+    if (DEV.famId) connect(DEV.famId); else render();
+  },
+  async createFamily(st, pid){
+    if (LOCAL){ S = st; DEV.pid = pid; DEV.famId = 'LOCAL'; saveDev(); localStorage.setItem('lq-local', JSON.stringify(S)); render(); return; }
+    const id = rand(20); const ref = fdb.collection('families').doc(id);
+    await ref.set({owner:uid, created:Date.now(), members:{[uid]:{name:st.profiles[pid].name, role:'parent', pid, joined:Date.now()}}});
+    await ref.collection('data').doc('main').set({state:JSON.stringify(st), updated:Date.now(), by:uid});
+    DEV.famId = id; DEV.pid = pid; saveDev(); S = st; connect(id);
+  },
+  async createInvite(pid){
+    const p = S.profiles[pid]; const code = rand(8);
+    if (LOCAL) return code;
+    await fdb.collection('invites').doc(code).set({fam:famRef.id, role:p.role, pid, exp:Date.now()+48*3600e3, by:uid});
+    return code;
+  },
+  async join(code){
+    code = code.toUpperCase().replace(/[^A-Z0-9]/g, '');
+    const inv = await fdb.collection('invites').doc(code).get();
+    if (!inv.exists) throw new Error('Code nicht gefunden');
+    const d = inv.data(); if (d.exp < Date.now()) throw new Error('Code ist abgelaufen');
+    await fdb.collection('families').doc(d.fam).update({['members.'+uid]:{name:'', role:d.role, pid:d.pid, invite:code, joined:Date.now()}});
+    DEV.famId = d.fam; DEV.pid = d.pid; saveDev();
+    fdb.collection('invites').doc(code).delete().catch(() => {});
+    connect(d.fam);
+  },
+  async removeDevice(devUid){ if (LOCAL) return; await famRef.update({['members.'+devUid]:firebase.firestore.FieldValue.delete()}); },
+  mutate(fn){
+    const next = clone(S); fn(next); prune(next); S = next; render();
+    if (LOCAL){ try { localStorage.setItem('lq-local', JSON.stringify(S)); } catch(e){} return Promise.resolve(); }
+    const ref = famRef.collection('data').doc('main');
+    return fdb.runTransaction(async t => {
+      const sn = await t.get(ref); const st = sn.exists ? JSON.parse(sn.data().state) : freshState();
+      fn(st); prune(st); t.set(ref, {state:JSON.stringify(st), updated:Date.now(), by:uid});
+    }).catch(e => { syncErr(e); toast('Nicht gespeichert – keine Verbindung?'); });
+  },
+};
+function connect(id){
+  unsubs.forEach(u => u()); unsubs = [];
+  famRef = fdb.collection('families').doc(id);
+  unsubs.push(famRef.onSnapshot(sn => {
+    if (!sn.exists){ leave('Die Familie gibt es nicht mehr.'); return; }
+    FAM = sn.data(); if (!FAM.members || !FAM.members[uid]){ leave('Dieses Gerät wurde aus der Familie entfernt.'); return; }
+    softRender();
+  }, e => { syncErr(e); if (e && e.code === 'permission-denied') leave('Kein Zugriff auf die Familie. Bitte das Gerät neu koppeln.'); }));
+  unsubs.push(famRef.collection('data').doc('main').onSnapshot(sn => {
+    if (!sn.exists) return; S = JSON.parse(sn.data().state); UI.err = null; softRender();
+  }, syncErr));
+}
+function leave(msg){ unsubs.forEach(u => u()); unsubs = []; DEV = {}; saveDev(); S = null; FAM = null; render(); if (msg) toast(msg); }
+function syncErr(e){ console.error(e); UI.err = (e && (e.code || e.message)) || 'Fehler'; softRender(); }
+let pendingRender = false;
+function softRender(){ const a = document.activeElement; if (a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA') && document.body.contains(a)){ pendingRender = true; return; } render(); }
+document.addEventListener('focusout', () => { if (pendingRender){ pendingRender = false; setTimeout(render, 0); } });
+
+// ---------- Domänenlogik ----------
+function todayItems(p){
+  const d = wd(), t = today();
+  const items = Object.values(S.agenda).filter(a => a.owner === p.id && a.days.includes(d) && (!a.once || a.once === t)).map(a => ({...a, key:`a:${a.id}`, kind:'a'}));
+  (p.missions||[]).forEach(ms => {
+    const mi = mById(ms.id); if (!mi || ms.step >= mi.steps.length) return;
+    const s = mi.steps[ms.step];
+    items.push({key:`m:${p.id}:${mi.id}:${ms.step}`, kind:'m', id:mi.id, title:stepT(s), sub:`${mi.title} · ${ms.step+1}/${mi.steps.length}`, type:'mission', cat:mi.cat, e:mi.e, check:stepCheck(s), time:''});
+  });
+  return items.sort((a,b) => (a.time||'').localeCompare(b.time||''));
+}
+const goalsToday = () => Object.values(S.goals).filter(g => g.status === 'active' && g.days.includes(wd())).sort((a,b) => (a.time||'').localeCompare(b.time||''));
+const L = (date, key) => (S.log[date]||{})[key];
+function keyOwner(key){ const p = key.split(':'); if (p[0] === 'a') return S.agenda[p[1]]?.owner; if (p[0] === 'm') return p[1]; if (p[0] === 'g') return p[2]; return null; }
+function progressOf(p){
+  const t = today(), it = todayItems(p), gs = goalsToday();
+  let done = it.filter(i => L(t,i.key)?.s === 'done').length, total = it.length;
+  gs.forEach(g => { total++; if (L(t, `g:${g.id}:${g.mode==='together'?'all':p.id}`)?.s === 'done') done++; });
+  return {done, total};
+}
+function activeDay(pid, date){ const lg = S.log[date]; if (!lg) return false; return Object.entries(lg).some(([k,v]) => v.s === 'done' && (keyOwner(k) === pid || k.endsWith(':all'))); }
+function weekActiveCount(pid, ref){ return weekDates(ref).filter(d => activeDay(pid, dkey(d))).length; }
+function personalStreak(pid){
+  let n = 0; const ref = new Date(); if (weekActiveCount(pid, ref) >= 5) n++;
+  for (let i=1;i<40;i++){ const d = new Date(); d.setDate(d.getDate()-7*i); if (weekActiveCount(pid, d) >= 5) n++; else break; }
+  return n;
+}
+function goalOccDone(g, date){
+  if (g.mode === 'together') return L(date, `g:${g.id}:all`)?.s === 'done';
+  return profiles().every(p => L(date, `g:${g.id}:${p.id}`)?.s === 'done');
+}
+function familyWeekRatio(ref){
+  let occ = 0, done = 0; const t = today();
+  weekDates(ref).forEach(d => { const k = dkey(d); if (k > t) return; Object.values(S.goals).filter(g => g.status === 'active' && g.days.includes(d.getDay()) && (g.since||'') <= k).forEach(g => { occ++; if (goalOccDone(g, k)) done++; }); });
+  return occ ? done/occ : null;
+}
+function familyStreak(){
+  let n = 0; const r0 = familyWeekRatio(new Date()); if (r0 !== null && r0 >= .7) n++;
+  for (let i=1;i<40;i++){ const d = new Date(); d.setDate(d.getDate()-7*i); const r = familyWeekRatio(d); if (r !== null && r >= .7) n++; else break; }
+  return n;
+}
+function award(st, pid, type, sign=1){ const p = st.profiles[pid]; if (!p) return; const T = TYPES[type]; p.xp = Math.max(0,(p.xp||0)+sign*T.xp); p.coins = Math.max(0,(p.coins||0)+sign*T.coins); }
+function advance(st, pid, mid){
+  const p = st.profiles[pid], ms = (p.missions||[]).find(x => x.id === mid); if (!ms) return false;
+  ms.step++; const mi = (st.customMissions||{})[mid] || MISSIONS.find(m => m.id === mid);
+  if (mi && ms.step >= mi.steps.length){ p.badges = p.badges||[]; p.badges.unshift(`${mi.e||CATS[mi.cat].e}|${mi.title}`); p.xp += 100; p.coins += 30; p.missions = p.missions.filter(x => x.id !== mid); return true; }
+  return false;
+}
+// Abschluss eines Eintrags (in Mutation): setzt done, vergibt Punkte, schiebt Mission weiter
+function complete(st, date, key, by){
+  st.log[date] = st.log[date] || {};
+  st.log[date][key] = {s:'done', by, at:Date.now()};
+  const [k, a, b, c] = key.split(':');
+  if (k === 'a'){ const it = st.agenda[a]; if (it) award(st, it.owner, it.type); }
+  else if (k === 'g'){ if (b === 'all') Object.keys(st.profiles).forEach(pid => award(st, pid, 'goal')); else award(st, b, 'goal'); }
+  else if (k === 'm'){ const p = st.profiles[a], ms = (p?.missions||[]).find(x => x.id === b); if (ms && ms.step === +c){ award(st, a, 'mission'); return advance(st, a, b); } }
+  return false;
+}
+function uncomplete(st, date, key){
+  const [k, a, b, c] = key.split(':');
+  if (st.log[date]?.[key]?.s === 'done'){
+    if (k === 'a'){ const it = st.agenda[a]; if (it) award(st, it.owner, it.type, -1); }
+    else if (k === 'g'){ if (b === 'all') Object.keys(st.profiles).forEach(pid => award(st, pid, 'goal', -1)); else award(st, b, 'goal', -1); }
+    else if (k === 'm'){ const ms = (st.profiles[a]?.missions||[]).find(x => x.id === b); if (ms && ms.step === +c+1){ ms.step--; award(st, a, 'mission', -1); } }
+  }
+  delete st.log[date][key];
+}
+function tap(item){
+  const p = me(), t = today(), key = item.key, cur = L(t, key);
+  if (cur?.s === 'done'){
+    if (cur.by !== p.id && item.check !== 'self'){ toast('Schon bestätigt'); return; }
+    DB.mutate(st => uncomplete(st, t, key)); toast('Rückgängig'); return;
+  }
+  if (cur?.s === 'pending'){ DB.mutate(st => { delete st.log[t][key]; }); toast('Anfrage zurückgezogen'); return; }
+  if (item.check === 'qr'){ openScan(key); return; }
+  if (item.check === 'peer' || item.check === 'parent'){
+    DB.mutate(st => { st.log[t] = st.log[t]||{}; st.log[t][key] = {s:'pending', by:p.id, at:Date.now(), need:item.check}; });
+    toast(item.check === 'peer' ? 'Check-Anfrage an die Familie 🤝' : 'Ein Elternteil schaut kurz drüber 👀'); return;
+  }
+  let fin = false;
+  DB.mutate(st => { fin = complete(st, t, key, p.id); });
+  celebrate(fin);
+}
+function requestParentInstead(key){ const p = me(), t = today(); DB.mutate(st => { st.log[t] = st.log[t]||{}; st.log[t][key] = {s:'pending', by:p.id, at:Date.now(), need:'parent'}; }); UI.scan = null; stopCam(); toast('Eltern-Check angefragt'); }
+function labelOfKey(key){
+  const [k, a, b, c] = key.split(':');
+  if (k === 'a') return S.agenda[a] ? {title:S.agenda[a].title, e:TYPES[S.agenda[a].type].e} : null;
+  if (k === 'g') return S.goals[a] ? {title:S.goals[a].title, e:S.goals[a].e} : null;
+  if (k === 'm'){ const mi = mById(b); return mi ? {title:`${stepT(mi.steps[+c]||'')}`, sub:mi.title, e:mi.e||CATS[mi.cat].e} : null; }
+  return null;
+}
+function checkRequests(v){
+  const out = [], lim = new Date(); lim.setDate(lim.getDate()-7); const lk = dkey(lim);
+  Object.entries(S.log).forEach(([date, lg]) => { if (date < lk) return; Object.entries(lg).forEach(([key, e]) => {
+    if (e.s !== 'pending' || e.by === v.id) return;
+    if (e.need === 'parent' && v.role !== 'parent') return;
+    const lab = labelOfKey(key); if (!lab) return;
+    out.push({kind:'log', date, key, e, lab, from:S.profiles[e.by]});
+  }); });
+  if (v.role === 'parent'){
+    Object.values(S.redemptions).filter(r => r.status === 'pending').forEach(r => out.push({kind:'reward', r, rw:S.rewards[r.rid], from:S.profiles[r.pid]}));
+    Object.values(S.goals).filter(g => g.status === 'proposed').forEach(g => out.push({kind:'goalProp', g, from:S.profiles[g.by]}));
+    Object.values(S.customMissions).filter(m => m.status === 'proposed').forEach(m => out.push({kind:'missionProp', m, from:S.profiles[m.by]}));
+  }
+  return out;
+}
+function dueQRSteps(){ // QR-Schritte der Kinder, die gerade fällig sind (zum Zeigen auf dem Eltern-Handy)
+  const out = [];
+  profiles().filter(p => p.role === 'kid').forEach(p => (p.missions||[]).forEach(ms => { const mi = mById(ms.id); if (mi && ms.step < mi.steps.length && stepCheck(mi.steps[ms.step]) === 'qr') out.push({p, mi, step:ms.step}); }));
+  return out;
+}
+// QR-Inhalte: LQ1|<Familie>|<Art>|<ID>
+const famTag = () => (DEV.famId || 'LOCAL').slice(0,6);
+const qrPayload = (kind, id) => `LQ1|${famTag()}|${kind}|${id}`;
+const shortCode = (kind, id) => `${kind.toUpperCase()}-${id}`.replace(/\./g,'-');
+function handleScan(text){
+  text = String(text).trim();
+  let kind, id;
+  if (text.startsWith('LQ1|')){ const p = text.split('|'); if (p[2] === 'J'){ return {join:p[3]}; } if (p[1] !== famTag()) return {err:'Dieser Code gehört zu einer anderen Familie.'}; kind = p[2]; id = p[3]; }
+  else { const m = text.toUpperCase().match(/^([GAM])-(.+)$/); if (!m) return {err:'Unbekannter Code'}; kind = m[1].toLowerCase(); id = kind === 'm' ? m[2].replace(/-(\d+)$/, '.$1').toLowerCase() : m[2]; }
+  const p = me(), t = today();
+  if (kind === 'g'){
+    const g = Object.values(S.goals).find(x => x.id.toUpperCase() === id.toUpperCase()); if (!g) return {err:'Familienziel nicht gefunden'};
+    const key = `g:${g.id}:${g.mode==='together'?'all':p.id}`; if (L(t,key)?.s === 'done') return {err:'Schon erledigt ✓'};
+    DB.mutate(st => complete(st, t, key, p.id)); return {ok:`${g.e} ${g.title}`};
+  }
+  if (kind === 'a'){
+    const a = Object.values(S.agenda).find(x => x.id.toUpperCase() === id.toUpperCase()); if (!a) return {err:'Aufgabe nicht gefunden'};
+    if (a.owner !== p.id) return {err:`Das ist eine Aufgabe von ${S.profiles[a.owner]?.name}.`};
+    const key = `a:${a.id}`; if (L(t,key)?.s === 'done') return {err:'Schon erledigt ✓'};
+    DB.mutate(st => complete(st, t, key, p.id)); return {ok:`${TYPES[a.type].e} ${a.title}`};
+  }
+  if (kind === 'm'){
+    const [mid, stp] = id.split('.'); const mi = mById(mid) || missionsAll().find(x => x.id.toLowerCase() === mid.toLowerCase()); if (!mi) return {err:'Mission nicht gefunden'};
+    const ms = (p.missions||[]).find(x => x.id === mi.id); if (!ms) return {err:`Starte zuerst die Mission „${mi.title}“.`};
+    if (ms.step !== +stp) return {err:`Dieser Code gehört zu Schritt ${+stp+1} – du bist bei Schritt ${ms.step+1}.`};
+    let fin = false; DB.mutate(st => { fin = complete(st, t, `m:${p.id}:${mi.id}:${stp}`, p.id); }); return {ok:`${mi.e||CATS[mi.cat].e} ${mi.title}: ${stepT(mi.steps[+stp])}`, fin};
+  }
+  return {err:'Unbekannter Code'};
+}
+
+// ---------- Effekte ----------
+let toastTimer;
+function toast(msg){ document.querySelectorAll('.toast').forEach(t => t.remove()); const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.remove(), 2200); }
+function celebrate(big){
+  const tier = tierOf(me()), msgs = COPY[tier].done; toast(big ? 'Mission geschafft! 🏆 +100 XP' : msgs[Math.floor(Math.random()*msgs.length)]);
+  if (!big && (tier === 'teen' || tier === 'parent')) return;
+  const cols = tier === 'teen' ? ['#C8FF3D','#5CE1FF','#fff'] : ['#FF4F87','#FFC530','#22C55E','#3E7BFA','#7C5CFF','#FF9417'];
+  for (let i=0;i<(big?60:tier==='kid'?40:22);i++){ const c = document.createElement('i'); c.className = 'confetti'; c.style.left = Math.random()*100+'vw'; c.style.background = cols[i%cols.length]; c.style.animationDelay = Math.random()*.3+'s'; c.style.animationDuration = (1+Math.random()*.9)+'s'; document.body.appendChild(c); setTimeout(() => c.remove(), 2600); }
+}
+const openModal = m => { UI.modal = m; render(); };
+const closeModal = () => { UI.modal = null; render(); };
+function resetForm(x={}){ UI.form = {title:'', time:'', type:'habit', freq:'all', check:'self', days:[...ALL], mode:'each', e:'', kind:'Erlebnis', cost:'100', desc:'', cat:'natur', ageMin:'6', ageMax:'17', weeks:'2', needs:[], steps:[{t:'',check:'self'}], name:'', role:'kid', age:'9', avatar:'', ...clone(x)}; }
+
+// ---------- Bausteine ----------
+function heroDeco(tier){
+  if (tier === 'kid') return `<svg class="deco" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice"><circle cx="350" cy="40" r="34" fill="#FFE066"/><circle cx="350" cy="40" r="46" fill="#FFE066" opacity=".3"/><g fill="#fff" opacity=".9"><ellipse cx="70" cy="40" rx="38" ry="14"/><ellipse cx="95" cy="30" rx="24" ry="16"/><ellipse cx="250" cy="70" rx="30" ry="10"/><ellipse cx="270" cy="62" rx="18" ry="12"/></g><path d="M0 200 Q100 170 200 195 T400 185 V220 H0z" fill="#8BE08B" opacity=".55"/></svg>`;
+  if (tier === 'tween') return `<svg class="deco" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice"><circle cx="360" cy="10" r="90" fill="#fff" opacity=".08"/><circle cx="20" cy="210" r="70" fill="#fff" opacity=".07"/><g fill="#fff"><text x="300" y="60" font-size="18" opacity=".7">✦</text><text x="230" y="30" font-size="11" opacity=".6">✦</text><text x="380" y="120" font-size="13" opacity=".5">✦</text></g></svg>`;
+  if (tier === 'teen') return `<svg class="deco" viewBox="0 0 400 220" preserveAspectRatio="none"><g stroke="#fff" stroke-opacity=".05">${Array.from({length:10},(_,i)=>`<line x1="${i*44}" y1="0" x2="${i*44}" y2="220"/>`).join('')}${Array.from({length:6},(_,i)=>`<line x1="0" y1="${i*44}" x2="400" y2="${i*44}"/>`).join('')}</g></svg>`;
+  return `<svg class="deco" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice"><circle cx="380" cy="0" r="120" fill="#fff" opacity=".06"/><circle cx="330" cy="200" r="60" fill="#fff" opacity=".05"/></svg>`;
+}
+const avStyle = a => isEmoji(a) ? '' : 'font-size:16px';
+function avRing(p, size=66){ return `<button class="avring" style="width:${size}px;height:${size}px" data-a="profile">${ringSvg(size, 6, lvlPct(p.xp), 'var(--ring)', 'var(--ring-track)')}<span class="av" style="${isEmoji(p.avatar)?'':'font-size:22px'}">${esc(p.avatar)}</span><span class="lv">LV ${level(p.xp)}</span></button>`; }
+function familyStrip(v){
+  return `<div class="fam">${profiles().map(o => { const pr = progressOf(o), priv = v.role === 'parent' && S.settings.teenPrivacy && o.role === 'kid' && o.age >= 14;
+    return `<div class="p"><div class="rg">${ringSvg(54,5,pr.total?pr.done/pr.total:0,'var(--done)','var(--track)')}<span class="av" style="${avStyle(o.avatar)}">${esc(o.avatar)}</span></div>${esc(o.name)}<span class="muted" style="font-weight:600">${priv?'🔒':`${pr.done}/${pr.total}`}</span></div>`; }).join('')}</div>`;
+}
+function checkChip(c){ return c === 'peer' ? '<span class="chip peer">🤝 Peer-Check</span>' : c === 'parent' ? '<span class="chip par">👀 Eltern-Check</span>' : c === 'qr' ? '<span class="chip qr">📷 QR-Code</span>' : ''; }
+function questCard(p, it){
+  const t = today(), st = L(t, it.key)?.s, T = TYPES[it.type];
+  const c1 = it.type === 'mission' ? CATS[it.cat].c : T.c1, c2 = it.type === 'mission' ? `color-mix(in srgb,${CATS[it.cat].c} 50%,#fff)` : T.c2;
+  const meta = [it.time ? `<span>${it.time}</span>` : '', `<span>${esc(it.sub || T.n)}</span>`, it.by === p.id && p.role === 'kid' ? '<span class="chip">✨ eigenes Ziel</span>' : '', checkChip(it.check), st === 'pending' ? '<span class="chip peer">⏳ wartet</span>' : ''].join('');
+  const btn = it.check === 'qr' && !st ? `<button class="qbtn scan" data-a="tap" data-id="${esc(it.key)}">${ic('qr')}<span>Scan</span></button>` : `<button class="qbtn" data-a="tap" data-id="${esc(it.key)}">${st === 'pending' ? '⏳' : '✓'}</button>`;
+  return `<div class="quest ${st||''}"><div class="tile" style="--c1:${c1};--c2:${c2}">${it.type === 'mission' ? esc(it.e || CATS[it.cat].e) : T.e}</div><div class="grow"><div class="qt">${esc(it.title)}</div><div class="qs">${meta}</div></div><span class="xp">+${T.xp}</span>${btn}</div>`;
+}
+function goalCard(p, g){
+  const t = today(), key = `g:${g.id}:${g.mode==='together'?'all':p.id}`, st = L(t, key)?.s;
+  const who = g.mode === 'together' ? '' : `<div class="who">${profiles().map(o => { const s = L(t, `g:${g.id}:${o.id}`)?.s; return `<span class="${s==='done'?'ok':s==='pending'?'pend':''}" title="${esc(o.name)}" style="${avStyle(o.avatar)?'font-size:11px':''}">${esc(o.avatar)}</span>`; }).join('')}</div>`;
+  const doneBy = g.mode === 'together' && st === 'done' ? `<span>✓ ${esc(S.profiles[L(t,key).by]?.name||'')}</span>` : '';
+  const btn = g.check === 'qr' && !st ? `<button class="qbtn scan" data-a="tapGoal" data-id="${g.id}">${ic('qr')}<span>Scan</span></button>` : `<button class="qbtn" data-a="tapGoal" data-id="${g.id}">${st === 'pending' ? '⏳' : '✓'}</button>`;
+  return `<div class="quest ${st||''}"><div class="tile" style="--c1:#F43F5E;--c2:#FDA4AF">${esc(g.e||'👪')}</div><div class="grow"><div class="qt">${esc(g.title)}</div>
+    <div class="qs">${g.time?`<span>${g.time}</span>`:''}<span class="chip">${g.mode==='together'?'👪 gemeinsam':'🙋 jede:r'}</span>${checkChip(g.check)}${doneBy}${st==='pending'?'<span class="chip peer">⏳ wartet</span>':''}</div>${who}</div><span class="xp">+${TYPES.goal.xp}</span>${btn}</div>`;
+}
+function questList(p){
+  const items = todayItems(p);
+  const groups = [['🚀','Missionen',i => i.type==='mission'],['🌅','Morgens',i => i.type!=='mission' && i.time < '12:00'],['☀️','Nachmittags',i => i.type!=='mission' && i.time >= '12:00' && i.time < '17:30'],['🌙','Abends',i => i.type!=='mission' && i.time >= '17:30']];
+  return groups.map(([e,n,f]) => { const g = items.filter(f); return g.length ? `<div class="tod">${e} ${n}</div>${g.map(i => questCard(p,i)).join('')}` : ''; }).join('') || `<div class="card muted small" style="text-align:center">Keine persönlichen Quests für heute.</div>`;
+}
+function streakCard(p){
+  const wk = weekDates(), n = personalStreak(p.id), cnt = weekActiveCount(p.id, new Date()), tier = tierOf(p);
+  return `<div class="card streak"><div class="row"><div class="bigflame">🔥</div><div class="grow"><div class="head" style="font-weight:800;font-size:1.15em">${n} ${n===1?'Woche':'Wochen'} in Folge</div><div class="small muted">${cnt>=5?'Woche gesichert ✓':`${cnt}/7 aktive Tage · ab 5 zählt die Woche`}</div></div></div>
+    <div class="days">${wk.map(d => { const on = activeDay(p.id, dkey(d)); return `<div class="d ${on?'on':''} ${dkey(d)===today()?'today':''}"><i>${on?(tier==='teen'?'✓':'🔥'):''}</i>${DAYS[d.getDay()]}</div>`; }).join('')}</div></div>`;
+}
+function navBar(labels, icons, badges={}){
+  return `<nav class="nav">${labels.map((t,i) => i === 2 ? `<button class="scanbtn" data-a="scan"><span class="sc">${ic('qr')}</span>${t}</button>` : `<button class="${i===UI.tab && !UI.page ? 'on':''}" data-a="tab" data-id="${i}"><span class="ic">${icons[i]}</span>${badges[i]?`<span class="badge">${badges[i]}</span>`:''}${t}</button>`).join('')}</nav>`;
+}
+function reqCard(r, v){
+  const av = r.from ? `<div class="bi" style="${avStyle(r.from.avatar)}">${esc(r.from.avatar)}</div>` : '<div class="bi">🤝</div>';
+  if (r.kind === 'log') return `<div class="banner peer">${av}<div class="grow"><div class="qt">${esc(r.from?.name||'')}: „${esc(r.lab.title)}“</div><div class="small muted">${r.lab.sub?esc(r.lab.sub)+' · ':''}${r.e.need==='parent'?'Eltern-Check':'Peer-Check'}${r.date!==today()?' · '+r.date.slice(8)+'.'+r.date.slice(5,7)+'.':''}</div>
+    <div class="row" style="margin-top:10px;gap:8px"><button class="btn sm" data-a="okLog" data-id="${r.date}|${esc(r.key)}">✓ Stimmt</button><button class="btn soft sm" data-a="noLog" data-id="${r.date}|${esc(r.key)}">Nicht gesehen</button></div></div></div>`;
+  if (r.kind === 'reward') return `<div class="banner gold">${av}<div class="grow"><div class="qt">${esc(r.from?.name||'')} möchte: ${esc(r.rw?.e||'')} ${esc(r.rw?.title||'')}</div><div class="small muted">Belohnung · ${r.rw?.cost||0} Coins</div>
+    <div class="row" style="margin-top:10px;gap:8px"><button class="btn sm" data-a="okRw" data-id="${r.r.id}">✓ Freigeben</button><button class="btn soft sm" data-a="noRw" data-id="${r.r.id}">Später</button></div></div></div>`;
+  if (r.kind === 'goalProp') return `<div class="banner gold">${av}<div class="grow"><div class="qt">Familienziel-Vorschlag: ${esc(r.g.e)} ${esc(r.g.title)}</div><div class="small muted">von ${esc(r.from?.name||'')}</div>
+    <div class="row" style="margin-top:10px;gap:8px"><button class="btn sm" data-a="okGoalProp" data-id="${r.g.id}">✓ Aufnehmen</button><button class="btn soft sm" data-a="noGoalProp" data-id="${r.g.id}">Ablehnen</button></div></div></div>`;
+  return `<div class="banner gold">${av}<div class="grow"><div class="qt">Missions-Vorschlag: ${esc(r.m.e)} ${esc(r.m.title)}</div><div class="small muted">von ${esc(r.from?.name||'')} · ${r.m.steps.length} Schritte</div>
+    <div class="row" style="margin-top:10px;gap:8px"><button class="btn sm" data-a="okMissionProp" data-id="${r.m.id}">✓ Freigeben</button><button class="btn soft sm" data-a="editMission" data-id="${r.m.id}">Bearbeiten</button><button class="btn soft sm" data-a="noMissionProp" data-id="${r.m.id}">✕</button></div></div></div>`;
+}
+
+// ---------- Screens: Start / Onboarding ----------
+function renderWelcome(){
+  document.body.dataset.tier = 'tween';
+  return `<div class="app onb"><div class="hero" style="margin:-20px -16px 0;padding:40px 22px 30px;text-align:center">${heroDeco('tween')}<div style="font-size:64px">🧭</div><div class="hello" style="font-size:2.2em">LifeQuest</div><div class="hsub">Alltags-Abenteuer für die ganze Familie</div></div>
+    ${!UI.ready ? '<div class="hint">Verbinde mit dem Server …</div>' : ''}
+    <div class="sec"><h2>Neue Familie gründen</h2></div>
+    <div class="card"><p class="small muted" style="margin:0 0 12px">Nur einmal – auf dem Gerät eines Elternteils. Setzt euch dafür am besten zusammen: Ihr legt gemeinsam eure Familienziele fest.</p>
+      <button class="btn block" data-a="startOnb" ${UI.ready?'':'disabled'}>Familie gründen ✨</button></div>
+    ${LOCAL ? '<div class="hint">🧪 <b>Testmodus:</b> Es ist noch kein Firebase-Projekt hinterlegt. Alles wird nur auf diesem Gerät gespeichert, Profile können oben gewechselt werden.</div>' : `
+    <div class="sec"><h2>Einer Familie beitreten</h2></div>
+    <div class="card"><p class="small muted" style="margin:0 0 12px">Den Code erzeugt ein Elternteil unter Familie → Geräte koppeln.</p>
+      <input class="in" id="joinCode" placeholder="8-stelliger Code" autocapitalize="characters" autocomplete="off" style="letter-spacing:.15em;text-transform:uppercase;font-weight:800">
+      <div class="row" style="margin-top:10px"><button class="btn grow" data-a="join" ${UI.ready?'':'disabled'}>Beitreten</button><button class="btn soft" data-a="scanJoin">${ic('qr')} Scannen</button></div></div>`}
+    <div class="note" style="margin-top:14px;text-align:center">Tipp: Erst „Zum Home-Bildschirm hinzufügen“, dann dort öffnen und koppeln – sonst kennt die Home-App die Kopplung nicht.</div></div>`;
+}
+function renderOnb(){
+  const o = UI.onb; document.body.dataset.tier = 'parent';
+  const bar = `<div class="stepbar">${[0,1,2,3,4,5].map(i => `<i class="${i<=o.step?'on':''}"></i>`).join('')}</div>`;
+  let c = '';
+  if (o.step === 0){
+    c = `<div style="font-size:64px">🛋️</div><h1>Holt alle zusammen!</h1><p class="muted" style="line-height:1.5">In den nächsten Schritten legt ihr <b>gemeinsam</b> fest, wer mitmacht, welche <b>Familienziele</b> ihr euch setzt und welche <b>Belohnungen</b> es gibt. Am Ende steht euer <b>Familien-Pakt</b>, den alle auf ihrem Gerät unterschreiben.</p>
+      <label class="f">Wie heißt eure Familie / euer Team?</label><input class="in" data-in="famName" value="${esc(o.famName)}" placeholder="z. B. Team Sonnenschein">`;
+  } else if (o.step === 1){
+    c = `<h1>Wer bist du?</h1><label class="f">Dein Name</label><input class="in" data-in="meName" value="${esc(o.me.name)}" placeholder="z. B. Mama">
+      <label class="f">Dein Avatar</label><div class="avgrid">${ADULT_AV.map(a => `<button class="${o.me.avatar===a?'on':''}" data-a="onbMeAv" data-id="${a}">${a}</button>`).join('')}</div>`;
+  } else if (o.step === 2){
+    c = `<h1>Wer macht noch mit?</h1><p class="muted">Weitere Eltern und alle Kinder. Jede:r koppelt später das eigene Gerät.</p>
+      <div class="card" style="padding:4px 16px">${[{...o.me, role:'parent', self:true}, ...o.members].map((m,i) => `<div class="li"><div class="av" style="${avStyle(m.avatar)}">${esc(m.avatar||'🙂')}</div><div class="grow"><b>${esc(m.name||'?')}</b>${m.self?' <span class="muted small">(du)</span>':''}<div class="small muted">${m.role==='parent'?'Elternteil':`${m.age} Jahre · ${TIER_NAME[tierOf(m)]}`}</div></div>${m.self?'':`<button class="x" data-a="onbDelMember" data-id="${i-1}">✕</button>`}</div>`).join('')}</div>
+      <button class="btn soft block" style="margin-top:12px" data-a="onbAddMember">${ic('plus')} Person hinzufügen</button>`;
+  } else if (o.step === 3){
+    c = `<h1>Eure Familienziele</h1><p class="muted">Was wollt ihr <b>alle zusammen</b> schaffen? Wählt aus oder schreibt eigene. Tippen zum Auswählen, ✏️ zum Anpassen.</p>
+      ${o.goals.map((g,i) => `<div class="gsug ${g.on?'on':''}"><button class="ck" data-a="onbGoal" data-id="${i}">✓</button><span style="font-size:26px">${esc(g.e)}</span><button class="grow" style="text-align:left" data-a="onbGoal" data-id="${i}"><div class="qt">${esc(g.title)}</div><div class="small muted">${g.days.length===7?'täglich':WEEK_ORDER.filter(d => g.days.includes(d)).map(d => DAYS[d]).join(' ')} · ${g.time} · ${g.mode==='together'?'gemeinsam':'jede:r'}${g.check!=='self'?' · '+CHECKS[g.check].n:''}</div></button><button class="x" data-a="onbEditGoal" data-id="${i}">✏️</button></div>`).join('')}
+      <button class="btn soft block" style="margin-top:12px" data-a="onbNewGoal">${ic('plus')} Eigenes Familienziel</button>
+      <div class="hint">👪 <b>gemeinsam</b> = einer hakt für alle ab (z. B. Abendbrot) · 🙋 <b>jede:r</b> = alle haken einzeln ab (z. B. Handy weglegen). Familien-Serie: Wochen, in denen ihr ≥ 70 % eurer Familienziele geschafft habt.</div>`;
+  } else if (o.step === 4){
+    c = `<h1>Belohnungen</h1><p class="muted">Wofür können die Kinder ihre Coins einlösen? Am besten Erlebnisse & Privilegien. Später jederzeit änderbar.</p>
+      ${o.rewards.map((r,i) => `<button class="gsug ${r.on?'on':''}" data-a="onbRw" data-id="${i}"><span class="ck">✓</span><span style="font-size:26px">${r.e}</span><span class="grow"><span class="qt" style="display:block">${esc(r.title)}</span><span class="small muted">${r.kind} · ${r.cost} Coins</span></span></button>`).join('')}`;
+  } else {
+    const gs = o.goals.filter(g => g.on);
+    c = `<h1>Euer Familien-Pakt</h1><p class="muted">Lest ihn gemeinsam vor. Jede:r unterschreibt nach dem Koppeln auf dem eigenen Gerät.</p>
+      <div class="pact"><h3>📜 ${esc(o.famName || 'Unsere Familie')}</h3><div class="small">Wir nehmen uns gemeinsam vor:</div><ul>${gs.map(g => `<li>${esc(g.e)} ${esc(g.title)}${g.days.length<7?' ('+WEEK_ORDER.filter(d => g.days.includes(d)).map(d => DAYS[d]).join(', ')+')':''}</li>`).join('') || '<li>…noch keine Ziele gewählt</li>'}</ul>
+      <div class="small">Wir helfen uns gegenseitig, bestätigen ehrlich und feiern zusammen.</div>
+      <div class="sig">${[o.me, ...o.members].map(m => `<span class="${m===o.me?'':'no'}">${esc(m.avatar)} ${esc(m.name)}${m===o.me?' ✍️':''}</span>`).join('')}</div></div>`;
+  }
+  const last = o.step === 5;
+  const canNext = o.step === 1 ? !!o.me.name.trim() : true;
+  return `<div class="app onb">${bar}${c}<div class="onbfoot">${o.step>0?'<button class="btn soft" data-a="onbBack">Zurück</button>':'<button class="btn soft" data-a="onbCancel">Abbrechen</button>'}<button class="btn grow" ${canNext?'':'disabled'} data-a="${last?'onbFinish':'onbNext'}">${last?'Pakt schließen & loslegen ✍️':'Weiter'}</button></div></div>`;
+}
+function finishOnb(){
+  const o = UI.onb, st = freshState(); st.famName = o.famName.trim() || 'Unsere Familie';
+  const pid = 'P'+uid6();
+  st.profiles[pid] = {id:pid, name:o.me.name.trim(), role:'parent', age:40, avatar:o.me.avatar||'🧑', xp:0, coins:0, equip:[], interests:[], missions:[], badges:[], pact:Date.now()};
+  o.members.forEach(m => { const id = 'P'+uid6(); st.profiles[id] = {id, name:m.name.trim(), role:m.role, age:+m.age||9, avatar:m.avatar||(m.role==='parent'?'🧑':'🐸'), xp:0, coins:0, equip:[], interests:[], missions:[], badges:[], pact:null}; });
+  o.goals.filter(g => g.on).forEach(g => { const id = uid6(); st.goals[id] = {id, title:g.title, e:g.e, days:g.days, time:g.time, mode:g.mode, check:g.check, status:'active', by:pid, since:today()}; });
+  o.rewards.filter(r => r.on).forEach(r => { const id = uid6(); st.rewards[id] = {id, title:r.title, e:r.e, cost:r.cost, kind:r.kind}; });
+  DB.createFamily(st, pid).then(() => { UI.onb = null; UI.tab = 1; UI.page = 'devices'; render(); toast('Familie gegründet 🎉'); celebrate(true); }).catch(e => { syncErr(e); toast('Gründen fehlgeschlagen: '+(e.code||e.message)); });
+}
+
+// ---------- Screens: Heute ----------
+function renderHero(p){
+  const tier = tierOf(p), C = COPY[tier], pr = progressOf(p);
+  return `<header class="hero">${heroDeco(tier)}<div class="row">${avRing(p)}<div class="grow"><div class="hello">${esc(C.hello(p.name))}</div><div class="hsub">${C.sub || new Date().toLocaleDateString('de-DE',{weekday:'long', day:'numeric', month:'long'})}</div></div>
+      ${p.role==='kid' ? `<button class="coin" data-a="tab" data-id="4">${C.coin} ${p.coins||0}</button>` : `<button class="iconbtn" data-a="page" data-id="settings">${ic('gear')}</button>`}</div>
+    <div class="hstats"><div class="hs"><b>🔥 ${personalStreak(p.id)}</b><span>Wochen-Serie</span></div><div class="hs"><b>${pr.done}/${pr.total}</b><span>heute</span></div><div class="hs"><b>👪 ${familyStreak()}</b><span>Familien-Serie</span></div></div></header>`;
+}
+function viewHeute(p){
+  const reqs = checkRequests(p), gs = goalsToday(), tier = tierOf(p);
+  return `${renderHero(p)}
+    ${!p.pact ? `<button class="banner gold" data-a="pact"><div class="bi">📜</div><div class="grow"><div class="qt">Familien-Pakt unterschreiben</div><div class="small muted">Schau dir eure gemeinsamen Ziele an und sei dabei!</div></div></button>` : ''}
+    ${reqs.length ? `<button class="banner peer" data-a="tab" data-id="3"><div class="bi">🤝</div><div class="grow"><div class="qt">${reqs.length} ${reqs.length===1?'Check wartet':'Checks warten'} auf dich</div><div class="small muted">${esc([...new Set(reqs.map(r => r.from?.name).filter(Boolean))].join(', '))}</div></div></button>` : ''}
+    ${gs.length ? `<div class="sec"><h2>👪 Familienziele</h2><span class="more">${gs.filter(g => L(today(), `g:${g.id}:${g.mode==='together'?'all':p.id}`)?.s==='done').length}/${gs.length}</span></div>${gs.map(g => goalCard(p,g)).join('')}` : ''}
+    <div class="sec"><h2>${tier==='kid'?'Deine Quests':'Meine Quests'}</h2>${(p.role==='parent'||S.settings.kidsOwnGoals)?`<button class="more" data-a="addOwn">+ Ziel</button>`:''}</div>
+    ${questList(p)}
+    <div class="sec"><h2>Familie heute</h2></div><div class="card" style="padding:12px">${familyStrip(p)}</div>
+    <div class="sec"><h2>Serie</h2></div>${streakCard(p)}`;
+}
+
+// ---------- Screens: Missionen ----------
+function mTile(p, mi, locked){
+  const ms = (p.missions||[]).find(a => a.id === mi.id);
+  const rib = locked ? '🔒 ' + mi.needs.filter(n => !p.equip.includes(n)).map(n => equipAll()[n]?.e||'?').join('') : mi.custom ? '🏠 eigene' : mi.steps.some(s => stepCheck(s)==='qr') ? '📷 QR' : '';
+  return `<button class="mtile ${locked?'locked':''}" style="--c:${CATS[mi.cat].c}" data-a="mission" data-id="${mi.id}">${rib?`<span class="rib">${rib}</span>`:''}<span class="me">${esc(mi.e||CATS[mi.cat].e)}</span><span class="mt">${esc(mi.title)}</span><span class="mm">${mi.weeks} ${+mi.weeks===1?'Woche':'Wochen'} · ${mi.steps.length} Schritte</span>${ms?`<span class="mprog"><i style="width:${ms.step/mi.steps.length*100}%"></i></span>`:''}</button>`;
+}
+function viewMissionen(p, manage){
+  const tier = tierOf(p), all = missionsAll();
+  const ageOk = manage || p.role === 'parent' ? all : all.filter(x => p.age >= x.age[0] && p.age <= x.age[1]);
+  const hasEq = x => (x.needs||[]).every(n => (p.equip||[]).includes(n));
+  const q = UI.search.trim().toLowerCase();
+  const pool = ageOk.filter(x => (!q || (x.title+' '+x.desc+' '+CATS[x.cat].n).toLowerCase().includes(q)) && (!UI.cat || x.cat === UI.cat));
+  const active = (p.missions||[]).map(a => mById(a.id)).filter(Boolean);
+  const rest = pool.filter(x => !active.includes(x));
+  const rec = rest.filter(x => manage || hasEq(x)).sort((a,b) => ((b.custom?2:0)+((p.interests||[]).includes(b.cat)?1:0)) - ((a.custom?2:0)+((p.interests||[]).includes(a.cat)?1:0)));
+  const locked = manage ? [] : rest.filter(x => !hasEq(x));
+  const addTile = `<button class="mtile add" data-a="newMission"><span style="font-size:34px">＋</span>${p.role==='parent'?'Eigene Mission anlegen':'Mission vorschlagen'}</button>`;
+  return `${manage?`<button class="back" data-a="back">${ic('left')} Mehr</button>`:''}<div style="padding-top:${manage?4:18}px"><div class="hello" style="font-size:1.8em">${manage?'Missions-Bibliothek':tier==='kid'?'Abenteuer':'Missionen'}</div><div class="muted small" style="margin-top:4px">${manage?'Eigene Missionen anlegen, bearbeiten, Vorlagen anpassen oder ausblenden.':'Passend zu Alter, Ausstattung und Interessen.'}</div></div>
+    <label class="search">${ic('search')}<input placeholder="Missionen suchen" value="${esc(UI.search)}" data-in="search"></label>
+    <div class="bubbles">${Object.entries(CATS).map(([k,c]) => `<button class="bub ${UI.cat===k?'on':''}" style="--c:${c.c}" data-a="cat" data-id="${UI.cat===k?'':k}"><span class="o">${c.e}</span>${c.n}</button>`).join('')}</div>
+    ${active.length && !manage ? `<div class="sec"><h2>Aktiv</h2><span class="more">${active.length}</span></div><div class="carousel">${active.map(x => mTile(p,x,false)).join('')}</div>` : ''}
+    <div class="sec"><h2>${manage?'Alle Missionen':q||UI.cat?'Treffer':'Für dich'}</h2><span class="more">${rec.length}</span></div>
+    <div class="grid2">${addTile}${rec.map(x => mTile(p,x,false)).join('')}</div>
+    ${locked.length ? `<div class="sec"><h2>Mit mehr Ausstattung</h2><span class="more">${locked.length}</span></div><div class="note" style="margin:-6px 2px 10px">Ausstattung im Profil ergänzen, dann werden diese frei.</div><div class="carousel">${locked.map(x => mTile(p,x,true)).join('')}</div>` : ''}
+    ${manage && (S.hiddenMissions||[]).length ? `<div class="sec"><h2>Ausgeblendet</h2><span class="more">${S.hiddenMissions.length}</span></div><div class="card" style="padding:4px 16px">${S.hiddenMissions.map(id => { const mi = MISSIONS.find(m => m.id === id); return mi ? `<div class="li"><span style="font-size:24px">${mi.e||CATS[mi.cat].e}</span><div class="grow">${esc(mi.title)}</div><button class="btn soft sm" data-a="unhide" data-id="${id}">Einblenden</button></div>` : ''; }).join('')}</div>` : ''}`;
+}
+
+// ---------- Screens: Familie ----------
+function viewFamilie(p){
+  const gsAll = Object.values(S.goals).filter(g => g.status === 'active');
+  const kidChecks = p.role === 'kid' ? checkRequests(p) : [];
+  const signed = profiles().filter(o => o.pact);
+  return `<div style="padding-top:18px"><div class="hello" style="font-size:1.8em">${esc(S.famName)}</div><div class="muted small" style="margin-top:4px">👪 Familien-Serie: <b>${familyStreak()} ${familyStreak()===1?'Woche':'Wochen'}</b> · diese Woche ${Math.round((familyWeekRatio(new Date())||0)*100)} % der Familienziele</div></div>
+    ${p.role === 'kid' ? `<div class="sec"><h2>🤝 Checks für dich</h2><span class="more">${kidChecks.length}</span></div>${kidChecks.map(r => reqCard(r,p)).join('') || '<div class="card muted small" style="text-align:center">Gerade keine Check-Anfragen.</div>'}<div class="note" style="margin-top:8px">Bestätige nur, was du selbst gesehen hast. Für jeden ehrlichen Check gibt’s +5 XP.</div>` : ''}
+    <div class="sec"><h2>Heute</h2></div><div class="card" style="padding:12px">${familyStrip(p)}</div>
+    ${p.role === 'parent' ? `<div class="sec"><h2>Mitglieder</h2><button class="more" data-a="addMember">+ Person</button></div>
+      ${profiles().map(k => { const pr = progressOf(k), priv = S.settings.teenPrivacy && k.role === 'kid' && k.age >= 14, devs = deviceOf(k.id);
+        return `<div class="card" style="margin-bottom:12px"><div class="row"><div class="rg">${ringSvg(54,5,pr.total?pr.done/pr.total:0,'var(--done)','var(--track)')}<span class="av" style="${avStyle(k.avatar)}">${esc(k.avatar)}</span></div>
+          <div class="grow"><div class="qt">${esc(k.name)}${k.role==='kid'?', '+k.age:''}</div><div class="qs"><span class="chip">${TIER_NAME[tierOf(k)]}</span><span>Lv ${level(k.xp)} · 🔥 ${personalStreak(k.id)}</span><span>${devs.length?'📱 gekoppelt':LOCAL?'':'⚪ kein Gerät'}</span>${k.pact?'<span>📜 ✓</span>':''}</div></div></div>
+          ${priv ? `<div class="hint">🔒 <b>Autonomie ab 14:</b> ${weekActiveCount(k.id,new Date())}/7 aktive Tage diese Woche, ${(k.missions||[]).length} laufende Missionen.</div>` : (k.missions||[]).length ? `<div class="qs" style="margin-top:10px">${k.missions.map(ms => { const mi = mById(ms.id); return mi ? `<span class="chip">${esc(mi.e||CATS[mi.cat].e)} ${esc(mi.title)} ${ms.step}/${mi.steps.length}</span>` : ''; }).join('')}</div>` : ''}
+          <div class="row" style="margin-top:12px;gap:8px"><button class="btn soft sm grow" data-a="agenda" data-id="${k.id}">🗓️ Agenda</button><button class="btn soft sm grow" data-a="editMember" data-id="${k.id}">✏️ Profil</button>${!LOCAL && !devs.length ? `<button class="btn sm grow" data-a="invite" data-id="${k.id}">📱 Koppeln</button>` : ''}</div></div>`; }).join('')}` : ''}
+    <div class="sec"><h2>👪 Familienziele</h2>${p.role==='parent'?`<button class="more" data-a="newGoal">+ Ziel</button>`:`<button class="more" data-a="newGoal">+ Vorschlagen</button>`}</div>
+    <div class="card" style="padding:4px 16px">${gsAll.map(g => `<div class="li"><span style="font-size:26px">${esc(g.e)}</span><div class="grow"><b>${esc(g.title)}</b><div class="small muted">${g.days.length===7?'täglich':WEEK_ORDER.filter(d => g.days.includes(d)).map(d => DAYS[d]).join(' ')} · ${g.time} · ${g.mode==='together'?'gemeinsam':'jede:r'}${g.check!=='self'?' · '+CHECKS[g.check].n:''}</div></div>${p.role==='parent'?`<button class="x" data-a="editGoal" data-id="${g.id}">✏️</button>`:''}</div>`).join('') || '<div class="li muted small">Noch keine Familienziele.</div>'}</div>
+    <div class="sec"><h2>📜 Familien-Pakt</h2><span class="more">${signed.length}/${profiles().length}</span></div>
+    <div class="pact"><h3>${esc(S.famName)}</h3><ul>${gsAll.map(g => `<li>${esc(g.e)} ${esc(g.title)}</li>`).join('')}</ul><div class="sig">${profiles().map(o => `<span class="${o.pact?'':'no'}">${esc(o.avatar)} ${esc(o.name)} ${o.pact?'✍️':'…'}</span>`).join('')}</div>
+      ${!p.pact ? `<button class="btn block" style="margin-top:12px" data-a="signPact">Ich bin dabei ✍️</button>` : ''}</div>`;
+}
+function deviceOf(pid){ return FAM ? Object.entries(FAM.members||{}).filter(([u,m]) => m.pid === pid) : []; }
+
+// ---------- Screens: Checks / Shop / Profil / Mehr ----------
+function viewChecks(p){
+  const reqs = checkRequests(p), due = dueQRSteps();
+  return `<div style="padding-top:18px"><div class="hello" style="font-size:1.8em">Checks</div><div class="muted small" style="margin-top:4px">Bestätigungen, Wünsche und Vorschläge.</div></div>
+    <div class="sec"><h2>Offen</h2><span class="more">${reqs.length}</span></div>${reqs.map(r => reqCard(r,p)).join('') || '<div class="card muted small" style="text-align:center">Nichts offen 🎉</div>'}
+    ${due.length ? `<div class="sec"><h2>📷 QR-Schritte der Kinder</h2></div><div class="card" style="padding:4px 16px">${due.map(d => `<div class="li"><div class="av" style="${avStyle(d.p.avatar)}">${esc(d.p.avatar)}</div><div class="grow"><b>${esc(stepT(d.mi.steps[d.step]))}</b><div class="small muted">${esc(d.p.name)} · ${esc(d.mi.title)}</div></div><button class="btn sm" data-a="showQR" data-id="m|${d.mi.id}.${d.step}">QR zeigen</button></div>`).join('')}</div><div class="note" style="margin-top:8px">Vor Ort den Code auf deinem Handy zeigen – das Kind scannt ihn mit seinem Gerät.</div>` : ''}`;
+}
+function viewShop(p){
+  const C = COPY[tierOf(p)], mine = Object.values(S.redemptions).filter(r => r.pid === p.id).sort((a,b) => b.at - a.at).slice(0,6);
+  return `<div style="padding-top:18px"><div class="hello" style="font-size:1.8em">${C.tabs[4]}</div></div>
+    <div class="wallet"><div style="font-size:44px">${C.coin}</div><div><div class="big">${p.coins||0}</div><div class="small" style="opacity:.85;font-weight:700">${C.coins} zum Einlösen</div></div></div>
+    ${mine.length ? `<div class="sec"><h2>Deine Wünsche</h2></div><div class="card" style="padding:4px 16px">${mine.map(r => { const rw = S.rewards[r.rid]; return `<div class="li"><span style="font-size:22px">${esc(rw?.e||'🎁')}</span><span class="grow">${esc(rw?.title||'(gelöscht)')}</span><span class="chip ${r.status==='pending'?'peer':''}">${r.status==='pending'?'⏳ wartet':'✓ freigegeben'}</span></div>`; }).join('')}</div>` : ''}
+    <div class="sec"><h2>Von deinen Eltern</h2></div>
+    <div class="grid2">${Object.values(S.rewards).sort((a,b) => a.cost-b.cost).map(r => { const can = (p.coins||0) >= r.cost; return `<div class="rw"><div class="re">${esc(r.e)}</div><div class="rt">${esc(r.title)}</div><span class="chip" style="margin-top:6px">${esc(r.kind)}</span><button class="btn sm price ${can?'':'soft'}" ${can?'':'disabled'} data-a="redeem" data-id="${r.id}">${C.coin} ${r.cost}</button></div>`; }).join('') || '<div class="muted small">Noch keine Belohnungen.</div>'}</div>`;
+}
+function viewProfil(p){
+  const tier = tierOf(p), eq = equipAll();
+  return `<button class="back" data-a="back">${ic('left')} Zurück</button>
+    <div class="card" style="text-align:center;margin-top:8px"><div style="display:flex;justify-content:center">${avRing(p, 96)}</div><div class="hello" style="margin-top:10px;font-size:1.5em">${esc(p.name)}</div><div class="muted small">${p.role==='kid'?p.age+' Jahre · ':''}${p.xp||0} XP · ${TIER_NAME[tier]}</div></div>
+    <div class="sec"><h2>Medaillen</h2><span class="more">${(p.badges||[]).length}</span></div>
+    <div class="card">${(p.badges||[]).length ? `<div class="medals">${p.badges.slice(0,12).map(b => { const [e,t] = b.split('|'); return `<div class="medal"><span class="md">${esc(e)}</span>${esc(t)}</div>`; }).join('')}</div>` : '<div class="muted small" style="text-align:center">Schließe eine Mission ab, um deine erste Medaille zu bekommen.</div>'}</div>
+    <div class="sec"><h2>Meine Ausstattung</h2><button class="more" data-a="newEquip">+ Neu</button></div>
+    <div class="tagwrap">${Object.entries(eq).map(([k,e]) => `<button class="tg ${(p.equip||[]).includes(k)?'on':''}" data-a="equip" data-id="${k}">${esc(e.e)} ${esc(e.n)}</button>`).join('')}</div>
+    <div class="sec"><h2>Interessen</h2></div>
+    <div class="tagwrap">${Object.entries(CATS).map(([k,c]) => `<button class="tg ${(p.interests||[]).includes(k)?'on':''}" data-a="interest" data-id="${k}">${c.e} ${c.n}</button>`).join('')}</div>
+    <div class="sec"><h2>Avatar</h2></div>
+    <div class="avgrid">${(p.role==='parent'?ADULT_AV:tier==='teen'?[p.name[0]?.toUpperCase()||'A','★','◆','●','▲','✦','♪','⚡',...KID_AV.slice(0,4)]:KID_AV).map(a => `<button class="${p.avatar===a?'on':''}" data-a="setAvatar" data-id="${esc(a)}">${esc(a)}</button>`).join('')}</div>`;
+}
+function viewMehr(p){
+  const items = [['library','📚','Missions-Bibliothek','Eigene Missionen anlegen & bearbeiten'],['rewards','🎁','Belohnungen','Was die Kinder einlösen können'],['equipment','🧰','Ausstattung','z. B. Teleskop, Kanu, Nähmaschine'],['qr','🖨️','QR-Codes drucken','Für Familienziele, Aufgaben & Missionen'],['devices','📱','Geräte & Familie','Koppeln, entfernen, Profile'],['settings','⚙️','Einstellungen','Familienregeln']];
+  return `<div style="padding-top:18px"><div class="hello" style="font-size:1.8em">Mehr</div></div>
+    <div class="card" style="margin-top:16px;padding:4px 14px">${items.map(([id,e,t,d]) => `<button class="menu" data-a="page" data-id="${id}"><span class="mi">${e}</span><span class="grow">${t}<div class="small muted" style="font-weight:600">${d}</div></span>›</button>`).join('')}</div>
+    <div class="sec"><h2>Meine Ausstattung & Profil</h2></div><button class="btn soft block" data-a="profile">Mein Profil öffnen</button>`;
+}
+function pageRewards(){
+  return `<button class="back" data-a="back">${ic('left')} Mehr</button><div class="row between"><div class="hello" style="font-size:1.8em">Belohnungen</div><button class="btn sm" data-a="newReward">${ic('plus')} Neu</button></div>
+    <div class="grid2" style="margin-top:16px">${Object.values(S.rewards).sort((a,b) => a.cost-b.cost).map(r => `<div class="rw"><div class="re">${esc(r.e)}</div><div class="rt">${esc(r.title)}</div><span class="chip" style="margin-top:6px">${esc(r.kind)} · ${r.cost}</span><button class="btn soft sm price" data-a="editReward" data-id="${r.id}">Bearbeiten</button></div>`).join('')}</div>
+    <div class="hint">💡 Lieber gemeinsame Erlebnisse & Privilegien als Geld oder Dinge.</div>`;
+}
+function pageEquipment(){
+  const custom = Object.entries(S.equipment||{});
+  return `<button class="back" data-a="back">${ic('left')} Mehr</button><div class="row between"><div class="hello" style="font-size:1.8em">Ausstattung</div><button class="btn sm" data-a="newEquip">${ic('plus')} Neu</button></div>
+    <p class="muted small">Was habt ihr zuhause? Eigene Ausstattung kann in Missionen vorausgesetzt werden – jede:r markiert im Profil, was sie/er nutzen kann.</p>
+    <div class="sec"><h2>Eigene</h2></div><div class="card" style="padding:4px 16px">${custom.map(([k,e]) => `<div class="li"><span style="font-size:24px">${esc(e.e)}</span><div class="grow"><b>${esc(e.n)}</b></div><button class="x" data-a="delEquip" data-id="${k}">✕</button></div>`).join('') || '<div class="li muted small">Noch keine – z. B. „Teleskop“ anlegen.</div>'}</div>
+    <div class="sec"><h2>Standard</h2></div><div class="tagwrap">${Object.values(EQUIP).map(e => `<span class="tg">${e.e} ${e.n}</span>`).join('')}</div>`;
+}
+function pageQR(){
+  const cards = [];
+  Object.values(S.goals).filter(g => g.status==='active').forEach(g => cards.push({t:`${g.e} ${g.title}`, s:'Familienziel', p:qrPayload('g', g.id), c:shortCode('g', g.id), q:g.check==='qr'}));
+  Object.values(S.agenda).forEach(a => cards.push({t:`${TYPES[a.type].e} ${a.title}`, s:`Aufgabe von ${S.profiles[a.owner]?.name||'?'}`, p:qrPayload('a', a.id), c:shortCode('a', a.id), q:a.check==='qr'}));
+  missionsAll().forEach(mi => mi.steps.forEach((s,i) => { if (stepCheck(s) === 'qr') cards.push({t:`${mi.e||CATS[mi.cat].e} ${stepT(s)}`, s:`${mi.title} · Schritt ${i+1}`, p:qrPayload('m', `${mi.id}.${i}`), c:shortCode('m', `${mi.id}.${i}`), q:true}); }));
+  const show = UI.form.qrAll ? cards : cards.filter(c => c.q);
+  return `<div class="noprint"><button class="back" data-a="back">${ic('left')} Mehr</button><div class="row between"><div class="hello" style="font-size:1.8em">QR-Codes</div><button class="btn sm" data-a="print">🖨️ Drucken</button></div>
+    <p class="muted small">Ausdrucken und dort aufhängen, wo es passiert – z. B. „Handys weglegen“ an der Ladestation. Gescannt wird mit dem Scan-Button der App.</p>
+    <div class="seg" style="margin-bottom:14px"><button class="${!UI.form.qrAll?'on':''}" data-a="qrFilter" data-id="">Nur QR-Checks (${cards.filter(c => c.q).length})</button><button class="${UI.form.qrAll?'on':''}" data-a="qrFilter" data-id="1">Alle (${cards.length})</button></div></div>
+    <div class="printgrid">${show.map(c => `<div class="pcard">${qrSvg(c.p)}<b>${esc(c.t)}</b><small>${esc(c.s)} · ${esc(c.c)}</small></div>`).join('') || '<div class="muted small">Noch keine QR-Checks. Wähle bei Zielen oder Missionsschritten „📷 QR-Code“.</div>'}</div>`;
+}
+function pageDevices(){
+  const devs = FAM ? Object.entries(FAM.members||{}) : [];
+  return `<button class="back" data-a="back">${ic('left')} Zurück</button><div class="hello" style="font-size:1.8em">Geräte & Familie</div>
+    ${LOCAL ? '<div class="hint">🧪 Testmodus: keine Geräte-Kopplung. Sobald das Firebase-Projekt hinterlegt ist, koppelt hier jede:r das eigene Gerät.</div>' : `<p class="muted small">Jede:r koppelt das eigene Gerät mit einem Einmal-Code (48 Std. gültig).</p>`}
+    <div class="sec"><h2>Profile</h2><button class="more" data-a="addMember">+ Person</button></div>
+    <div class="card" style="padding:4px 16px">${profiles().map(k => { const d = deviceOf(k.id); return `<div class="li"><div class="av" style="${avStyle(k.avatar)}">${esc(k.avatar)}</div><div class="grow"><b>${esc(k.name)}</b><div class="small muted">${k.role==='parent'?'Elternteil':k.age+' Jahre'} · ${LOCAL?'Testmodus':d.length?`📱 ${d.length} Gerät${d.length>1?'e':''}`:'kein Gerät'}</div></div>${!LOCAL?`<button class="btn sm ${d.length?'soft':''}" data-a="invite" data-id="${k.id}">${d.length?'+ Gerät':'Koppeln'}</button>`:''}</div>`; }).join('')}</div>
+    ${devs.length ? `<div class="sec"><h2>Gekoppelte Geräte</h2></div><div class="card" style="padding:4px 16px">${devs.map(([u,m]) => `<div class="li"><span style="font-size:22px">📱</span><div class="grow"><b>${esc(S.profiles[m.pid]?.name||m.name||'?')}</b>${u===uid?' <span class="muted small">(dieses Gerät)</span>':''}<div class="small muted">seit ${new Date(m.joined).toLocaleDateString('de-DE')}</div></div>${u!==uid?`<button class="x" data-a="rmDevice" data-id="${u}">✕</button>`:''}</div>`).join('')}</div>` : ''}`;
+}
+function pageSettings(){
+  const s = S.settings, par = isParent();
+  const tg = (key, title, desc) => `<div class="toggle"><div class="grow"><b>${title}</b><div class="small muted" style="margin-top:2px">${desc}</div></div><button class="sw ${s[key]?'on':''}" data-a="setting" data-id="${key}" ${par?'':'disabled'}></button></div>`;
+  return `<button class="back" data-a="back">${ic('left')} Zurück</button><div class="hello" style="font-size:1.8em">Einstellungen</div>
+    ${par ? `<label class="f">Familienname</label><div class="row"><input class="in" id="famNameIn" value="${esc(S.famName)}"><button class="btn sm" data-a="saveFamName">OK</button></div>
+    <div class="card" style="margin-top:16px;padding:4px 16px">${tg('kidsOwnGoals','Kinder legen eigene Ziele an','Eigene Ziele motivieren stärker als vorgegebene.')}${tg('teenPrivacy','Autonomie ab 14','Eltern sehen bei Jugendlichen nur die Wochenübersicht.')}</div>` : ''}
+    <div class="sec"><h2>Dieses Gerät</h2></div>
+    <div class="card small" style="line-height:1.6">Angemeldet als <b>${esc(me().name)}</b>${LOCAL?' · Testmodus (nur lokal)':''}</div>
+    <button class="btn danger block" style="margin-top:12px" data-a="leave">${LOCAL?'Testdaten löschen':'Gerät von der Familie trennen'}</button>
+    <div class="note" style="margin-top:14px">Daten liegen in eurem eigenen Firebase-Projekt (Firestore). Keine Werbung, keine Weitergabe.</div>`;
+}
+
+// ---------- Modals ----------
+function seg(key, opts, cls=''){ return `<div class="seg ${cls}">${opts.map(([v,l,e]) => `<button type="button" class="${String(UI.form[key])===String(v)?'on':''}" data-a="fset" data-k="${key}" data-id="${esc(v)}">${e?`<span class="se">${e}</span>`:''}${l}</button>`).join('')}</div>`; }
+const dayPick = () => `<div class="seg days">${WEEK_ORDER.map(d => `<button type="button" class="${UI.form.days.includes(d)?'on':''}" data-a="fday" data-id="${d}">${DAYS[d]}</button>`).join('')}</div>`;
+const checkSeg = (opts=['self','peer','parent','qr']) => seg('check', opts.map(c => [c, CHECKS[c].n, CHECKS[c].e]));
+function renderModal(){
+  const md = UI.modal; if (!md) return '';
+  const p = me(), F = UI.form, tier = tierOf(p);
+  let h = '';
+  if (md.type === 'mission'){
+    const mi = mById(md.id); if (!mi) { UI.modal = null; return ''; }
+    const ms = (p.missions||[]).find(a => a.id === mi.id), eq = equipAll();
+    const missing = (mi.needs||[]).filter(n => !(p.equip||[]).includes(n));
+    h = `<div class="mhead" style="--c:${CATS[mi.cat].c}"><div class="small" style="opacity:.85;font-weight:700">${CATS[mi.cat].e} ${CATS[mi.cat].n} · ${mi.age[0]}–${mi.age[1]} Jahre${mi.custom?' · 🏠 eigene':''}</div><h1>${esc(mi.title)}</h1><div class="meta"><span>⏱ ${mi.weeks} Wo.</span><span>🚀 ${mi.steps.length} Schritte</span><span>+${mi.steps.length*30+100} XP</span></div><span class="me">${esc(mi.e||CATS[mi.cat].e)}</span></div>
+      ${mi.desc?`<p style="margin:0 2px 12px;line-height:1.5">${esc(mi.desc)}</p>`:''}
+      ${(mi.needs||[]).length ? `<div class="qs" style="margin:0 2px 8px">${mi.needs.map(n => `<span class="chip">${(p.equip||[]).includes(n)?'✅':'❌'} ${esc(eq[n]?.e||'')} ${esc(eq[n]?.n||n)}</span>`).join('')}</div>` : ''}
+      <div class="sec" style="margin-top:14px"><h2>Pfad</h2></div>
+      <div class="path">${mi.steps.map((s,i) => { const cls = ms ? (i < ms.step ? 'done' : i === ms.step ? 'cur' : '') : ''; const c = stepCheck(s); return `<div class="node ${cls}"><div class="nd">${cls==='done'?'✓':i+1}</div><div class="nt">${esc(stepT(s))} ${c!=='self'?checkChip(c):''}</div></div>`; }).join('')}</div>
+      <div style="margin-top:18px">${ms ? `<div class="hint">Läuft – der nächste Schritt steht in deiner Tagesliste.</div><button class="btn soft block" style="margin-top:10px" data-a="stopMission" data-id="${mi.id}">Mission pausieren</button>`
+        : missing.length && p.role === 'kid' ? `<button class="btn block" disabled>Ausstattung fehlt</button>` : `<button class="btn block" data-a="startMission" data-id="${mi.id}">${tier==='kid'?'Los geht’s! 🚀':'Mission starten'}</button>`}
+      ${isParent() ? `<div class="row" style="margin-top:10px;gap:8px">${mi.custom ? `<button class="btn soft sm grow" data-a="editMission" data-id="${mi.id}">✏️ Bearbeiten</button><button class="btn danger sm" data-a="delMission" data-id="${mi.id}">Löschen</button>` : `<button class="btn soft sm grow" data-a="copyMission" data-id="${mi.id}">✏️ Kopie anpassen</button><button class="btn soft sm grow" data-a="hideMission" data-id="${mi.id}">Ausblenden</button>`}</div>` : ''}
+      ${isParent() && p.role === 'parent' ? `<div class="note" style="margin-top:10px">Eltern starten Missionen für sich selbst. Für Kinder: auf deren Gerät starten – oder gemeinsam.</div>` : ''}</div>`;
+  } else if (md.type === 'missionEdit'){
+    const eq = equipAll(), par = isParent();
+    h = `<h1>${md.id ? 'Mission bearbeiten' : par ? 'Eigene Mission' : 'Mission vorschlagen'}</h1>${par?'':'<div class="muted small">Deine Eltern schauen drüber und schalten sie frei.</div>'}
+      <form data-form="mission">
+      <div class="row" style="align-items:flex-end"><div><label class="f">Symbol</label><input class="in emo-in" data-in="f.e" value="${esc(F.e)}" placeholder="🔭" maxlength="8"></div><div class="grow"><label class="f">Titel</label><input class="in" data-in="f.title" value="${esc(F.title)}" placeholder="z. B. Mondspaziergang mit dem Teleskop" required></div></div>
+      <label class="f">Worum geht’s?</label><textarea class="in" data-in="f.desc" placeholder="Kurz beschreiben, was man erlebt und lernt.">${esc(F.desc)}</textarea>
+      <label class="f">Rubrik</label><div class="bubbles" style="padding-top:4px">${Object.entries(CATS).map(([k,c]) => `<button type="button" class="bub ${F.cat===k?'on':''}" style="--c:${c.c}" data-a="fset" data-k="cat" data-id="${k}"><span class="o">${c.e}</span>${c.n}</button>`).join('')}</div>
+      <div class="row"><div class="grow"><label class="f">Alter von</label><select class="in" data-in="f.ageMin">${Array.from({length:12},(_,i)=>i+6).map(a => `<option ${+F.ageMin===a?'selected':''}>${a}</option>`).join('')}<option ${+F.ageMin===99?'selected':''} value="99">Eltern</option></select></div><div class="grow"><label class="f">bis</label><select class="in" data-in="f.ageMax">${Array.from({length:12},(_,i)=>i+6).map(a => `<option ${+F.ageMax===a?'selected':''}>${a}</option>`).join('')}<option ${+F.ageMax===99?'selected':''} value="99">alle</option></select></div><div class="grow"><label class="f">Wochen</label><select class="in" data-in="f.weeks">${[1,2,3,4,6,8,12].map(w => `<option ${+F.weeks===w?'selected':''}>${w}</option>`).join('')}</select></div></div>
+      <label class="f">Braucht Ausstattung</label><div class="tagwrap">${Object.entries(eq).map(([k,e]) => `<button type="button" class="tg ${F.needs.includes(k)?'on':''}" data-a="fneed" data-id="${k}">${esc(e.e)} ${esc(e.n)}</button>`).join('')}<button type="button" class="tg add" data-a="newEquip">＋ neu</button></div>
+      <label class="f">Schritte (Pfad)</label>
+      ${F.steps.map((s,i) => `<div class="stepedit"><div class="row"><b style="width:22px;text-align:center">${i+1}</b><input class="in grow" data-in="step.${i}" value="${esc(s.t)}" placeholder="z. B. Mond durchs Teleskop beobachten" style="padding:10px"><button type="button" class="x" data-a="stepUp" data-id="${i}" ${i===0?'disabled':''}>↑</button><button type="button" class="x" data-a="stepDel" data-id="${i}">✕</button></div>
+        <div class="row" style="margin-top:8px;gap:6px"><span class="small muted" style="width:60px">Prüfung</span><div class="seg mini">${Object.entries(CHECKS).map(([c,C]) => `<button type="button" class="${s.check===c?'on':''}" data-a="stepCheck" data-id="${i}|${c}" title="${C.n}">${C.e}</button>`).join('')}</div><span class="small muted">${CHECKS[s.check].n}</span></div></div>`).join('')}
+      <button type="button" class="btn soft block sm" style="margin-top:10px" data-a="stepAdd">${ic('plus')} Schritt</button>
+      <div class="hint">📷 QR-Schritte: Eltern drucken den Code aus (Mehr → QR-Codes) oder zeigen ihn vor Ort auf dem Handy. 🤝 Peer: jemand aus der Familie bestätigt.</div>
+      <button class="btn block" style="margin-top:16px">${md.id ? 'Speichern' : par ? 'Mission anlegen' : 'Vorschlagen'}</button></form>`;
+  } else if (md.type === 'own'){
+    const par = p.role === 'parent';
+    h = `<h1>${par ? 'Eigenes Ziel formulieren' : 'Eigenes Ziel'}</h1><form data-form="own">
+      <label class="f">Was willst du schaffen?</label><input class="in" data-in="f.title" value="${esc(F.title)}" placeholder="${par?'z. B. Kein Handy im Schlafzimmer':'z. B. 20 Liegestütze'}" required>
+      <label class="f">Art</label>${seg('type', [['habit','Habit','⚡'],['termin','Termin','📅'],['haushalt','Haushalt','🧹']])}
+      <label class="f">Wann?</label>${seg('freq', [['all','Täglich'],['custom','Bestimmte Tage'],['today','Nur heute']])}
+      ${F.freq==='custom' ? `<div style="margin-top:8px">${dayPick()}</div>` : ''}
+      <label class="f">Uhrzeit</label><input class="in" type="time" data-in="f.time" value="${esc(F.time||'17:00')}">
+      <label class="f">Wer bestätigt?</label>${checkSeg(par ? ['self','peer','qr'] : ['self','peer','parent','qr'])}
+      <div class="hint">${CHECKS[F.check].e} ${par && F.check==='peer' ? 'Deine Kinder oder dein:e Partner:in bestätigen – Rollentausch!' : CHECKS[F.check].d}</div>
+      <button class="btn block" style="margin-top:16px">Hinzufügen</button></form>`;
+  } else if (md.type === 'agenda'){
+    const k = S.profiles[md.id], list = Object.values(S.agenda).filter(a => a.owner === k.id).sort((a,b) => a.time.localeCompare(b.time));
+    h = `<h1>Agenda von ${esc(k.name)}</h1><div class="muted small">Regeltermine, Haushalt, Mikro-Habits.</div>
+      <form data-form="agenda" class="card" style="margin-top:14px">
+        <label class="f" style="margin-top:0">Was?</label><input class="in" data-in="f.title" value="${esc(F.title)}" placeholder="z. B. Blumen gießen" required>
+        <label class="f">Art</label>${seg('type', [['haushalt','Haushalt','🧹'],['termin','Termin','📅'],['habit','Habit','⚡']])}
+        <label class="f">Tage</label>${dayPick()}
+        <label class="f">Uhrzeit</label><input class="in" type="time" data-in="f.time" value="${esc(F.time||'18:00')}">
+        <label class="f">Wer bestätigt?</label>${checkSeg()}
+        <div class="small muted" style="margin-top:10px">Belohnung: +${TYPES[F.type].xp} XP · +${TYPES[F.type].coins} Coins</div>
+        <button class="btn block" style="margin-top:12px">Hinzufügen</button></form>
+      <div class="sec"><h2>Aktuell</h2><span class="more">${list.length}</span></div>
+      ${list.map(a => `<div class="quest"><div class="tile" style="--c1:${TYPES[a.type].c1};--c2:${TYPES[a.type].c2}">${TYPES[a.type].e}</div><div class="grow"><div class="qt">${esc(a.title)}</div><div class="qs"><span>${a.once?'nur '+a.once.slice(8)+'.'+a.once.slice(5,7)+'.':WEEK_ORDER.filter(d => a.days.includes(d)).map(d => DAYS[d]).join(' ')} · ${a.time}</span>${a.by===k.id&&k.role==='kid'?'<span class="chip">✨ eigenes</span>':''}${checkChip(a.check)}</div></div><button class="x" data-a="delAgenda" data-id="${a.id}">✕</button></div>`).join('') || '<div class="muted small">Noch nichts geplant.</div>'}`;
+  } else if (md.type === 'goal'){
+    const par = isParent();
+    h = `<h1>${md.id ? 'Familienziel bearbeiten' : par ? 'Neues Familienziel' : 'Familienziel vorschlagen'}</h1><form data-form="goal">
+      <div class="row" style="align-items:flex-end"><div><label class="f">Symbol</label><input class="in emo-in" data-in="f.e" value="${esc(F.e)}" placeholder="👪" maxlength="8"></div><div class="grow"><label class="f">Ziel</label><input class="in" data-in="f.title" value="${esc(F.title)}" placeholder="z. B. Sonntags gemeinsam kochen" required></div></div>
+      <label class="f">Tage</label>${dayPick()}
+      <label class="f">Uhrzeit</label><input class="in" type="time" data-in="f.time" value="${esc(F.time||'18:00')}">
+      <label class="f">Wie wird abgehakt?</label>${seg('mode', [['together','Gemeinsam','👪'],['each','Jede:r einzeln','🙋']])}
+      <label class="f">Wer bestätigt?</label>${checkSeg(['self','peer','qr'])}
+      <div class="hint">${F.check==='qr' ? '📷 Code ausdrucken (Mehr → QR-Codes) und dort aufhängen, wo es passiert – z. B. an der Handy-Ladestation.' : CHECKS[F.check].d}</div>
+      <button class="btn block" style="margin-top:16px">${md.id?'Speichern':par?'Hinzufügen':'Vorschlagen'}</button>
+      ${md.id ? `<button type="button" class="btn danger block" style="margin-top:8px" data-a="delGoal" data-id="${md.id}">Ziel entfernen</button>` : ''}</form>`;
+  } else if (md.type === 'onbGoal'){
+    h = `<h1>Familienziel</h1><form data-form="onbGoal">
+      <div class="row" style="align-items:flex-end"><div><label class="f">Symbol</label><input class="in emo-in" data-in="f.e" value="${esc(F.e)}" maxlength="8"></div><div class="grow"><label class="f">Ziel</label><input class="in" data-in="f.title" value="${esc(F.title)}" required></div></div>
+      <label class="f">Tage</label>${dayPick()}<label class="f">Uhrzeit</label><input class="in" type="time" data-in="f.time" value="${esc(F.time||'18:00')}">
+      <label class="f">Wie wird abgehakt?</label>${seg('mode', [['together','Gemeinsam','👪'],['each','Jede:r einzeln','🙋']])}
+      <label class="f">Wer bestätigt?</label>${checkSeg(['self','peer','qr'])}
+      <button class="btn block" style="margin-top:16px">Übernehmen</button></form>`;
+  } else if (md.type === 'member'){
+    const editing = md.id && S?.profiles[md.id];
+    h = `<h1>${editing ? 'Profil bearbeiten' : 'Person hinzufügen'}</h1><form data-form="member">
+      <label class="f">Name</label><input class="in" data-in="f.name" value="${esc(F.name)}" required>
+      <label class="f">Rolle</label>${seg('role', [['kid','Kind / Jugendliche:r','🧒'],['parent','Elternteil','🧑']])}
+      ${F.role==='kid' ? `<label class="f">Alter</label><select class="in" data-in="f.age">${Array.from({length:12},(_,i)=>i+6).map(a => `<option ${+F.age===a?'selected':''}>${a}</option>`).join('')}</select><div class="hint">Das Alter bestimmt die Oberfläche: ${TIER_NAME[tierOf({role:'kid',age:+F.age})]}</div>` : ''}
+      <label class="f">Avatar</label><div class="avgrid">${(F.role==='parent'?ADULT_AV:KID_AV).map(a => `<button type="button" class="${F.avatar===a?'on':''}" data-a="fset" data-k="avatar" data-id="${a}">${a}</button>`).join('')}</div>
+      <button class="btn block" style="margin-top:16px">${editing?'Speichern':'Hinzufügen'}</button>
+      ${editing && md.id !== DEV.pid ? `<button type="button" class="btn danger block" style="margin-top:8px" data-a="delMember" data-id="${md.id}">Profil löschen</button>` : ''}</form>`;
+  } else if (md.type === 'reward'){
+    h = `<h1>${md.id?'Belohnung bearbeiten':'Neue Belohnung'}</h1><form data-form="reward">
+      <div class="row" style="align-items:flex-end"><div><label class="f">Symbol</label><input class="in emo-in" data-in="f.e" value="${esc(F.e)}" placeholder="🎁" maxlength="8"></div><div class="grow"><label class="f">Belohnung</label><input class="in" data-in="f.title" value="${esc(F.title)}" placeholder="z. B. Gemeinsam Pizza backen" required></div></div>
+      <label class="f">Art</label>${seg('kind', [['Erlebnis','Erlebnis','🎉'],['Privileg','Privileg','👑'],['Sache','Sache','📦']])}
+      <label class="f">Preis in Coins</label><input class="in" type="number" min="10" step="10" data-in="f.cost" value="${esc(F.cost)}">
+      <button class="btn block" style="margin-top:16px">Speichern</button>${md.id?`<button type="button" class="btn danger block" style="margin-top:8px" data-a="delReward" data-id="${md.id}">Löschen</button>`:''}</form>`;
+  } else if (md.type === 'equip'){
+    h = `<h1>Neue Ausstattung</h1><form data-form="equip"><div class="row" style="align-items:flex-end"><div><label class="f">Symbol</label><input class="in emo-in" data-in="f.e" value="${esc(F.e)}" placeholder="🔭" maxlength="8"></div><div class="grow"><label class="f">Name</label><input class="in" data-in="f.title" value="${esc(F.title)}" placeholder="z. B. Teleskop" required></div></div>
+      <button class="btn block" style="margin-top:16px">Hinzufügen</button></form>`;
+  } else if (md.type === 'invite'){
+    const k = S.profiles[md.id];
+    h = `<div style="text-align:center"><h1>${esc(k.avatar)} ${esc(k.name)} koppeln</h1><p class="small muted">Auf ${esc(k.name)}s Gerät LifeQuest öffnen (am besten vom Home-Bildschirm) → „Einer Familie beitreten“ → Code eingeben oder scannen.</p>
+      ${md.code ? `<div class="qrbox">${qrSvg(`LQ1|J|J|${md.code}`)}</div><div class="code" style="margin-top:12px">${md.code.slice(0,4)} ${md.code.slice(4)}</div><div class="small muted" style="margin-top:6px">Gilt 48 Stunden und nur einmal.</div>` : '<div class="hint">Code wird erstellt …</div>'}
+      <button class="btn block" style="margin-top:16px" data-a="close">Fertig</button></div>`;
+  } else if (md.type === 'showQR'){
+    h = `<div style="text-align:center"><h1>${esc(md.title)}</h1><p class="small muted">${esc(md.sub||'')}</p><div class="qrbox" style="width:260px">${qrSvg(md.payload)}</div><div class="small muted" style="margin-top:8px">${esc(md.code)}</div><button class="btn block" style="margin-top:16px" data-a="close">Schließen</button></div>`;
+  } else if (md.type === 'pact'){
+    const gs = Object.values(S.goals).filter(g => g.status === 'active');
+    h = `<div class="pact"><h3>📜 ${esc(S.famName)}</h3><div class="small">Wir nehmen uns gemeinsam vor:</div><ul>${gs.map(g => `<li>${esc(g.e)} ${esc(g.title)}</li>`).join('')}</ul><div class="small">Wir helfen uns gegenseitig, bestätigen ehrlich und feiern zusammen.</div><div class="sig">${profiles().map(o => `<span class="${o.pact?'':'no'}">${esc(o.avatar)} ${esc(o.name)} ${o.pact?'✍️':'…'}</span>`).join('')}</div></div>
+      <button class="btn block" style="margin-top:16px" data-a="signPact">Ich bin dabei ✍️</button><button class="btn soft block" style="margin-top:8px" data-a="close">Später</button>`;
+  }
+  return `<div class="scrim" data-a="scrim"><div class="sheet" data-stop="1"><div class="grab"></div>${h}</div></div>`;
+}
+
+// ---------- Scanner ----------
+let camStream = null, camRAF = null;
+function openScan(target){ UI.scan = {target, msg:null}; render(); startCam(); }
+function renderScanner(){
+  if (!UI.scan) return '';
+  const t = UI.scan.target, lab = t && t !== 'join' ? labelOfKey(t) : null;
+  return `<div class="scanner"><video id="cam" playsinline muted></video>
+    <div class="top"><button data-a="scanClose">✕</button><b>QR-Code scannen</b><span style="width:40px"></span></div>
+    <div class="finder"><i class="cn a"></i><i class="cn b"></i><i class="cn c"></i><i class="cn d"></i><div class="laser"></div></div>
+    <div class="sh">${UI.scan.msg ? esc(UI.scan.msg) : lab ? `Für: ${esc(lab.title)}` : 'Halte die Kamera auf einen LifeQuest-Code.'}</div>
+    <div class="manual"><div class="small" style="opacity:.7;margin-bottom:8px">Kamera klappt nicht? Code unter dem QR eingeben:</div>
+      <div class="row"><input id="manualCode" placeholder="z. B. G-AB12CD" autocapitalize="characters"><button class="btn sm" data-a="manualScan">OK</button></div>
+      ${t && t.startsWith('m:') ? `<button class="btn soft block sm" style="margin-top:10px;background:#2a2a32;color:#fff" data-a="parentInstead" data-id="${esc(t)}">Stattdessen Eltern-Check anfragen</button>` : ''}</div></div>`;
+}
+async function startCam(){
+  try {
+    camStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}, audio:false});
+    const v = $('#cam'); if (!v){ stopCam(); return; } v.srcObject = camStream; await v.play();
+    const c = document.createElement('canvas'), ctx = c.getContext('2d', {willReadFrequently:true});
+    const loop = () => {
+      if (!UI.scan || !camStream) return;
+      const vv = $('#cam');
+      if (vv && vv.readyState >= 2){ const w = 480, h = Math.round(vv.videoHeight/vv.videoWidth*w) || 360; c.width = w; c.height = h; ctx.drawImage(vv, 0, 0, w, h);
+        const res = jsQR(ctx.getImageData(0,0,w,h).data, w, h, {inversionAttempts:'dontInvert'}); if (res && res.data){ onScanned(res.data); return; } }
+      camRAF = requestAnimationFrame(loop);
+    };
+    loop();
+  } catch(e){ UI.scan && (UI.scan.msg = 'Kein Kamerazugriff – Code unten eingeben.'); softRender(); }
+}
+function stopCam(){ if (camRAF) cancelAnimationFrame(camRAF); camRAF = null; if (camStream){ camStream.getTracks().forEach(t => t.stop()); camStream = null; } }
+function onScanned(text){
+  if (navigator.vibrate) navigator.vibrate(60);
+  if (!S){ // Beitritt
+    const m = String(text).split('|'); const code = m[0] === 'LQ1' && m[2] === 'J' ? m[3] : text;
+    stopCam(); UI.scan = null; render(); const inp = $('#joinCode'); if (inp) inp.value = code; doJoin(code); return;
+  }
+  const r = handleScan(text);
+  if (r.join){ UI.scan.msg = 'Das ist ein Kopplungs-Code – dieses Gerät ist schon gekoppelt.'; render(); startCam(); return; }
+  if (r.err){ UI.scan.msg = r.err; render(); setTimeout(startCam, 900); return; }
+  stopCam(); UI.scan = null; render(); celebrate(r.fin); toast('✓ ' + r.ok);
+}
+async function doJoin(code){
+  if (!code || code.replace(/[^A-Z0-9]/gi,'').length < 8){ toast('Bitte den 8-stelligen Code eingeben'); return; }
+  try { await DB.join(code); toast('Gerät gekoppelt 🎉'); } catch(e){ syncErr(e); toast(e.message || 'Koppeln fehlgeschlagen'); }
+}
+
+// ---------- Haupt-Render ----------
+function render(){
+  pendingRender = false;
+  const y = window.scrollY;
+  let html = '';
+  const p = me();
+  if (UI.onb){ html = renderOnb(); }
+  else if (!S || !p){ html = (S && !p && !LOCAL) ? `<div class="app onb"><div class="hint">Profil nicht gefunden. Bitte das Gerät neu koppeln.</div><button class="btn block" data-a="leave" style="margin-top:12px">Trennen</button></div>` : renderWelcome(); }
+  else {
+    const tier = tierOf(p); document.body.dataset.tier = tier;
+    let body;
+    const pg = UI.page;
+    if (pg === 'profile') body = viewProfil(p);
+    else if (pg === 'library') body = viewMissionen(p, true);
+    else if (pg === 'rewards') body = pageRewards();
+    else if (pg === 'equipment') body = pageEquipment();
+    else if (pg === 'qr') body = pageQR();
+    else if (pg === 'devices') body = pageDevices();
+    else if (pg === 'settings') body = pageSettings();
+    else if (p.role === 'parent') body = [viewHeute, viewFamilie, null, viewChecks, viewMehr][UI.tab](p);
+    else body = [viewHeute, viewMissionen, null, viewFamilie, viewShop][UI.tab](p);
+    const C = COPY[tier];
+    const icons = tier === 'kid' ? ['🏠','🗺️','','👪','🎁'] : p.role === 'parent' ? [ic('home'), ic('users'), '', ic('check'), ic('menu')] : [ic('home'), ic('compass'), '', ic('users'), ic('gift')];
+    const nreq = checkRequests(p).length;
+    html = (LOCAL ? `<div class="local">🧪 Testmodus · Profil: ${profiles().map(o => `<button class="${o.id===p.id?'on':''}" data-a="switch" data-id="${o.id}">${esc(o.avatar)} ${esc(o.name)}</button>`).join('')}</div>` : '')
+      + (UI.err ? `<div class="err">Sync-Problem: ${esc(UI.err)}</div>` : '')
+      + `<div class="app">${body}</div>` + navBar(C.tabs, icons, p.role === 'parent' ? {3:nreq} : {3:nreq});
+  }
+  $('#root').innerHTML = html + (S && me() ? renderModal() : (UI.modal && UI.onb ? renderModal() : '')) + renderScanner();
+  window.scrollTo(0, UI.top ? 0 : y); UI.top = false;
+}
+
+// ---------- Events ----------
+const go = (tab, page=null) => { UI.tab = tab; UI.page = page; UI.top = true; render(); };
+document.addEventListener('click', async e => {
+  const a = e.target.closest('[data-a]'); if (!a) return;
+  if (a.dataset.a === 'scrim' && e.target.closest('[data-stop]')) return;
+  const id = a.dataset.id, p = me(), F = UI.form, t = today();
+  switch (a.dataset.a){
+    case 'tab': go(+id); break;
+    case 'page': UI.page = id; UI.top = true; render(); break;
+    case 'back': UI.page = null; UI.top = true; render(); break;
+    case 'profile': UI.page = 'profile'; UI.top = true; UI.modal = null; render(); break;
+    case 'switch': DEV.pid = id; saveDev(); UI.page = null; UI.tab = 0; UI.top = true; render(); break;
+    case 'scrim': case 'close': closeModal(); break;
+    case 'tap': { const it = todayItems(p).find(i => i.key === id); if (it) tap(it); break; }
+    case 'tapGoal': { const g = S.goals[id]; tap({key:`g:${g.id}:${g.mode==='together'?'all':p.id}`, check:g.check}); break; }
+    case 'scan': openScan(null); break;
+    case 'scanJoin': openScan('join'); break;
+    case 'scanClose': stopCam(); UI.scan = null; render(); break;
+    case 'manualScan': { const v = $('#manualCode').value; if (v) onScanned(v); break; }
+    case 'parentInstead': requestParentInstead(id); break;
+    case 'join': doJoin($('#joinCode').value); break;
+    // Onboarding
+    case 'startOnb': UI.onb = {step:0, famName:'', me:{name:'', avatar:'👩'}, members:[], goals:GOAL_SUG.map((g,i) => ({...clone(g), on:i<3})), rewards:REWARD_SUG.map((r,i) => ({...r, on:i<5}))}; UI.top = true; render(); break;
+    case 'onbCancel': UI.onb = null; render(); break;
+    case 'onbNext': UI.onb.step++; UI.top = true; render(); break;
+    case 'onbBack': UI.onb.step--; UI.top = true; render(); break;
+    case 'onbMeAv': UI.onb.me.avatar = id; render(); break;
+    case 'onbAddMember': resetForm({role:'kid', age:'9', avatar:KID_AV[UI.onb.members.length % KID_AV.length]}); openModal({type:'member', onb:true}); break;
+    case 'onbDelMember': UI.onb.members.splice(+id, 1); render(); break;
+    case 'onbGoal': UI.onb.goals[+id].on = !UI.onb.goals[+id].on; render(); break;
+    case 'onbEditGoal': resetForm({...UI.onb.goals[+id]}); openModal({type:'onbGoal', idx:+id}); break;
+    case 'onbNewGoal': resetForm({e:'👪', mode:'together', time:'18:00'}); openModal({type:'onbGoal', idx:-1}); break;
+    case 'onbRw': UI.onb.rewards[+id].on = !UI.onb.rewards[+id].on; render(); break;
+    case 'onbFinish': finishOnb(); break;
+    // Formulare
+    case 'fset': UI.form[a.dataset.k] = id; render(); break;
+    case 'fday': { const d = +id; F.days = F.days.includes(d) ? F.days.filter(x => x !== d) : [...F.days, d]; render(); break; }
+    case 'fneed': F.needs = F.needs.includes(id) ? F.needs.filter(x => x !== id) : [...F.needs, id]; render(); break;
+    case 'stepAdd': F.steps.push({t:'', check:'self'}); render(); break;
+    case 'stepDel': F.steps.splice(+id, 1); if (!F.steps.length) F.steps.push({t:'',check:'self'}); render(); break;
+    case 'stepUp': { const i = +id; if (i > 0) [F.steps[i-1], F.steps[i]] = [F.steps[i], F.steps[i-1]]; render(); break; }
+    case 'stepCheck': { const [i, c] = id.split('|'); F.steps[+i].check = c; render(); break; }
+    // Ziele & Agenda
+    case 'addOwn': resetForm({check:'self', time:'17:00', freq:'all'}); openModal({type:'own'}); break;
+    case 'agenda': resetForm({type:'haushalt', time:'18:00', days:[1,2,3,4,5]}); openModal({type:'agenda', id}); break;
+    case 'delAgenda': DB.mutate(st => { delete st.agenda[id]; }); toast('Entfernt'); break;
+    case 'newGoal': resetForm({e:'👪', mode:'together', time:'18:00'}); openModal({type:'goal'}); break;
+    case 'editGoal': resetForm({...S.goals[id]}); openModal({type:'goal', id}); break;
+    case 'delGoal': if (confirm('Familienziel entfernen?')){ DB.mutate(st => { delete st.goals[id]; }); closeModal(); } break;
+    case 'pact': openModal({type:'pact'}); break;
+    case 'signPact': DB.mutate(st => { st.profiles[p.id].pact = Date.now(); }); UI.modal = null; render(); celebrate(true); toast('Pakt unterschrieben ✍️'); break;
+    // Missionen
+    case 'cat': UI.cat = id || null; render(); break;
+    case 'mission': openModal({type:'mission', id}); break;
+    case 'startMission': UI.modal = null; DB.mutate(st => { const pp = st.profiles[p.id]; pp.missions = pp.missions||[]; if (!pp.missions.find(x => x.id === id)) pp.missions.push({id, step:0, started:t}); }); celebrate(); toast('Mission gestartet – Schritt 1 steht in „Heute“'); break;
+    case 'stopMission': DB.mutate(st => { const pp = st.profiles[p.id]; pp.missions = (pp.missions||[]).filter(x => x.id !== id); }); closeModal(); break;
+    case 'newMission': resetForm({e:'', cat:UI.cat||'natur', ageMin:'6', ageMax:'17', weeks:'2', needs:[], steps:[{t:'',check:'self'},{t:'',check:'self'}]}); openModal({type:'missionEdit'}); break;
+    case 'editMission': { const mi = S.customMissions[id]; resetForm({e:mi.e, title:mi.title, desc:mi.desc, cat:mi.cat, ageMin:String(mi.age[0]), ageMax:String(mi.age[1]), weeks:String(mi.weeks), needs:[...(mi.needs||[])], steps:mi.steps.map(s => ({t:stepT(s), check:stepCheck(s)}))}); openModal({type:'missionEdit', id}); break; }
+    case 'copyMission': { const mi = mById(id); resetForm({e:mi.e||CATS[mi.cat].e, title:mi.title+' (unsere Version)', desc:mi.desc, cat:mi.cat, ageMin:String(mi.age[0]), ageMax:String(mi.age[1]), weeks:String(mi.weeks), needs:[...(mi.needs||[])], steps:mi.steps.map(s => ({t:stepT(s), check:stepCheck(s)}))}); openModal({type:'missionEdit'}); break; }
+    case 'delMission': if (confirm('Mission löschen?')){ DB.mutate(st => { delete st.customMissions[id]; Object.values(st.profiles).forEach(pp => pp.missions = (pp.missions||[]).filter(x => x.id !== id)); }); closeModal(); } break;
+    case 'hideMission': DB.mutate(st => { st.hiddenMissions = [...new Set([...(st.hiddenMissions||[]), id])]; }); closeModal(); toast('Ausgeblendet'); break;
+    case 'unhide': DB.mutate(st => { st.hiddenMissions = (st.hiddenMissions||[]).filter(x => x !== id); }); break;
+    // Checks
+    case 'okLog': { const [date, key] = id.split('|'); let fin = false; DB.mutate(st => { if (st.log[date]?.[key]?.s !== 'pending') return; const by = st.log[date][key].by; fin = complete(st, date, key, by); st.log[date][key].ok = p.id; if (p.role === 'kid') st.profiles[p.id].xp = (st.profiles[p.id].xp||0) + 5; }); toast('Bestätigt ✓'); break; }
+    case 'noLog': { const [date, key] = id.split('|'); DB.mutate(st => { if (st.log[date]) delete st.log[date][key]; }); toast('Zurückgegeben'); break; }
+    case 'okRw': DB.mutate(st => { if (st.redemptions[id]) st.redemptions[id].status = 'approved'; }); toast('Freigegeben 🎉'); break;
+    case 'noRw': DB.mutate(st => { const r = st.redemptions[id]; if (!r || r.status !== 'pending') return; const rw = st.rewards[r.rid]; st.profiles[r.pid].coins += rw ? rw.cost : 0; delete st.redemptions[id]; }); toast('Coins zurückgegeben'); break;
+    case 'okGoalProp': DB.mutate(st => { if (st.goals[id]){ st.goals[id].status = 'active'; st.goals[id].since = t; } }); toast('Familienziel aufgenommen'); break;
+    case 'noGoalProp': DB.mutate(st => { delete st.goals[id]; }); break;
+    case 'okMissionProp': DB.mutate(st => { if (st.customMissions[id]) st.customMissions[id].status = 'active'; }); closeModal(); toast('Mission freigegeben'); break;
+    case 'noMissionProp': DB.mutate(st => { delete st.customMissions[id]; }); break;
+    case 'showQR': { const [kind, ref] = id.split('|'); const [mid, stp] = ref.split('.'); const mi = mById(mid); openModal({type:'showQR', title:stepT(mi.steps[+stp]), sub:mi.title, payload:qrPayload(kind, ref), code:shortCode(kind, ref)}); break; }
+    // Shop
+    case 'redeem': { const r = S.rewards[id]; if (!r || (p.coins||0) < r.cost) break; const rid = uid6(); DB.mutate(st => { const pp = st.profiles[p.id]; if ((pp.coins||0) < r.cost) return; pp.coins -= r.cost; st.redemptions[rid] = {id:rid, pid:p.id, rid:id, status:'pending', at:Date.now()}; }); toast('Wunsch an die Eltern geschickt 💌'); break; }
+    case 'newReward': resetForm({e:'🎁', kind:'Erlebnis', cost:'100'}); openModal({type:'reward'}); break;
+    case 'editReward': resetForm({...S.rewards[id], cost:String(S.rewards[id].cost)}); openModal({type:'reward', id}); break;
+    case 'delReward': DB.mutate(st => { delete st.rewards[id]; }); closeModal(); break;
+    // Profil & Ausstattung
+    case 'equip': DB.mutate(st => { const pp = st.profiles[p.id]; pp.equip = (pp.equip||[]).includes(id) ? pp.equip.filter(x => x !== id) : [...(pp.equip||[]), id]; }); break;
+    case 'interest': DB.mutate(st => { const pp = st.profiles[p.id]; pp.interests = (pp.interests||[]).includes(id) ? pp.interests.filter(x => x !== id) : [...(pp.interests||[]), id]; }); break;
+    case 'setAvatar': DB.mutate(st => { st.profiles[p.id].avatar = id; }); break;
+    case 'newEquip': UI.prevModal = UI.modal; UI.prevForm = clone(UI.form); resetForm({e:'🔭'}); openModal({type:'equip'}); break;
+    case 'delEquip': DB.mutate(st => { delete st.equipment[id]; }); break;
+    // Familie & Geräte
+    case 'addMember': resetForm({role:'kid', age:'9', avatar:'🐸'}); openModal({type:'member'}); break;
+    case 'editMember': { const k = S.profiles[id]; resetForm({name:k.name, role:k.role, age:String(k.age||9), avatar:k.avatar}); openModal({type:'member', id}); break; }
+    case 'delMember': if (confirm('Profil wirklich löschen? Punkte und Verlauf gehen verloren.')){ DB.mutate(st => { delete st.profiles[id]; Object.values(st.agenda).forEach(a => { if (a.owner === id) delete st.agenda[a.id]; }); }); closeModal(); } break;
+    case 'invite': { openModal({type:'invite', id}); try { const code = await DB.createInvite(id); if (UI.modal?.type === 'invite'){ UI.modal.code = code; render(); } } catch(err){ syncErr(err); toast('Code konnte nicht erstellt werden'); } break; }
+    case 'rmDevice': if (confirm('Gerät entfernen?')) DB.removeDevice(id).catch(syncErr); break;
+    case 'setting': DB.mutate(st => { st.settings[id] = !st.settings[id]; }); break;
+    case 'saveFamName': { const v = $('#famNameIn').value.trim(); if (v) DB.mutate(st => { st.famName = v; }); toast('Gespeichert'); break; }
+    case 'qrFilter': UI.form.qrAll = !!id; render(); break;
+    case 'print': window.print(); break;
+    case 'leave': if (confirm(LOCAL ? 'Alle Testdaten auf diesem Gerät löschen?' : 'Dieses Gerät von der Familie trennen? (Daten der Familie bleiben erhalten)')){
+      if (LOCAL){ localStorage.removeItem('lq-local'); S = null; DEV = {}; saveDev(); UI.page = null; render(); }
+      else { try { await famRef.update({['members.'+uid]:firebase.firestore.FieldValue.delete()}); } catch(err){} leave('Gerät getrennt'); } } break;
+  }
+});
+document.addEventListener('input', e => {
+  const k = e.target.dataset.in; if (!k) return;
+  const v = e.target.value;
+  if (k === 'search'){ UI.search = v; const pos = e.target.selectionStart; render(); const inp = document.querySelector('[data-in="search"]'); if (inp){ inp.focus(); inp.setSelectionRange(pos,pos); } }
+  else if (k === 'famName') UI.onb.famName = v;
+  else if (k === 'meName'){ UI.onb.me.name = v; const b = document.querySelector('[data-a="onbNext"]'); if (b) b.disabled = !v.trim(); }
+  else if (k.startsWith('f.')) UI.form[k.slice(2)] = v;
+  else if (k.startsWith('step.')) UI.form.steps[+k.slice(5)].t = v;
+});
+document.addEventListener('change', e => { const k = e.target.dataset.in; if (k && k.startsWith('f.') && e.target.tagName === 'SELECT'){ UI.form[k.slice(2)] = e.target.value; if (k === 'f.age') render(); } });
+document.addEventListener('submit', e => {
+  const f = e.target.dataset.form; if (!f) return; e.preventDefault();
+  const p = me(), F = UI.form, title = (F.title||'').trim(), t = today();
+  const need = () => { if (!title){ toast('Bitte einen Titel eingeben'); return false; } return true; };
+  if (f === 'own'){ if (!need()) return; const id = uid6(); const days = F.freq === 'all' ? [...ALL] : F.freq === 'custom' ? [...F.days] : [wd()];
+    if (!days.length){ toast('Bitte Tage wählen'); return; }
+    DB.mutate(st => { st.agenda[id] = {id, owner:p.id, title, type:F.type, days, time:F.time||'17:00', check:F.check, by:p.id, once:F.freq==='today'?t:null}; }); UI.modal = null; render(); toast('Ziel hinzugefügt'); }
+  else if (f === 'agenda'){ if (!need()) return; if (!F.days.length){ toast('Bitte Tage wählen'); return; } const id = uid6(), owner = UI.modal.id;
+    DB.mutate(st => { st.agenda[id] = {id, owner, title, type:F.type, days:[...F.days], time:F.time||'18:00', check:F.check, by:p.id}; }); resetForm({type:F.type, time:F.time, days:F.days, check:F.check}); render(); toast('Hinzugefügt'); }
+  else if (f === 'goal'){ if (!need()) return; if (!F.days.length){ toast('Bitte Tage wählen'); return; } const id = UI.modal.id || uid6(), par = isParent();
+    DB.mutate(st => { const old = st.goals[id] || {}; st.goals[id] = {...old, id, title, e:F.e||'👪', days:[...F.days], time:F.time||'18:00', mode:F.mode, check:F.check, status:old.status || (par?'active':'proposed'), by:old.by||p.id, since:old.since||t}; });
+    UI.modal = null; render(); toast(par ? 'Gespeichert' : 'Vorschlag an die Eltern geschickt'); }
+  else if (f === 'onbGoal'){ if (!need()) return; const g = {title, e:F.e||'👪', days:[...F.days], time:F.time||'18:00', mode:F.mode, check:F.check, on:true};
+    if (UI.modal.idx >= 0) UI.onb.goals[UI.modal.idx] = g; else UI.onb.goals.push(g); UI.modal = null; render(); }
+  else if (f === 'member'){ const name = (F.name||'').trim(); if (!name){ toast('Bitte Namen eingeben'); return; }
+    const m = {name, role:F.role, age:F.role==='kid'?+F.age:40, avatar:F.avatar||(F.role==='parent'?'🧑':'🐸')};
+    if (UI.modal.onb){ UI.onb.members.push(m); UI.modal = null; render(); return; }
+    const id = UI.modal.id || 'P'+uid6();
+    DB.mutate(st => { const old = st.profiles[id] || {id, xp:0, coins:0, equip:[], interests:[], missions:[], badges:[], pact:null}; st.profiles[id] = {...old, ...m}; }); UI.modal = null; render(); toast('Gespeichert'); }
+  else if (f === 'reward'){ if (!need()) return; const id = UI.modal.id || uid6(); DB.mutate(st => { st.rewards[id] = {id, title, e:F.e||'🎁', cost:Math.max(10, +F.cost||100), kind:F.kind}; }); UI.modal = null; render(); toast('Gespeichert'); }
+  else if (f === 'equip'){ if (!need()) return; const key = 'x'+uid6().toLowerCase();
+    DB.mutate(st => { st.equipment = st.equipment||{}; st.equipment[key] = {n:title, e:F.e||'🧰'}; const pp = st.profiles[p.id]; if (pp.role === 'parent' || true) pp.equip = [...new Set([...(pp.equip||[]), key])]; });
+    if (UI.prevModal){ UI.modal = UI.prevModal; UI.form = UI.prevForm; if (UI.modal.type === 'missionEdit') UI.form.needs = [...new Set([...UI.form.needs, key])]; UI.prevModal = null; } else UI.modal = null;
+    render(); toast('Ausstattung hinzugefügt'); }
+  else if (f === 'mission'){ if (!need()) return;
+    const steps = F.steps.map(s => ({t:s.t.trim(), check:s.check})).filter(s => s.t);
+    if (!steps.length){ toast('Mindestens einen Schritt eintragen'); return; }
+    let a0 = +F.ageMin, a1 = +F.ageMax; if (a0 > a1) [a0, a1] = [a1, a0];
+    const id = UI.modal.id || 'c'+uid6().toLowerCase(), par = isParent();
+    DB.mutate(st => { const old = st.customMissions[id] || {}; st.customMissions[id] = {id, custom:true, title, e:F.e||CATS[F.cat].e, desc:(F.desc||'').trim(), cat:F.cat, age:[a0, a1], weeks:+F.weeks, needs:[...F.needs], steps, status:old.status === 'active' || par ? 'active' : 'proposed', by:old.by||p.id}; });
+    UI.modal = null; render(); toast(par ? 'Mission gespeichert 🚀' : 'Vorschlag an die Eltern geschickt'); }
+});
+
+DB.init();
+</script>
+</body>
+</html>

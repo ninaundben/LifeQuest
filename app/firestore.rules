@@ -1,0 +1,42 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isMember(fam) {
+      return signedIn() &&
+        request.auth.uid in get(/databases/$(database)/documents/families/$(fam)).data.members;
+    }
+    function invite(code) { return get(/databases/$(database)/documents/invites/$(code)).data; }
+
+    match /families/{fam} {
+      allow create: if signedIn()
+        && request.resource.data.owner == request.auth.uid
+        && request.resource.data.members.keys().hasOnly([request.auth.uid]);
+      allow read: if signedIn() && request.auth.uid in resource.data.members;
+      allow update: if signedIn() && (
+        request.auth.uid in resource.data.members
+        || (
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['members'])
+          && request.resource.data.members.diff(resource.data.members).addedKeys().hasOnly([request.auth.uid])
+          && request.resource.data.members.diff(resource.data.members).changedKeys().size() == 0
+          && request.resource.data.members.diff(resource.data.members).removedKeys().size() == 0
+          && invite(request.resource.data.members[request.auth.uid].invite).fam == fam
+          && invite(request.resource.data.members[request.auth.uid].invite).exp > request.time.toMillis()
+          && invite(request.resource.data.members[request.auth.uid].invite).role == request.resource.data.members[request.auth.uid].role
+        )
+      );
+      allow delete: if false;
+
+      match /data/{doc} {
+        allow read, write: if isMember(fam);
+      }
+    }
+
+    match /invites/{code} {
+      allow get: if signedIn();
+      allow list: if false;
+      allow create: if signedIn() && isMember(request.resource.data.fam);
+      allow delete: if signedIn() && isMember(resource.data.fam);
+    }
+  }
+}
