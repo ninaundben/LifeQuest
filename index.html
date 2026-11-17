@@ -1,0 +1,1021 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LifeQuest – Demonstrator</title>
+<meta name="description" content="Klickbarer Demonstrator: Alltags-Gamification für Familien – Agenda, Missionen, Streaks, Belohnungen, Freunde.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@500;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+
+/* ---------- Themes pro Altersstufe ---------- */
+body{
+  font-family:var(--font);font-size:var(--fs);color:var(--text);
+  background:var(--bg);background-attachment:fixed;min-height:100vh;
+  transition:background .4s,color .3s;-webkit-font-smoothing:antialiased;
+}
+body[data-tier="kid"]{
+  --font:'Baloo 2',ui-rounded,system-ui,sans-serif;--fs:18px;
+  --bg:linear-gradient(180deg,#BFE6FF 0%,#E9F6FF 40%,#FFF3C4 100%);
+  --surface:#FFFFFF;--surface2:#FFF6DB;--text:#2A2350;--muted:#6F6A92;
+  --accent:#FF5C8A;--accent-dark:#D63E6C;--accent2:#FFC93C;--on-accent:#fff;
+  --radius:24px;--border:transparent;--shadow:0 6px 0 rgba(42,35,80,.08),0 10px 24px rgba(42,35,80,.08);
+  --btn-shadow:0 5px 0 var(--accent-dark);--check:#2DBE6C;--track:#FFE9A8;
+}
+body[data-tier="tween"]{
+  --font:'Nunito',system-ui,sans-serif;--fs:16px;
+  --bg:linear-gradient(180deg,#EEE9FF 0%,#F6F4FF 50%,#EAFBF8 100%);
+  --surface:#FFFFFF;--surface2:#F3F0FF;--text:#1E1B3A;--muted:#6B6890;
+  --accent:#6C4CFF;--accent-dark:#4E31D9;--accent2:#22C3B5;--on-accent:#fff;
+  --radius:16px;--border:rgba(108,76,255,.10);--shadow:0 4px 16px rgba(60,40,160,.10);
+  --btn-shadow:0 3px 0 var(--accent-dark);--check:#22C3B5;--track:#E5DFFF;
+}
+body[data-tier="teen"]{
+  --font:'Inter',system-ui,sans-serif;--fs:15px;
+  --bg:#0D0E12;
+  --surface:#16181F;--surface2:#1E2129;--text:#ECEEF3;--muted:#8A90A0;
+  --accent:#C8FF3D;--accent-dark:#A6D82A;--accent2:#5CE1FF;--on-accent:#0D0E12;
+  --radius:10px;--border:#262A33;--shadow:none;
+  --btn-shadow:none;--check:#C8FF3D;--track:#262A33;
+}
+body[data-tier="parent"]{
+  --font:'Inter',system-ui,sans-serif;--fs:15px;
+  --bg:#F4F5F7;
+  --surface:#FFFFFF;--surface2:#F0F3F8;--text:#1B2230;--muted:#667085;
+  --accent:#2F6FEB;--accent-dark:#1F55C2;--accent2:#12B76A;--on-accent:#fff;
+  --radius:12px;--border:#E4E7EC;--shadow:0 1px 2px rgba(16,24,40,.05);
+  --btn-shadow:none;--check:#12B76A;--track:#E4E7EC;
+}
+
+/* ---------- Demo-Leiste (neutral, unabhängig vom Theme) ---------- */
+.demobar{position:sticky;top:0;z-index:60;background:#111318;color:#E8EAF0;
+  font:500 13px/1.2 Inter,system-ui,sans-serif;padding:8px 10px;display:flex;gap:6px;
+  align-items:center;overflow-x:auto;white-space:nowrap;scrollbar-width:none}
+.demobar::-webkit-scrollbar{display:none}
+.demobar .lbl{color:#8A90A0;margin-right:2px;font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+.demobar button{background:#22252D;border:1px solid #2E323C;color:#E8EAF0;border-radius:999px;padding:6px 10px;font:inherit;flex:none}
+.demobar button.on{background:#E8EAF0;color:#111318;border-color:#E8EAF0}
+.demobar .sep{width:1px;height:20px;background:#2E323C;flex:none;margin:0 2px}
+
+/* ---------- Layout ---------- */
+.app{max-width:440px;margin:0 auto;padding:12px 16px 110px;min-height:calc(100vh - 44px)}
+.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:440px;z-index:40;
+  display:flex;justify-content:space-around;padding:8px 6px calc(8px + env(safe-area-inset-bottom));
+  background:var(--surface);border-top:1px solid var(--border);box-shadow:0 -4px 20px rgba(0,0,0,.06)}
+body[data-tier="kid"] .nav{border-radius:24px 24px 0 0}
+.nav button{background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:2px;
+  color:var(--muted);font-size:11px;font-weight:700;padding:4px 6px;border-radius:12px;min-width:58px}
+.nav button .ic{font-size:22px;line-height:1}
+body[data-tier="kid"] .nav button{font-size:13px}
+body[data-tier="kid"] .nav button .ic{font-size:28px}
+.nav button.on{color:var(--accent)}
+body[data-tier="teen"] .nav button .ic{font-size:13px;font-weight:700;letter-spacing:.05em;height:22px;display:flex;align-items:center}
+body[data-tier="teen"] .nav button.on{color:var(--accent)}
+
+h1,h2,h3{margin:0;line-height:1.15}
+h1{font-size:1.6em;font-weight:800}
+h2{font-size:1.15em;font-weight:800;margin:22px 2px 10px}
+body[data-tier="teen"] h2{font-size:.78em;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:600}
+body[data-tier="parent"] h2{font-size:1em;font-weight:700}
+.muted{color:var(--muted)}
+.small{font-size:.82em}
+.row{display:flex;align-items:center;gap:10px}
+.between{justify-content:space-between}
+.grow{flex:1;min-width:0}
+.stack>*+*{margin-top:10px}
+.card{background:var(--surface);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);border:1px solid var(--border)}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:999px;background:var(--surface2);font-size:.78em;font-weight:700;color:var(--muted)}
+.tag{font:700 10px/1 Inter,system-ui;letter-spacing:.08em;padding:4px 6px;border-radius:4px;border:1px solid var(--border);color:var(--muted)}
+.btn{background:var(--accent);color:var(--on-accent);border:none;border-radius:999px;padding:11px 18px;font-weight:800;box-shadow:var(--btn-shadow);transition:transform .08s}
+.btn:active{transform:translateY(2px);box-shadow:none}
+body[data-tier="teen"] .btn,body[data-tier="parent"] .btn{border-radius:8px;font-weight:600}
+.btn.ghost{background:var(--surface2);color:var(--text);box-shadow:none}
+.btn.block{width:100%}
+.btn.sm{padding:7px 12px;font-size:.85em}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+
+/* ---------- Header ---------- */
+.hdr{padding:6px 2px 4px}
+.avatar{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-size:28px;background:var(--surface2);flex:none;font-weight:800}
+body[data-tier="kid"] .avatar{width:58px;height:58px;font-size:36px;background:#fff;box-shadow:0 4px 0 rgba(42,35,80,.08)}
+body[data-tier="teen"] .avatar{border-radius:10px;font-size:18px;background:var(--accent);color:var(--on-accent)}
+.stats{display:flex;gap:8px;margin-top:12px}
+.stat{flex:1;background:var(--surface);border-radius:var(--radius);padding:10px 12px;border:1px solid var(--border);box-shadow:var(--shadow)}
+.stat b{display:block;font-size:1.25em;font-weight:800}
+.stat span{font-size:.75em;color:var(--muted);font-weight:700}
+body[data-tier="teen"] .stat b{font-variant-numeric:tabular-nums}
+.xpbar{height:10px;background:var(--track);border-radius:99px;overflow:hidden;margin-top:6px}
+body[data-tier="kid"] .xpbar{height:14px}
+body[data-tier="teen"] .xpbar{height:4px}
+.xpbar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:99px;transition:width .5s}
+body[data-tier="teen"] .xpbar i{background:var(--accent)}
+
+/* ---------- Streak ---------- */
+.streak .flame{font-size:34px;line-height:1}
+body[data-tier="teen"] .streak .flame{font-size:24px;filter:saturate(.6)}
+.dots{display:flex;gap:6px;margin-top:10px}
+.dot{flex:1;text-align:center;font-size:.7em;font-weight:700;color:var(--muted)}
+.dot i{display:block;height:28px;border-radius:10px;background:var(--track);margin-bottom:4px;display:grid;place-items:center;font-style:normal;font-size:14px}
+body[data-tier="teen"] .dot i{height:6px;border-radius:2px}
+.dot.on i{background:var(--accent2);color:#fff}
+body[data-tier="teen"] .dot.on i{background:var(--accent)}
+.dot.today i{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ---------- Agenda-Items ---------- */
+.item{display:flex;align-items:center;gap:12px;padding:12px;background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);transition:opacity .3s,transform .2s}
+.item+.item{margin-top:8px}
+.item .ico{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font-size:22px;flex:none;background:var(--surface2)}
+body[data-tier="kid"] .item .ico{width:50px;height:50px;font-size:28px;border-radius:18px}
+body[data-tier="teen"] .item .ico{width:auto;height:auto;background:none}
+.item .t{font-weight:800;line-height:1.2}
+body[data-tier="teen"] .item .t,body[data-tier="parent"] .item .t{font-weight:600}
+.item .s{font-size:.78em;color:var(--muted);margin-top:2px}
+.check{width:36px;height:36px;border-radius:50%;border:3px solid var(--track);background:none;flex:none;display:grid;place-items:center;font-size:18px;color:transparent;font-weight:900}
+body[data-tier="kid"] .check{width:44px;height:44px;font-size:22px}
+body[data-tier="teen"] .check{border-radius:6px;width:26px;height:26px;border-width:2px;font-size:14px}
+.item.done{opacity:.6}
+.item.done .t{text-decoration:line-through}
+.item.done .check{background:var(--check);border-color:var(--check);color:#fff}
+body[data-tier="teen"] .item.done .check{color:#0D0E12}
+.item.pending .check{border-color:var(--accent2);color:var(--accent2);border-style:dashed}
+.badge-type{font-size:.7em;font-weight:800;padding:2px 7px;border-radius:99px;background:var(--surface2);color:var(--muted);margin-left:6px;vertical-align:middle}
+
+/* ---------- Missionen ---------- */
+.search{width:100%;padding:12px 14px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow);outline:none}
+body[data-tier="kid"] .search{border:3px solid #fff}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:10px 2px 4px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:7px 12px;font-weight:700;font-size:.85em;box-shadow:var(--shadow)}
+.chip.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.mcard{display:flex;gap:12px;padding:12px;background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);text-align:left;width:100%;border-left:6px solid var(--c)}
+.mcard+.mcard{margin-top:8px}
+body[data-tier="teen"] .mcard{border-left:1px solid var(--border)}
+.mcard .mi{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:26px;background:color-mix(in srgb,var(--c) 18%,transparent);flex:none}
+body[data-tier="kid"] .mcard .mi{width:58px;height:58px;font-size:32px;border-radius:18px}
+body[data-tier="teen"] .mcard .mi{background:none;width:auto}
+.mcard .t{font-weight:800}
+body[data-tier="teen"] .mcard .t{font-weight:600}
+.mcard .d{font-size:.8em;color:var(--muted);margin-top:2px}
+.mcard.locked{opacity:.6}
+.prog{height:6px;background:var(--track);border-radius:9px;overflow:hidden;margin-top:8px}
+.prog i{display:block;height:100%;background:var(--c,var(--accent))}
+.catgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.catbtn{border:none;border-radius:var(--radius);padding:14px;text-align:left;background:color-mix(in srgb,var(--c) 16%,var(--surface));box-shadow:var(--shadow);font-weight:800}
+.catbtn .e{font-size:28px;display:block}
+body[data-tier="teen"] .catbtn{background:var(--surface);border:1px solid var(--border);font-weight:600}
+body[data-tier="teen"] .catbtn .e{font-size:11px;letter-spacing:.1em;color:var(--c);margin-bottom:6px}
+
+/* ---------- Vergleich ---------- */
+.cmp{display:grid;grid-template-columns:110px 1fr 46px;gap:8px;align-items:center;font-size:.85em}
+.cmp+.cmp{margin-top:8px}
+.cmp .bar{height:12px;background:var(--track);border-radius:9px;position:relative;overflow:hidden}
+.cmp .bar i{position:absolute;inset:0 auto 0 0;background:var(--c);border-radius:9px}
+.cmp b{text-align:right}
+
+/* ---------- Modal / Toast ---------- */
+.scrim{position:fixed;inset:0;background:rgba(10,10,20,.45);z-index:80;display:flex;align-items:flex-end;justify-content:center;animation:fade .2s}
+.sheet{background:var(--surface);color:var(--text);width:100%;max-width:440px;max-height:88vh;overflow:auto;border-radius:24px 24px 0 0;padding:18px 16px calc(20px + env(safe-area-inset-bottom));animation:up .25s ease-out}
+body[data-tier="teen"] .sheet{border:1px solid var(--border);border-radius:14px 14px 0 0}
+.sheet .grab{width:44px;height:5px;border-radius:9px;background:var(--track);margin:0 auto 12px}
+@keyframes up{from{transform:translateY(40px);opacity:.5}}
+@keyframes fade{from{opacity:0}}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#1B1E26;color:#fff;padding:10px 16px;border-radius:999px;font-weight:700;font-size:14px;z-index:90;animation:fade .2s;max-width:90vw;text-align:center}
+body[data-tier="kid"] .toast{background:var(--accent);font-size:17px;padding:12px 20px}
+body[data-tier="teen"] .toast{background:var(--accent);color:#0D0E12;border-radius:8px}
+.confetti{position:fixed;top:-12px;width:10px;height:14px;z-index:95;pointer-events:none;border-radius:2px;animation:fall 1.3s ease-in forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg);opacity:.8}}
+
+/* ---------- Formulare ---------- */
+label.f{display:block;font-size:.8em;font-weight:700;color:var(--muted);margin:12px 0 5px}
+input.in,select.in{width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);outline:none}
+body[data-tier="kid"] input.in{border:2px solid var(--track)}
+input.in:focus,select.in:focus{border-color:var(--accent)}
+.daypick{display:flex;gap:5px}
+.daypick button{flex:1;padding:8px 0;border-radius:8px;border:1px solid var(--border);background:var(--surface2);font-weight:700;font-size:.8em}
+.daypick button.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.toggle{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.toggle:last-child{border-bottom:none}
+.sw{width:44px;height:26px;border-radius:99px;background:var(--track);position:relative;flex:none;border:none;margin-top:2px}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.sw.on{background:var(--accent)}
+.sw.on::after{left:21px}
+
+/* ---------- Onboarding ---------- */
+.onb{padding-top:10px}
+.onb .step{font-size:.8em;font-weight:700;color:var(--muted)}
+.onb h1{margin:6px 0 4px}
+.choice{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
+.choice button{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);padding:16px 10px;font-weight:800;box-shadow:var(--shadow)}
+.choice button .e{font-size:34px;display:block;margin-bottom:4px}
+.choice button.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surface))}
+.choice.c3{grid-template-columns:repeat(3,1fr)}
+.choice.c4{grid-template-columns:repeat(4,1fr)}
+.choice.c4 button{padding:10px 4px;font-size:26px}
+.agebig{font-size:64px;font-weight:800;text-align:center;line-height:1;margin-top:18px}
+input[type=range]{width:100%;accent-color:var(--accent);margin:14px 0 4px;height:30px}
+.tierinfo{text-align:center;font-weight:700;color:var(--muted)}
+.hint{font-size:.8em;color:var(--muted);background:var(--surface2);border-radius:10px;padding:10px 12px;margin-top:12px}
+.onbfoot{display:flex;gap:10px;margin-top:22px}
+
+.empty{text-align:center;padding:20px;color:var(--muted)}
+.feed .fi{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border)}
+.feed .fi:last-child{border-bottom:none}
+.qr{width:120px;height:120px;background:#fff;padding:8px;border-radius:10px}
+.kpi{font-size:1.5em;font-weight:800}
+.note{font-size:.75em;color:var(--muted);font-style:italic}
+.mascot{font-size:48px;line-height:1}
+.bubble{background:#fff;border-radius:20px;padding:10px 14px;font-weight:700;position:relative;box-shadow:var(--shadow)}
+.bubble::before{content:"";position:absolute;left:-8px;top:18px;border:8px solid transparent;border-right-color:#fff;border-left:0}
+</style>
+</head>
+<body data-tier="tween">
+<div id="root"></div>
+
+<script>
+/* =====================================================================
+   LifeQuest – Demonstrator (rein clientseitig, Beispieldaten)
+   ===================================================================== */
+
+// ---------- Stammdaten ----------
+const CATS = {
+  wissen:   {n:'Allgemeinwissen', e:'🧠', c:'#7C5CFF', t:'WIS'},
+  finanzen: {n:'Finanzen',        e:'💰', c:'#E0A800', t:'FIN'},
+  literatur:{n:'Literatur',       e:'📚', c:'#FF7A59', t:'LIT'},
+  musik:    {n:'Musizieren',      e:'🎸', c:'#E64CA0', t:'MUS'},
+  sprachen: {n:'Sprachen',        e:'🗣️', c:'#20A6B3', t:'SPR'},
+  soziales: {n:'Soziales Miteinander', e:'🤝', c:'#FF5C7A', t:'SOZ'},
+  sport:    {n:'Sport',           e:'⚽', c:'#2DBE6C', t:'SPT'},
+  technik:  {n:'Technik',         e:'🔧', c:'#4A7DFF', t:'TEC'},
+  natur:    {n:'Natur',           e:'🌱', c:'#5DAA2E', t:'NAT'},
+  kochen:   {n:'Alltagsskills',   e:'🍳', c:'#FF9F1C', t:'ALL'},
+};
+const EQUIP = {
+  fahrrad:{n:'Fahrrad',e:'🚲'}, ball:{n:'Ball',e:'⚽'}, instrument:{n:'Instrument',e:'🎸'},
+  garten:{n:'Garten / Balkon',e:'🌻'}, kueche:{n:'Küche (darf ich nutzen)',e:'🍳'}, haustier:{n:'Haustier',e:'🐰'},
+  taschengeld:{n:'Taschengeld',e:'💶'}, buecher:{n:'Bücher zuhause',e:'📚'}, bibliothek:{n:'Bibliothek in der Nähe',e:'🏛️'},
+  werkzeug:{n:'Werkzeug',e:'🧰'}, computer:{n:'Computer / Tablet',e:'💻'}, sportverein:{n:'Sportverein',e:'🏅'},
+};
+const TYPES = {
+  termin:  {n:'Termin',      e:'📅', t:'TRM', xp:10, coins:2, min:60},
+  haushalt:{n:'Haushalt',    e:'🧹', t:'HH',  xp:15, coins:5, min:10},
+  habit:   {n:'Mikro-Habit', e:'⚡', t:'MH',  xp:5,  coins:1, min:5},
+  mission: {n:'Mission',     e:'🚀', t:'MSN', xp:30, coins:10, min:30},
+};
+const DAYS = ['So','Mo','Di','Mi','Do','Fr','Sa'];
+const WEEK_ORDER = [1,2,3,4,5,6,0];
+
+const MISSIONS = [
+  {id:'wetter', cat:'wissen', title:'Wetter-Forscher:in', age:[6,10], weeks:1, needs:[], desc:'Eine Woche lang Wolken, Wind und Temperatur beobachten und ein Wettertagebuch malen.', steps:['Wolkenarten anschauen (Bild oder Buch)','3 Tage Wetter aufmalen','Wetterregel ausprobieren: „Abendrot …“','Familie das Wetter von morgen vorhersagen']},
+  {id:'museum', cat:'wissen', title:'Museums-Expedition', age:[9,17], weeks:2, needs:[], desc:'Ein Museum in deiner Nähe besuchen und beim Abendessen 3 überraschende Fakten präsentieren.', steps:['Museum aussuchen & mit Familie planen','Besuch: 3 Fakten notieren','Beim Abendessen präsentieren']},
+  {id:'erklaer', cat:'wissen', title:'Erklär’s in 2 Minuten', age:[12,17], weeks:4, needs:[], desc:'Jede Woche ein Thema aus seriösen Quellen recherchieren und es der Familie in 2 Minuten erklären.', steps:['Thema 1 wählen & 2 seriöse Quellen finden','Thema 1 erklären','Thema 2','Thema 3','Thema 4 – Familie stellt Fragen']},
+  {id:'sparschwein', cat:'finanzen', title:'Sparschwein-Challenge', age:[6,10], weeks:4, needs:['taschengeld'], desc:'Ein Sparziel festlegen, aufmalen und 4 Wochen lang Woche für Woche näher kommen.', steps:['Sparziel aussuchen und malen','Woche 1 gespart','Woche 2 gespart','Woche 3 gespart','Ziel erreicht – feiern!']},
+  {id:'tgprofi', cat:'finanzen', title:'Taschengeld-Profi', age:[10,14], weeks:4, needs:['taschengeld'], desc:'Haushaltsbuch führen und Geld in Sparen / Ausgeben / Teilen aufteilen.', steps:['Drei Töpfe festlegen (Sparen/Ausgeben/Teilen)','Woche 1 alle Ausgaben notieren','Woche 2 notieren','Ein Spar-Ziel definieren','Woche 3+4: Bilanz ziehen','Einen Teil spenden oder verschenken']},
+  {id:'preisdetektiv', cat:'finanzen', title:'Preis-Detektiv', age:[9,14], weeks:1, needs:[], desc:'Im Supermarkt Grundpreise vergleichen und den günstigsten Einkauf für ein Familienrezept finden.', steps:['Grundpreis verstehen (€/kg)','Beim Einkauf 5 Produkte vergleichen','Familienrezept günstig einkaufen']},
+  {id:'budget', cat:'finanzen', title:'Mein erstes Budget', age:[14,17], weeks:4, needs:['taschengeld'], desc:'Monatsbudget aufstellen, Abos checken und Zinseszins verstehen.', steps:['Einnahmen & Fixkosten auflisten','Abos und In-App-Käufe checken','Zinseszins-Rechner ausprobieren','Budget einen Monat einhalten']},
+  {id:'leserakete', cat:'literatur', title:'Lese-Rakete', age:[6,9], weeks:2, needs:['buecher'], desc:'14 Tage lang jeden Tag 10 Minuten lesen oder vorlesen – die Rakete fliegt höher!', steps:['Lieblingsbuch aussuchen','Tag 1–3','Tag 4–7','Tag 8–11','Tag 12–14: Buch jemandem vorstellen']},
+  {id:'buchclub', cat:'literatur', title:'Buch-Club mit Freund:in', age:[10,17], weeks:3, needs:['buecher'], coop:true, desc:'Ein Buch zusammen mit einer Freundin oder einem Freund lesen und euch offline darüber austauschen.', steps:['Buch gemeinsam aussuchen','Erstes Drittel lesen & treffen','Zweites Drittel & treffen','Fertig lesen & Buch bewerten']},
+  {id:'ersteslied', cat:'musik', title:'Mein erstes Lied', age:[8,14], weeks:3, needs:['instrument'], desc:'Ein Lied auf deinem Instrument lernen und ein kleines Familienkonzert geben.', steps:['Lied aussuchen','Erste Hälfte üben','Zweite Hälfte üben','Familienkonzert!']},
+  {id:'toepfeband', cat:'musik', title:'Töpfe-Band', age:[6,12], weeks:1, needs:[], desc:'Rhythmus ohne Instrument: Body-Percussion, Töpfe und Löffel – erfinde einen eigenen Beat.', steps:['3 Body-Percussion-Sounds lernen','Küchen-Instrumente bauen','Eigenen Beat erfinden & aufführen']},
+  {id:'hauskonzert', cat:'musik', title:'Hauskonzert', age:[13,17], weeks:4, needs:['instrument'], desc:'Drei Stücke einstudieren und ein kleines Konzert für Freund:innen oder Nachbar:innen geben.', steps:['3 Stücke auswählen','Stück 1 sitzt','Stück 2 sitzt','Stück 3 sitzt','Konzert geben']},
+  {id:'woerter', cat:'sprachen', title:'Wörter-Sammler:in', age:[6,10], weeks:2, needs:[], desc:'Jeden Tag ein Wort in einer neuen Sprache lernen und Zettel an Gegenstände kleben.', steps:['Sprache aussuchen','5 Wörter-Zettel kleben','10 Wörter','Familie abfragen']},
+  {id:'sprechen', cat:'sprachen', title:'10 Minuten sprechen', age:[11,17], weeks:4, needs:[], desc:'Täglich laut sprechen statt nur tippen – einmal pro Woche mit einer echten Person (Tandem).', steps:['Tandem-Partner:in finden (Schule, Familie, Nachbarn)','Woche 1: täglich 10 Min laut','Woche 2 + 1 Tandem-Treffen','Woche 3 + Tandem','Woche 4: 5 Min frei erzählen']},
+  {id:'hallo', cat:'soziales', title:'Hallo-Held:in', age:[6,10], weeks:1, needs:[], desc:'Eine Woche lang jeden Tag jemandem eine kleine Freude machen.', steps:['Nachbarn freundlich grüßen','Jemandem helfen ohne gefragt zu werden','Ein Bild für jemanden malen','Ein Kind in der Pause mitspielen lassen']},
+  {id:'mut', cat:'soziales', title:'Mut-Training', age:[12,17], weeks:6, needs:[], desc:'Schritt für Schritt raus aus der Komfortzone – von klein bis groß.', steps:['Im Café selbst bestellen','Fremde Person nach dem Weg fragen','Beim Bäcker ein Kompliment machen','Im Unterricht freiwillig etwas sagen','Jemanden Neues ansprechen','Bei einem Verein / Kurs schnuppern','Kurzen Vortrag halten','Etwas organisieren, bei dem andere mitmachen']},
+  {id:'offlinetreff', cat:'soziales', title:'Offline-Treff organisieren', age:[10,17], weeks:2, coop:true, needs:[], desc:'Picknick, Spieleabend oder Ausflug mit Freund:innen planen – Handys kommen in die Box.', steps:['Idee & Datum festlegen','Freund:innen einladen (persönlich!)','Planung: Essen, Spiele, Ort','Treffen durchführen – Handy-Box!']},
+  {id:'radentdecker', cat:'sport', title:'Fahrrad-Entdecker:in', age:[7,13], weeks:3, needs:['fahrrad'], desc:'5 neue Orte in deiner Umgebung mit dem Rad entdecken (mit Erlaubnis/Begleitung).', steps:['Karte deiner Umgebung malen','Ort 1 + 2','Ort 3 + 4','Ort 5 & Karte fertig']},
+  {id:'jonglieren', cat:'sport', title:'Ball-Künstler:in', age:[7,13], weeks:3, needs:['ball'], desc:'Vom ersten Kick bis 50× jonglieren.', steps:['5× jonglieren','10×','20×','35×','50× – Video für die Familie']},
+  {id:'c25k', cat:'sport', title:'Couch to 5K', age:[13,17], weeks:8, needs:[], desc:'In 8 Wochen vom Spaziergang zu 5 km am Stück.', steps:['Woche 1–2: Gehen/Laufen im Wechsel','Woche 3–4: 5 Min am Stück','Woche 5–6: 15 Min am Stück','Woche 7: 25 Min','Woche 8: 5 km!']},
+  {id:'raddoktor', cat:'technik', title:'Fahrrad-Doktor', age:[9,15], weeks:2, needs:['fahrrad','werkzeug'], desc:'Platten flicken, Kette ölen, Bremsen checken – mach dein Rad selbst fit.', steps:['Werkzeug kennenlernen','Kette reinigen & ölen','Schlauch flicken','Bremsen & Licht checken']},
+  {id:'scratch', cat:'technik', title:'Mein erstes Spiel (Scratch)', age:[9,14], weeks:3, needs:['computer'], desc:'Sinnvolle Bildschirmzeit: ein eigenes kleines Spiel programmieren und Familie spielen lassen.', steps:['Figur bewegen','Punkte zählen','Level 2 bauen','Familie testen lassen']},
+  {id:'reparieren', cat:'technik', title:'Repair-Café', age:[12,17], weeks:3, needs:['werkzeug'], desc:'Ein kaputtes Gerät oder Möbelstück reparieren statt wegwerfen.', steps:['Kaputtes Ding finden','Fehler recherchieren','Reparieren (mit Hilfe ok)','Vorher/Nachher zeigen']},
+  {id:'gartendetektiv', cat:'natur', title:'Natur-Detektiv:in', age:[6,10], weeks:2, needs:[], desc:'5 Pflanzen oder Tiere draußen bestimmen und Kresse auf der Fensterbank ziehen.', steps:['Kresse säen','2 Pflanzen bestimmen','2 Tiere entdecken','Kresse ernten & essen','Naturbuch fertig']},
+  {id:'beet', cat:'natur', title:'Mein Beet / Balkonkasten', age:[9,17], weeks:6, needs:['garten'], desc:'Eigenes Gemüse oder Kräuter von der Saat bis zur Ernte.', steps:['Pflanzen aussuchen','Säen / pflanzen','2 Wochen gießen & pflegen','Erste Ernte','Etwas daraus kochen']},
+  {id:'minikoch', cat:'kochen', title:'Kleine Küchen-Crew', age:[6,10], weeks:2, needs:['kueche'], desc:'Obstsalat, belegte Brote, Müsli – einfache Gerichte (mit Erwachsenen) zubereiten.', steps:['Hände waschen & Küchenregeln','Obstsalat','Pausenbrot für alle','Familien-Frühstück']},
+  {id:'dinner', cat:'kochen', title:'Familien-Dinner', age:[12,17], weeks:4, needs:['kueche'], desc:'Einmal pro Woche für die Familie kochen – inkl. Einkauf und Budget.', steps:['Rezept & Einkaufsliste','Dinner 1','Dinner 2','Dinner 3','Eigenes Rezept erfinden']},
+  {id:'waesche', cat:'kochen', title:'Wäsche-Profi', age:[11,17], weeks:1, needs:[], desc:'Sortieren, Waschmaschine bedienen, aufhängen, falten.', steps:['Wäsche richtig sortieren','Maschine starten','Aufhängen & falten']},
+];
+
+const KID_AVATARS = ['🦄','🦊','🐼','🐯','🐸','🐙','🦁','🐨','🐲','🐱','🐶','🦖'];
+
+// ---------- Hilfsfunktionen ----------
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => Math.random().toString(36).slice(2, 9);
+const pad = n => String(n).padStart(2, '0');
+const dkey = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const TODAY = new Date();
+const TODAY_KEY = dkey(TODAY);
+const WD = TODAY.getDay();
+function weekDates(){ // Mo..So der aktuellen Woche
+  const d = new Date(TODAY); const off = (d.getDay()+6)%7; d.setDate(d.getDate()-off);
+  return Array.from({length:7}, (_,i) => { const x = new Date(d); x.setDate(d.getDate()+i); return x; });
+}
+const tierOf = m => m.role === 'parent' ? 'parent' : m.age <= 9 ? 'kid' : m.age <= 13 ? 'tween' : 'teen';
+const TIER_NAME = {kid:'Kids-Modus (6–9)', tween:'Tween-Modus (10–13)', teen:'Teen-Modus (14–17)', parent:'Eltern'};
+const level = xp => Math.floor(xp/250)+1;
+const lvlProg = xp => (xp % 250) / 250 * 100;
+const catIcon = (cat, tier) => tier === 'teen' ? `<span class="tag" style="color:${CATS[cat].c};border-color:${CATS[cat].c}55">${CATS[cat].t}</span>` : CATS[cat].e;
+const typeIcon = (type, tier) => tier === 'teen' ? `<span class="tag">${TYPES[type].t}</span>` : TYPES[type].e;
+
+const COPY = {
+  kid:   {hello:n=>`Hallo ${n}! 🌞`, sub:'Was erleben wir heute?', today:'Deine Quests heute', done:['Super gemacht! 🎉','Wow, toll! ⭐','Du bist spitze! 🚀'], tabs:['Heute','Abenteuer','Freunde','Schatzkiste','Ich'], coins:'Sterne', coin:'⭐', xp:'Punkte', addOwn:'✨ Eigenes Ziel', streak:'Wochen in Folge', pending:'Mama/Papa schaut kurz drüber 👀'},
+  tween: {hello:n=>`Hey ${n}! 👋`, sub:'Bereit für deine Quests?', today:'Heute', done:['Stark! 💪','Nice! +XP','Läuft bei dir! 🔥'], tabs:['Heute','Missionen','Crew','Rewards','Profil'], coins:'Coins', coin:'🪙', xp:'XP', addOwn:'+ Eigenes Ziel', streak:'Wochen-Serie', pending:'Wartet auf Bestätigung'},
+  teen:  {hello:n=>n, sub:null, today:'Heute', done:['Erledigt.','Done.','✓ Gespeichert'], tabs:['Heute','Missionen','Friends','Rewards','Stats'], coins:'Credits', coin:'◆', xp:'XP', addOwn:'+ Ziel', streak:'Wochen-Streak', pending:'Wartet auf Bestätigung'},
+};
+const NAV_IC = {
+  kid:  ['🏠','🗺️','👫','🎁','😀'],
+  tween:['🏠','🚀','👥','🎁','👤'],
+  teen: ['TDY','MSN','FRD','RWD','STS'],
+};
+
+// ---------- Seed-Daten ----------
+function seed(){
+  const wk = weekDates().map(dkey);
+  const past = wk.filter(k => k < TODAY_KEY);
+  const pick = (skip) => past.filter((_,i) => !skip.includes(i));
+  const all = [0,1,2,3,4,5,6];
+  return {
+    v:1,
+    activeId:'k2',
+    settings:{streakMode:'week', kidsOwnGoals:true, compare:'age', teenPrivacy:true},
+    members:[
+      {id:'p1', role:'parent', name:'Mama', age:41, avatar:'👩'},
+      {id:'k1', role:'kid', name:'Mia', age:7, gender:'w', avatar:'🦄',
+        equip:['fahrrad','garten','buecher','haustier','kueche'], interests:['natur','sport','literatur','musik'],
+        xp:340, coins:45, streakWeeks:4, jokers:1, offline:{week:185}, activeDays:pick([1]),
+        catXP:{natur:120,sport:60,literatur:110,musik:20,kochen:30},
+        missions:[{id:'gartendetektiv',step:1},{id:'leserakete',step:2}], badges:['🌱 Kresse-Profi','📖 Erste 7 Tage gelesen'],
+        friends:[{name:'Lotta',avatar:'🐱',age:7,lvl:2,streak:3,feed:'hat „Töpfe-Band“ geschafft 🥁'},{name:'Ben',avatar:'🐶',age:8,lvl:3,streak:6,feed:'hat 5 Tage in Folge gelesen 📚'}],
+        coop:{mission:'Natur-Detektiv:in',partner:'Lotta',progress:2,total:5},
+        agenda:[
+          {id:uid(), title:'Zähne putzen (morgens)', type:'habit', days:all, time:'07:10', by:'parent'},
+          {id:uid(), title:'Kaninchen füttern', type:'haushalt', days:all, time:'07:30', by:'parent'},
+          {id:uid(), title:'Turnen', type:'termin', days:[1,3], time:'16:00', by:'parent'},
+          {id:uid(), title:'Schwimmkurs', type:'termin', days:[5], time:'15:30', by:'parent'},
+          {id:uid(), title:'Tisch decken', type:'haushalt', days:all, time:'18:00', by:'parent', confirm:true},
+          {id:uid(), title:'5 Minuten lesen', type:'habit', days:all, time:'19:00', by:'kid'},
+          {id:uid(), title:'Schulranzen packen', type:'habit', days:[0,1,2,3,4], time:'19:15', by:'parent'},
+        ], log:{}},
+      {id:'k2', role:'kid', name:'Leon', age:11, gender:'m', avatar:'🦊',
+        equip:['fahrrad','instrument','ball','sportverein','computer','taschengeld','werkzeug'], interests:['sport','musik','technik','finanzen'],
+        xp:1280, coins:120, streakWeeks:9, jokers:2, offline:{week:240}, activeDays:pick([]),
+        catXP:{sport:420,musik:260,technik:310,finanzen:180,wissen:60,soziales:50},
+        missions:[{id:'tgprofi',step:2},{id:'jonglieren',step:3}], badges:['🔧 Fahrrad-Doktor','🎸 Erstes Lied','🔥 8-Wochen-Serie'],
+        friends:[{name:'Jonas',avatar:'🐯',age:11,lvl:6,streak:5,feed:'hat „Fahrrad-Doktor“ abgeschlossen 🔧'},{name:'Emma',avatar:'🐼',age:12,lvl:7,streak:11,feed:'hat eine 11-Wochen-Serie 🔥'},{name:'Ali',avatar:'🦁',age:11,lvl:5,streak:2,feed:'hat „Hallo-Held:in“ gestartet 🤝'}],
+        coop:{mission:'Offline-Treff organisieren',partner:'Jonas',progress:2,total:4},
+        agenda:[
+          {id:uid(), title:'Wasser trinken 💧', type:'habit', days:all, time:'07:00', by:'kid'},
+          {id:uid(), title:'Fußball-Training', type:'termin', days:[2,4], time:'17:00', by:'parent'},
+          {id:uid(), title:'Gitarrenunterricht', type:'termin', days:[1], time:'15:00', by:'parent'},
+          {id:uid(), title:'Gitarre üben (10 Min)', type:'habit', days:all, time:'16:00', by:'kid'},
+          {id:uid(), title:'Spülmaschine ausräumen', type:'haushalt', days:all, time:'18:30', by:'parent', confirm:true},
+          {id:uid(), title:'Müll rausbringen', type:'haushalt', days:[1,4], time:'19:00', by:'parent'},
+          {id:uid(), title:'Handy um 20 Uhr in die Ladestation', type:'habit', days:all, time:'20:00', by:'parent'},
+        ], log:{}},
+      {id:'k3', role:'kid', name:'Sofia', age:15, gender:'x', avatar:'S',
+        equip:['instrument','computer','taschengeld','kueche','bibliothek','buecher'], interests:['sprachen','soziales','finanzen','literatur'],
+        xp:3420, coins:260, streakWeeks:23, jokers:1, offline:{week:310}, activeDays:pick([3]),
+        catXP:{sprachen:980,soziales:640,finanzen:520,literatur:700,kochen:240,sport:180},
+        missions:[{id:'mut',step:3},{id:'sprechen',step:2}], badges:['Budget I','Buch-Club ×3','20-Wochen-Streak'],
+        friends:[{name:'Mara',avatar:'M',age:15,lvl:13,streak:17,feed:'hat „Couch to 5K“ Woche 5 geschafft'},{name:'Tim',avatar:'T',age:16,lvl:10,streak:4,feed:'hat ein Hauskonzert gegeben'},{name:'Jule',avatar:'J',age:15,lvl:15,streak:30,feed:'30-Wochen-Streak'}],
+        coop:{mission:'Buch-Club mit Freund:in',partner:'Mara',progress:3,total:4},
+        agenda:[
+          {id:uid(), title:'Spanisch – 10 Min laut sprechen', type:'habit', days:all, time:'07:15', by:'kid'},
+          {id:uid(), title:'Nachhilfe geben (Mathe)', type:'termin', days:[3], time:'16:30', by:'kid'},
+          {id:uid(), title:'Laufen 3 km', type:'habit', days:[1,4,6], time:'17:30', by:'kid'},
+          {id:uid(), title:'Wäsche aufhängen', type:'haushalt', days:[2,5,6], time:'18:00', by:'parent'},
+          {id:uid(), title:'Für die Familie einkaufen', type:'haushalt', days:[6], time:'10:00', by:'parent'},
+          {id:uid(), title:'Abendessen kochen', type:'haushalt', days:[0], time:'18:30', by:'parent'},
+          {id:uid(), title:'Handy ab 22 Uhr aus dem Zimmer', type:'habit', days:all, time:'22:00', by:'kid'},
+        ], log:{}},
+    ],
+    rewards:[
+      {id:uid(), title:'Eis essen gehen', e:'🍦', cost:50, kind:'Erlebnis'},
+      {id:uid(), title:'Pfannkuchen-Frühstück nach Wunsch', e:'🥞', cost:60, kind:'Erlebnis'},
+      {id:uid(), title:'30 Min länger aufbleiben (Wochenende)', e:'🌙', cost:80, kind:'Privileg'},
+      {id:uid(), title:'2 € Taschengeld-Extra', e:'💶', cost:120, kind:'Sache'},
+      {id:uid(), title:'Kinoabend mit der Familie', e:'🎬', cost:150, kind:'Erlebnis'},
+      {id:uid(), title:'Freund:in übernachtet', e:'🏕️', cost:200, kind:'Privileg'},
+      {id:uid(), title:'Ausflug nach Wahl', e:'🗺️', cost:300, kind:'Erlebnis'},
+    ],
+    redemptions:[],
+    familyStreak:6,
+  };
+}
+
+// ---------- State & Persistenz ----------
+const KEY = 'lifequest-demo-v1';
+let S;
+try { S = JSON.parse(localStorage.getItem(KEY)); } catch(e) { S = null; }
+if (!S || S.v !== 1) S = seed();
+const UI = {tab:{}, modal:null, onb:null, missionCat:null, search:'', planKid:null};
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} }
+const me = () => S.members.find(m => m.id === S.activeId) || S.members[0];
+const kids = () => S.members.filter(m => m.role === 'kid');
+const missionById = id => MISSIONS.find(m => m.id === id);
+
+// ---------- Logik ----------
+function todayItems(m){
+  const items = m.agenda.filter(i => i.days.includes(WD)).map(i => ({...i}));
+  (m.missions||[]).forEach(a => {
+    const mi = missionById(a.id); if (!mi || a.step >= mi.steps.length) return;
+    items.push({id:'m:'+a.id, title:mi.steps[a.step], sub:`${mi.title} · Schritt ${a.step+1}/${mi.steps.length}`, type:'mission', cat:mi.cat, time:'', by:'mission'});
+  });
+  return items.sort((a,b) => (a.time||'99').localeCompare(b.time||'99'));
+}
+const status = (m, id) => (m.log[TODAY_KEY]||{})[id];
+function award(m, type, cat, sign=1){
+  const T = TYPES[type];
+  m.xp = Math.max(0, m.xp + sign*T.xp); m.coins = Math.max(0, m.coins + sign*T.coins);
+  m.offline.week = Math.max(0, m.offline.week + sign*T.min);
+  const c = cat || ({termin:'sport',haushalt:'kochen',habit:'wissen'}[type]);
+  m.catXP[c] = Math.max(0, (m.catXP[c]||0) + sign*T.xp);
+  if (sign > 0 && !m.activeDays.includes(TODAY_KEY)) m.activeDays.push(TODAY_KEY);
+}
+function toggleItem(m, item){
+  m.log[TODAY_KEY] = m.log[TODAY_KEY] || {};
+  const st = m.log[TODAY_KEY][item.id];
+  const tier = tierOf(m);
+  if (st === 'done'){
+    delete m.log[TODAY_KEY][item.id];
+    if (item.type === 'mission'){ const a = m.missions.find(x => 'm:'+x.id === item.id); if (a) a.step = Math.max(0, a.step-1); }
+    award(m, item.type, item.cat, -1);
+    toast(tier === 'teen' ? 'Rückgängig' : 'Rückgängig gemacht');
+  } else if (st === 'pending'){
+    delete m.log[TODAY_KEY][item.id];
+    toast('Anfrage zurückgezogen');
+  } else if (item.confirm){
+    m.log[TODAY_KEY][item.id] = 'pending';
+    toast(COPY[tier].pending);
+  } else {
+    m.log[TODAY_KEY][item.id] = 'done';
+    if (item.type === 'mission'){
+      const a = m.missions.find(x => 'm:'+x.id === item.id);
+      if (a){ a.step++; const mi = missionById(a.id); if (a.step >= mi.steps.length) finishMission(m, mi); }
+    }
+    award(m, item.type, item.cat, 1);
+    celebrate(tier);
+  }
+  save(); render();
+}
+function finishMission(m, mi){
+  m.badges.unshift(tierOf(m) === 'teen' ? mi.title : `${CATS[mi.cat].e} ${mi.title}`);
+  m.xp += 100; m.coins += 30;
+  setTimeout(() => openModal({type:'missionDone', mi}), 400);
+}
+function weekActive(m){ return weekDates().map(d => m.activeDays.includes(dkey(d))); }
+
+// ---------- Effekte ----------
+let toastTimer;
+function toast(msg){
+  document.querySelectorAll('.toast').forEach(t => t.remove());
+  const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t);
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.remove(), 1900);
+}
+function celebrate(tier){
+  const msgs = COPY[tier].done; toast(msgs[Math.floor(Math.random()*msgs.length)]);
+  if (tier === 'teen') return;
+  const cols = tier === 'kid' ? ['#FF5C8A','#FFC93C','#2DBE6C','#4A7DFF','#7C5CFF','#FF9F1C'] : ['#6C4CFF','#22C3B5','#FFC93C','#FF5C8A'];
+  const n = tier === 'kid' ? 40 : 18;
+  for (let i=0;i<n;i++){
+    const c = document.createElement('i'); c.className = 'confetti';
+    c.style.left = Math.random()*100+'vw'; c.style.background = cols[i%cols.length];
+    c.style.animationDelay = Math.random()*.3+'s'; c.style.animationDuration = (1+Math.random()*.8)+'s';
+    document.body.appendChild(c); setTimeout(() => c.remove(), 2300);
+  }
+}
+function openModal(m){ UI.modal = m; render(); }
+function closeModal(){ UI.modal = null; render(); }
+
+// ---------- Render: Demo-Leiste ----------
+function renderDemoBar(){
+  const persona = S.members.map(m => {
+    const label = m.role === 'parent' ? `👪 Eltern` : `${m.avatar.length <= 2 && /\p{Extended_Pictographic}/u.test(m.avatar) ? m.avatar : '•'} ${esc(m.name)} (${m.age})`;
+    return `<button class="${!UI.onb && m.id === S.activeId ? 'on':''}" data-action="persona" data-id="${m.id}">${label}</button>`;
+  }).join('');
+  return `<div class="demobar"><span class="lbl">Demo</span>${persona}<span class="sep"></span>
+    <button class="${UI.onb?'on':''}" data-action="startOnb">＋ Onboarding</button>
+    <button data-action="about">ℹ︎ Konzept</button>
+    <button data-action="reset">↺ Reset</button></div>`;
+}
+
+// ---------- Render: Kind/Jugendliche ----------
+function renderKidHeader(m, tier){
+  const C = COPY[tier];
+  const dateStr = TODAY.toLocaleDateString('de-DE',{weekday:'long', day:'numeric', month:'long'});
+  const wk = weekActive(m), cnt = wk.filter(Boolean).length;
+  return `<div class="hdr">
+    <div class="row">
+      <div class="avatar">${esc(m.avatar)}</div>
+      <div class="grow">
+        <h1>${esc(C.hello(m.name))}</h1>
+        <div class="muted small">${C.sub ? C.sub : dateStr}</div>
+      </div>
+      ${tier==='kid' ? '<div class="mascot" title="Maskottchen">🐣</div>' : ''}
+    </div>
+    <div class="stats">
+      <div class="stat"><b>${tier==='kid'?'🏅 ':''}${level(m.xp)}</b><span>Level</span><div class="xpbar"><i style="width:${lvlProg(m.xp)}%"></i></div></div>
+      <div class="stat"><b>${C.coin} ${m.coins}</b><span>${C.coins}</span></div>
+      <div class="stat"><b>${tier==='teen'?'':'🔥 '}${S.settings.streakMode==='week' ? m.streakWeeks : m.streakWeeks*7}</b><span>${S.settings.streakMode==='week' ? C.streak : 'Tage-Serie'}</span></div>
+    </div>
+  </div>`;
+}
+function renderStreakCard(m, tier){
+  const wk = weekActive(m), cnt = wk.filter(Boolean).length, secured = cnt >= 5;
+  const dates = weekDates();
+  const dots = dates.map((d,i) => `<div class="dot ${wk[i]?'on':''} ${dkey(d)===TODAY_KEY?'today':''}"><i>${wk[i] && tier!=='teen' ? '✓':''}</i>${DAYS[d.getDay()]}</div>`).join('');
+  const msg = S.settings.streakMode === 'week'
+    ? (secured ? (tier==='kid' ? 'Woche geschafft! Deine Serie wächst 🎉' : 'Woche gesichert ✓') : `${cnt}/7 Tage – ab 5 Tagen zählt die Woche`)
+    : `Jeden Tag mindestens eine Quest`;
+  return `<div class="card streak">
+    <div class="row between"><div class="row"><span class="flame">🔥</span><div><b>${tier==='kid'?'Deine Feuer-Woche':'Diese Woche'}</b><div class="small muted">${msg}</div></div></div>
+    <span class="pill" title="Joker retten die Serie, wenn mal eine Woche schiefgeht">🛟 ${m.jokers} Joker</span></div>
+    <div class="dots">${dots}</div>
+    <div class="small muted" style="margin-top:8px">👪 Familien-Serie: <b>${S.familyStreak} Wochen</b> – alle haben ihre Woche geschafft</div>
+  </div>`;
+}
+function renderItem(m, it, tier, readonly){
+  const st = status(m, it.id);
+  const sub = it.sub || [it.time ? it.time+' Uhr' : null, TYPES[it.type].n, it.by==='kid' ? (tier==='teen'?'eigenes Ziel':'mein Ziel') : null, it.confirm ? 'mit Bestätigung' : null].filter(Boolean).join(' · ');
+  const icon = it.type === 'mission' ? catIcon(it.cat, tier) : typeIcon(it.type, tier);
+  return `<div class="item ${st||''}">
+    <div class="ico">${icon}</div>
+    <div class="grow"><div class="t">${esc(it.title)}</div><div class="s">${esc(sub)}${st==='pending'?' · ⏳ wartet':''}</div></div>
+    ${tier!=='teen' ? `<span class="pill">+${TYPES[it.type].xp}</span>` : `<span class="small muted">+${TYPES[it.type].xp}</span>`}
+    ${readonly ? '' : `<button class="check" aria-label="erledigt" data-action="toggle" data-id="${esc(it.id)}">✓</button>`}
+  </div>`;
+}
+function kidHeute(m, tier){
+  const C = COPY[tier];
+  const items = todayItems(m);
+  const done = items.filter(i => status(m,i.id)==='done').length;
+  return `${renderKidHeader(m, tier)}
+    ${tier==='kid' ? `<div class="row" style="margin-top:14px"><div class="mascot">🐣</div><div class="bubble">${done===items.length && items.length ? 'Alles geschafft! Zeit zum Spielen draußen! ☀️' : `Noch ${items.length-done} Quests – du schaffst das!`}</div></div>` : ''}
+    <h2>${C.today} <span class="muted small">${done}/${items.length}</span></h2>
+    <div>${items.map(i => renderItem(m, i, tier)).join('') || '<div class="empty">Heute nichts geplant.</div>'}</div>
+    ${S.settings.kidsOwnGoals ? `<button class="btn ghost block" style="margin-top:12px" data-action="addOwn">${C.addOwn}</button>` : ''}
+    <h2>${tier==='kid'?'Deine Serie':'Streak'}</h2>
+    ${renderStreakCard(m, tier)}
+    <div class="card" style="margin-top:10px"><div class="row between"><div><div class="small muted">${tier==='kid'?'Zeit draußen & im echten Leben':'Offline-Minuten diese Woche'}</div><div class="kpi">${m.offline.week} min</div></div><div style="font-size:30px">${tier==='teen'?'':'🌳'}</div></div>
+    <div class="note">Die App will so wenig Zeit wie möglich von dir: kurz abhaken, dann raus.</div></div>`;
+}
+function missionCard(m, mi, tier, locked){
+  const act = (m.missions||[]).find(a => a.id === mi.id);
+  const missing = mi.needs.filter(n => !m.equip.includes(n));
+  return `<button class="mcard ${locked?'locked':''}" style="--c:${CATS[mi.cat].c}" data-action="mission" data-id="${mi.id}">
+    <div class="mi">${catIcon(mi.cat, tier)}</div>
+    <div class="grow">
+      <div class="t">${esc(mi.title)} ${mi.coop?'<span class="badge-type">👥 zu zweit</span>':''}</div>
+      <div class="d">${esc(CATS[mi.cat].n)} · ${mi.weeks} ${mi.weeks===1?'Woche':'Wochen'} · ${mi.steps.length} Schritte</div>
+      ${locked ? `<div class="d">Braucht: ${missing.map(n => EQUIP[n].e+' '+EQUIP[n].n).join(', ')}</div>` : ''}
+      ${act ? `<div class="prog"><i style="width:${act.step/mi.steps.length*100}%"></i></div>` : ''}
+    </div>
+  </button>`;
+}
+function kidMissionen(m, tier){
+  const ageOk = MISSIONS.filter(x => m.age >= x.age[0] && m.age <= x.age[1]);
+  const hasEq = x => x.needs.every(n => m.equip.includes(n));
+  const q = UI.search.trim().toLowerCase();
+  const matchQ = x => !q || (x.title+' '+x.desc+' '+CATS[x.cat].n).toLowerCase().includes(q);
+  const matchC = x => !UI.missionCat || x.cat === UI.missionCat;
+  const active = (m.missions||[]).map(a => missionById(a.id)).filter(Boolean);
+  const pool = ageOk.filter(x => matchQ(x) && matchC(x) && !active.includes(x));
+  const rec = pool.filter(hasEq).sort((a,b) => (m.interests.includes(b.cat)?1:0) - (m.interests.includes(a.cat)?1:0));
+  const locked = pool.filter(x => !hasEq(x));
+  const chips = `<button class="chip ${!UI.missionCat?'on':''}" data-action="cat" data-id="">Alle</button>` +
+    Object.entries(CATS).map(([k,c]) => `<button class="chip ${UI.missionCat===k?'on':''}" data-action="cat" data-id="${k}">${tier==='teen'?'':c.e+' '}${c.n}</button>`).join('');
+  const T = {kid:'Abenteuer', tween:'Missionen', teen:'Missionen'}[tier];
+  return `<div class="hdr"><h1>${T}</h1><div class="muted small">${tier==='kid'?'Such dir ein Abenteuer aus!':'Passend zu deinem Alter und dem, was du zuhause hast.'}</div></div>
+    <div style="margin-top:12px"><input class="search" placeholder="${tier==='kid'?'🔍 Suchen …':'Rubriken & Missionen durchsuchen'}" value="${esc(UI.search)}" data-input="search"></div>
+    <div class="chips">${chips}</div>
+    ${active.length && !q && !UI.missionCat ? `<h2>${tier==='kid'?'Läuft gerade':'Aktiv'}</h2>${active.map(x => missionCard(m,x,tier,false)).join('')}` : ''}
+    <h2>${tier==='kid'?'Für dich ausgesucht':'Für dich empfohlen'} <span class="muted small">${rec.length}</span></h2>
+    ${rec.map(x => missionCard(m,x,tier,false)).join('') || '<div class="empty">Keine Treffer.</div>'}
+    ${locked.length ? `<h2>Mit mehr Ausstattung möglich</h2><div class="small muted" style="margin:-4px 2px 8px">Wie bei einem Trainingsplan: Ausstattung im Profil ergänzen, dann werden diese Missionen frei.</div>${locked.map(x => missionCard(m,x,tier,true)).join('')}` : ''}
+    <h2>Rubriken</h2>
+    <div class="catgrid">${Object.entries(CATS).map(([k,c]) => `<button class="catbtn" style="--c:${c.c}" data-action="cat" data-id="${k}"><span class="e">${tier==='teen'?c.t:c.e}</span>${c.n}</button>`).join('')}</div>`;
+}
+function kidFreunde(m, tier){
+  const young = m.age < 13;
+  const coop = m.coop;
+  const fr = m.friends.map(f => `<div class="fi"><div class="avatar" style="width:40px;height:40px;font-size:${tier==='teen'?'15px':'22px'}">${esc(f.avatar)}</div>
+    <div class="grow"><b>${esc(f.name)}</b> <span class="muted small">· Level ${f.lvl} · ${tier==='teen'?'':'🔥'}${f.streak} Wo.</span><div class="small">${esc(f.feed)}</div></div>
+    <button class="btn ghost sm" data-action="cheer" data-id="${esc(f.name)}">${tier==='teen'?'👏':'👏 Daumen'}</button></div>`).join('');
+  const ranking = [...m.friends.map(f => ({name:f.name, avatar:f.avatar, v:f.streak})), {name:m.name+' (du)', avatar:m.avatar, v:m.streakWeeks, me:true}].sort((a,b) => b.v - a.v);
+  return `<div class="hdr"><h1>${COPY[tier].tabs[2]}</h1><div class="muted small">Nur Freund:innen, die du im echten Leben kennst – per QR-Code verbunden.</div></div>
+    <h2>${tier==='kid'?'Gemeinsames Abenteuer':'Koop-Mission'}</h2>
+    <div class="card" style="--c:var(--accent2)"><div class="row"><div style="font-size:30px">${tier==='teen'?'':'🤝'}</div><div class="grow"><b>${esc(coop.mission)}</b><div class="small muted">mit ${esc(coop.partner)} · ${coop.progress}/${coop.total} Schritte</div><div class="prog"><i style="width:${coop.progress/coop.total*100}%"></i></div></div></div>
+    <div class="note" style="margin-top:8px">Kooperativ statt gegeneinander: ihr schafft es nur zusammen – und trefft euch dafür offline.</div></div>
+    <h2>${tier==='kid'?'Was deine Freunde geschafft haben':'Feed'}</h2>
+    <div class="card feed">${fr}</div>
+    <h2>${young ? 'Serien unter Freunden' : 'Ranking unter Freunden'}</h2>
+    <div class="card">${ranking.map((r,i) => `<div class="row" style="padding:6px 0;${r.me?'font-weight:800;color:var(--accent)':''}"><span style="width:22px">${i+1}.</span><span>${esc(r.avatar)}</span><span class="grow">${esc(r.name)}</span><span>${tier==='teen'?'':'🔥 '}${r.v} Wo.</span></div>`).join('')}
+    ${young ? '<div class="note" style="margin-top:6px">Unter 13: keine öffentlichen Ranglisten – nur dein Freundeskreis.</div>' : ''}</div>
+    <button class="btn block" style="margin-top:14px" data-action="invite">${tier==='kid'?'➕ Freund:in einladen':'Freund:in per QR verbinden'}</button>`;
+}
+function kidBelohnungen(m, tier){
+  const C = COPY[tier];
+  const mine = S.redemptions.filter(r => r.memberId === m.id);
+  return `<div class="hdr"><h1>${C.tabs[3]}</h1><div class="muted small">Belohnungen, die deine Eltern festgelegt haben. Du hast <b>${C.coin} ${m.coins} ${C.coins}</b>.</div></div>
+    ${mine.length ? `<h2>Deine Wünsche</h2><div class="card">${mine.map(r => { const rw = S.rewards.find(x => x.id===r.rewardId); return `<div class="row between" style="padding:5px 0"><span>${rw?esc(rw.e)+' '+esc(rw.title):'–'}</span><span class="pill">${r.status==='pending'?'⏳ wartet':'✓ freigegeben'}</span></div>`;}).join('')}</div>` : ''}
+    <h2>${tier==='kid'?'Was möchtest du?':'Einlösen'}</h2>
+    ${S.rewards.map(r => { const can = m.coins >= r.cost; return `<div class="item"><div class="ico">${tier==='teen'?`<span class="tag">${r.kind.slice(0,3).toUpperCase()}</span>`:esc(r.e)}</div>
+      <div class="grow"><div class="t">${esc(r.title)}</div><div class="s">${esc(r.kind)} · ${C.coin} ${r.cost}</div>${!can?`<div class="prog"><i style="width:${Math.min(100,m.coins/r.cost*100)}%"></i></div>`:''}</div>
+      <button class="btn sm" ${can?'':'disabled'} data-action="redeem" data-id="${r.id}">${can?(tier==='kid'?'Wünschen!':'Einlösen'):`noch ${r.cost-m.coins}`}</button></div>`;}).join('')}
+    <div class="note" style="margin-top:10px">Belohnungen sind bewusst eher Erlebnisse & Privilegien als Dinge – und werden mit der Zeit seltener, wenn die Gewohnheit sitzt.</div>`;
+}
+function percentile(m, cat){
+  const v = m.catXP[cat]||0; const k = 120 + m.age*25; // Beispiel-Verteilung je Alter
+  return Math.min(99, Math.round(100*(1-Math.exp(-v/k))));
+}
+function kidIch(m, tier){
+  const C = COPY[tier];
+  const cats = Object.keys(CATS).filter(c => (m.catXP[c]||0) > 0 || m.interests.includes(c)).sort((a,b) => (m.catXP[b]||0)-(m.catXP[a]||0));
+  const lo = m.age <= 9 ? 6 : m.age <= 13 ? 10 : 14, hi = m.age <= 9 ? 9 : m.age <= 13 ? 13 : 17;
+  return `<div class="hdr row"><div class="avatar" style="width:72px;height:72px;font-size:${tier==='teen'?'26px':'44px'}">${esc(m.avatar)}</div>
+    <div><h1>${esc(m.name)}</h1><div class="muted small">${m.age} Jahre · Level ${level(m.xp)} · ${m.xp} ${C.xp}</div><div class="pill" style="margin-top:4px">${TIER_NAME[tierOf(m)]}</div></div></div>
+    <h2>${tier==='kid'?'Deine Abzeichen':'Badges'}</h2>
+    <div class="card" style="display:flex;flex-wrap:wrap;gap:6px">${m.badges.map(b => `<span class="pill" style="font-size:.85em;color:var(--text)">${esc(b)}</span>`).join('')}</div>
+    <h2>${tier==='kid'?'Darin bist du schon richtig gut':'Vergleich mit deiner Altersgruppe'}</h2>
+    <div class="card">
+      <div class="small muted" style="margin-bottom:10px">${tier==='kid'?'Je länger der Balken, desto mehr hast du schon geübt – verglichen mit anderen Kindern in deinem Alter.':`Perzentil: Anteil der ${lo}–${hi}-Jährigen, die du in dieser Rubrik überholt hast.`}</div>
+      ${cats.map(c => { const p = percentile(m,c); return `<div class="cmp" style="--c:${CATS[c].c}"><span>${tier==='teen'?'':CATS[c].e+' '}${CATS[c].n}</span><div class="bar"><i style="width:${p}%"></i></div><b>${tier==='kid'? (p>66?'⭐⭐⭐':p>33?'⭐⭐':'⭐') : p+'%'}</b></div>`;}).join('')}
+      <div class="note" style="margin-top:10px">Beispieldaten. Im Produkt: anonymisiert aus Missionen derselben Altersgruppe, keine Namen.</div>
+    </div>
+    <h2>Meine Ausstattung</h2>
+    <div class="card"><div style="display:flex;flex-wrap:wrap;gap:6px">${Object.entries(EQUIP).map(([k,e]) => `<button class="chip ${m.equip.includes(k)?'on':''}" data-action="equip" data-id="${k}">${tier==='teen'?'':e.e+' '}${e.n}</button>`).join('')}</div>
+    <div class="note" style="margin-top:8px">Antippen zum Ändern – die Missionsvorschläge passen sich an.</div></div>
+    <h2>Interessen</h2>
+    <div class="card"><div style="display:flex;flex-wrap:wrap;gap:6px">${Object.entries(CATS).map(([k,c]) => `<button class="chip ${m.interests.includes(k)?'on':''}" data-action="interest" data-id="${k}">${tier==='teen'?'':c.e+' '}${c.n}</button>`).join('')}</div></div>`;
+}
+function renderKid(m){
+  const tier = tierOf(m);
+  const tab = UI.tab[m.id] || 0;
+  const body = [kidHeute, kidMissionen, kidFreunde, kidBelohnungen, kidIch][tab](m, tier);
+  const nav = COPY[tier].tabs.map((t,i) => `<button class="${i===tab?'on':''}" data-action="tab" data-id="${i}"><span class="ic">${NAV_IC[tier][i]}</span>${t}</button>`).join('');
+  return `<div class="app">${body}</div><nav class="nav">${nav}</nav>`;
+}
+
+// ---------- Render: Eltern ----------
+const P_TABS = [['👪','Familie'],['🗓️','Planen'],['✅','Bestätigen'],['🎁','Belohnungen'],['⚙️','Einstellungen']];
+function pendingList(){
+  const out = [];
+  kids().forEach(k => { const lg = k.log[TODAY_KEY]||{}; Object.entries(lg).forEach(([id,st]) => { if (st==='pending'){ const it = k.agenda.find(a => a.id===id); if (it) out.push({kind:'task', k, it}); } }); });
+  S.redemptions.filter(r => r.status==='pending').forEach(r => out.push({kind:'reward', k:S.members.find(x => x.id===r.memberId), r, rw:S.rewards.find(x => x.id===r.rewardId)}));
+  return out;
+}
+function parentFamilie(m){
+  const pend = pendingList().length;
+  return `<div class="hdr"><h1>Hallo ${esc(m.name)}</h1><div class="muted small">${TODAY.toLocaleDateString('de-DE',{weekday:'long', day:'numeric', month:'long'})}</div></div>
+    <div class="stats"><div class="stat"><b>${S.familyStreak} Wo.</b><span>Familien-Serie</span></div>
+      <div class="stat"><b>${kids().reduce((s,k) => s+k.offline.week, 0)} min</b><span>Offline-Zeit (Woche)</span></div>
+      <div class="stat" data-action="ptab" data-id="2" style="cursor:pointer"><b style="color:${pend?'var(--accent)':'inherit'}">${pend}</b><span>zu bestätigen</span></div></div>
+    <h2>Kinder</h2>
+    ${kids().map(k => {
+      const items = todayItems(k), done = items.filter(i => status(k,i.id)==='done').length;
+      const wk = weekActive(k), cnt = wk.filter(Boolean).length;
+      const priv = S.settings.teenPrivacy && k.age >= 14;
+      return `<div class="card" style="margin-bottom:10px">
+        <div class="row"><div class="avatar" style="width:42px;height:42px;font-size:${k.avatar.length<=2?'24px':'16px'}">${esc(k.avatar)}</div>
+        <div class="grow"><b>${esc(k.name)}, ${k.age}</b><div class="small muted">${TIER_NAME[tierOf(k)]} · Level ${level(k.xp)} · 🔥 ${k.streakWeeks} Wochen</div></div>
+        <button class="btn ghost sm" data-action="persona" data-id="${k.id}">Ansicht →</button></div>
+        ${priv ? `<div class="hint">🔒 <b>Autonomie ab 14:</b> Du siehst nur die Wochenübersicht – ${cnt}/7 aktive Tage, ${k.offline.week} Offline-Minuten, ${(k.missions||[]).length} laufende Missionen. Details sieht ${esc(k.name)} selbst.</div>` :
+        `<div class="row between" style="margin-top:10px"><span class="small">Heute ${done}/${items.length} erledigt</span><span class="small muted">${k.offline.week} min offline</span></div>
+         <div class="prog"><i style="width:${items.length?done/items.length*100:0}%;background:var(--accent2)"></i></div>
+         <div class="dots" style="margin-top:8px">${weekDates().map((d,i) => `<div class="dot ${wk[i]?'on':''} ${dkey(d)===TODAY_KEY?'today':''}"><i style="height:8px;border-radius:3px"></i>${DAYS[d.getDay()]}</div>`).join('')}</div>
+         <div class="small muted" style="margin-top:6px">Missionen: ${(k.missions||[]).map(a => { const mi = missionById(a.id); return mi ? `${CATS[mi.cat].e} ${esc(mi.title)} (${a.step}/${mi.steps.length})` : ''; }).join(' · ') || '–'}</div>`}
+      </div>`; }).join('')}
+    <div class="note">Eltern sehen Fortschritt, nicht jede Sekunde: je älter das Kind, desto weniger Kontrolle.</div>`;
+}
+function parentPlanen(){
+  const kid = S.members.find(x => x.id === UI.planKid) || kids()[0]; UI.planKid = kid.id;
+  const f = UI.planForm || (UI.planForm = {days:[1,2,3,4,5], type:'haushalt'});
+  return `<div class="hdr"><h1>Agenda planen</h1><div class="muted small">Regeltermine, Haushalt und Mikro-Habits für deine Kinder anlegen.</div></div>
+    <div class="chips">${kids().map(k => `<button class="chip ${k.id===kid.id?'on':''}" data-action="planKid" data-id="${k.id}">${esc(k.avatar)} ${esc(k.name)}</button>`).join('')}</div>
+    <form class="card" data-form="plan">
+      <label class="f">Was?</label><input class="in" name="title" placeholder="z. B. Blumen gießen" required>
+      <label class="f">Art</label>
+      <div class="daypick">${Object.entries(TYPES).filter(([k]) => k!=='mission').map(([k,t]) => `<button type="button" class="${f.type===k?'on':''}" data-action="ptype" data-id="${k}">${t.e} ${t.n}</button>`).join('')}</div>
+      <label class="f">An welchen Tagen?</label>
+      <div class="daypick">${WEEK_ORDER.map(d => `<button type="button" class="${f.days.includes(d)?'on':''}" data-action="pday" data-id="${d}">${DAYS[d]}</button>`).join('')}</div>
+      <div class="row" style="gap:10px"><div class="grow"><label class="f">Uhrzeit</label><input class="in" type="time" name="time" value="18:00"></div>
+      <div class="grow"><label class="f">Bestätigung durch Eltern?</label><select class="in" name="confirm"><option value="0">Nein, Vertrauen</option><option value="1">Ja</option></select></div></div>
+      <div class="small muted" style="margin-top:10px">Belohnung automatisch: +${TYPES[f.type].xp} XP · +${TYPES[f.type].coins} Coins</div>
+      <button class="btn block" style="margin-top:12px">Für ${esc(kid.name)} hinzufügen</button>
+    </form>
+    <h2>Agenda von ${esc(kid.name)}</h2>
+    ${kid.agenda.map(a => `<div class="item"><div class="ico">${TYPES[a.type].e}</div><div class="grow"><div class="t">${esc(a.title)}</div><div class="s">${WEEK_ORDER.filter(d => a.days.includes(d)).map(d => DAYS[d]).join(' ')} · ${a.time} · ${a.by==='kid'?'von '+esc(kid.name)+' selbst angelegt':'von Eltern'}${a.confirm?' · mit Bestätigung':''}</div></div>
+      <button class="btn ghost sm" data-action="delAgenda" data-id="${a.id}" aria-label="löschen">✕</button></div>`).join('')}
+    <div class="note" style="margin-top:10px">Kinder können (je nach Einstellung) auch selbst Ziele anlegen – das stärkt die Eigenmotivation.</div>`;
+}
+function parentBestaetigen(){
+  const list = pendingList();
+  return `<div class="hdr"><h1>Bestätigen</h1><div class="muted small">Erledigte Aufgaben mit Bestätigung und eingelöste Belohnungen.</div></div>
+    <h2>Offen <span class="muted small">${list.length}</span></h2>
+    ${list.map((p,i) => p.kind==='task'
+      ? `<div class="item"><div class="ico">${esc(p.k.avatar)}</div><div class="grow"><div class="t">${esc(p.it.title)}</div><div class="s">${esc(p.k.name)} sagt: erledigt ✓</div></div>
+         <button class="btn sm" data-action="approveTask" data-id="${p.k.id}|${p.it.id}">Passt</button></div>`
+      : `<div class="item"><div class="ico">${esc(p.rw?.e||'🎁')}</div><div class="grow"><div class="t">${esc(p.rw?.title||'')}</div><div class="s">${esc(p.k.name)} möchte einlösen · ${p.rw?.cost} Coins</div></div>
+         <button class="btn ghost sm" data-action="declineRw" data-id="${p.r.id}">Später</button><button class="btn sm" data-action="approveRw" data-id="${p.r.id}">OK</button></div>`).join('')
+      || '<div class="card empty">Nichts offen 🎉<div class="small" style="margin-top:6px">Tipp: In einer Kinder-Ansicht „Spülmaschine ausräumen“ (Leon) oder „Tisch decken“ (Mia) abhaken.</div></div>'}
+    <div class="note" style="margin-top:12px">Ein Tipp statt Foto-Beweis: kurz anschauen, loben, bestätigen. Kein Überwachungs-Tool.</div>`;
+}
+function parentBelohnungen(){
+  return `<div class="hdr"><h1>Belohnungen</h1><div class="muted small">Was können die Kinder mit ihren Coins einlösen?</div></div>
+    <form class="card" data-form="reward">
+      <div class="row" style="gap:8px"><div style="width:64px"><label class="f">Emoji</label><input class="in" name="e" value="🎁" maxlength="4"></div>
+      <div class="grow"><label class="f">Belohnung</label><input class="in" name="title" placeholder="z. B. Gemeinsam Pizza backen" required></div></div>
+      <div class="row" style="gap:8px"><div class="grow"><label class="f">Kosten (Coins)</label><input class="in" type="number" name="cost" value="100" min="10" step="10"></div>
+      <div class="grow"><label class="f">Art</label><select class="in" name="kind"><option>Erlebnis</option><option>Privileg</option><option>Sache</option></select></div></div>
+      <button class="btn block" style="margin-top:12px">Belohnung hinzufügen</button>
+    </form>
+    <h2>Aktive Belohnungen</h2>
+    ${S.rewards.map(r => `<div class="item"><div class="ico">${esc(r.e)}</div><div class="grow"><div class="t">${esc(r.title)}</div><div class="s">${esc(r.kind)} · ${r.cost} Coins</div></div><button class="btn ghost sm" data-action="delReward" data-id="${r.id}">✕</button></div>`).join('')}
+    <div class="hint">💡 Empfehlung: lieber gemeinsame Erlebnisse & Privilegien als Geld/Dinge. So bleibt die Motivation länger von innen.</div>`;
+}
+function parentEinstellungen(){
+  const s = S.settings;
+  const tg = (key, title, desc, on) => `<div class="toggle"><div class="grow"><b>${title}</b><div class="small muted">${desc}</div></div><button class="sw ${on?'on':''}" data-action="setting" data-id="${key}" aria-label="${title}"></button></div>`;
+  return `<div class="hdr"><h1>Einstellungen</h1><div class="muted small">Familienregeln für die App.</div></div>
+    <div class="card" style="margin-top:14px">
+      ${tg('streakMode','Wochen-Serie statt Tages-Serie','Eine Woche zählt ab 5 von 7 aktiven Tagen. Weniger Druck, kein „Streak-Stress“ am Sonntagabend.', s.streakMode==='week')}
+      ${tg('kidsOwnGoals','Kinder dürfen eigene Ziele anlegen','Eigene Ziele motivieren stärker als vorgegebene.', s.kidsOwnGoals)}
+      ${tg('teenPrivacy','Autonomie ab 14','Eltern sehen bei Jugendlichen nur die Wochenübersicht statt jeder einzelnen Aufgabe.', s.teenPrivacy)}
+      ${tg('compare','Anonymer Altersgruppen-Vergleich','Perzentile statt Namen. Unter 13 nie öffentliche Ranglisten.', s.compare==='age')}
+    </div>
+    <h2>Familie verbinden</h2>
+    <div class="card row"><div>${qrSvg('LQ-4821')}</div><div><b>Familien-Code</b><div class="kpi">LQ-4821</div><div class="small muted">Zweites Elternteil oder Kind scannt diesen Code.</div></div></div>
+    <h2>Datenschutz (Konzept)</h2>
+    <div class="card small">Keine Werbung · keine Datenweitergabe · Einwilligung der Eltern unter 16 (DSGVO Art. 8) · Freunde nur per persönlichem QR-Code · Fotos optional und nur lokal.</div>`;
+}
+function renderParent(m){
+  const tab = UI.tab[m.id] || 0;
+  const body = [parentFamilie, parentPlanen, parentBestaetigen, parentBelohnungen, parentEinstellungen][tab](m);
+  const pend = pendingList().length;
+  const nav = P_TABS.map(([ic,t],i) => `<button class="${i===tab?'on':''}" data-action="ptab" data-id="${i}"><span class="ic">${ic}</span>${t}${i===2&&pend?` (${pend})`:''}</button>`).join('');
+  return `<div class="app">${body}</div><nav class="nav">${nav}</nav>`;
+}
+
+// ---------- QR (dekorativ) ----------
+function qrSvg(seedStr){
+  let h = 0; for (const c of seedStr) h = (h*31 + c.charCodeAt(0)) >>> 0;
+  const n = 21, cells = [];
+  const finder = (x,y) => { for (let i=0;i<7;i++) for (let j=0;j<7;j++){ const edge = i===0||i===6||j===0||j===6, core = i>=2&&i<=4&&j>=2&&j<=4; if (edge||core) cells.push([x+i,y+j]); } };
+  finder(0,0); finder(14,0); finder(0,14);
+  for (let y=0;y<n;y++) for (let x=0;x<n;x++){
+    if ((x<8&&y<8)||(x>12&&y<8)||(x<8&&y>12)) continue;
+    h = (h*1103515245 + 12345) >>> 0; if ((h>>16)&1) cells.push([x,y]);
+  }
+  return `<svg class="qr" viewBox="0 0 ${n} ${n}" shape-rendering="crispEdges">${cells.map(([x,y]) => `<rect x="${x}" y="${y}" width="1" height="1" fill="#111"/>`).join('')}</svg>`;
+}
+
+// ---------- Modals ----------
+function renderModal(){
+  const md = UI.modal; if (!md) return '';
+  const m = me(), tier = tierOf(m);
+  let inner = '';
+  if (md.type === 'mission'){
+    const mi = missionById(md.id), act = (m.missions||[]).find(a => a.id === mi.id);
+    const missing = mi.needs.filter(n => !m.equip.includes(n));
+    inner = `<div class="row"><div class="mi" style="font-size:40px">${catIcon(mi.cat, tier)}</div><div><div class="small muted">${CATS[mi.cat].n} · ${mi.age[0]}–${mi.age[1]} Jahre</div><h1 style="font-size:1.4em">${esc(mi.title)}</h1></div></div>
+      <p>${esc(mi.desc)}</p>
+      <div class="row" style="flex-wrap:wrap;gap:6px"><span class="pill">⏱ ${mi.weeks} ${mi.weeks===1?'Woche':'Wochen'}</span><span class="pill">🚀 ${mi.steps.length} Schritte</span><span class="pill">+${mi.steps.length*30+100} XP</span>${mi.coop?'<span class="pill">👥 zu zweit</span>':''}<span class="pill">📵 offline</span></div>
+      ${mi.needs.length ? `<div class="small" style="margin-top:10px">Ausstattung: ${mi.needs.map(n => (m.equip.includes(n)?'✅ ':'❌ ')+EQUIP[n].n).join(' · ')}</div>` : ''}
+      <h2>Plan</h2>
+      <ol style="padding-left:20px;margin:0">${mi.steps.map((s,i) => `<li style="padding:4px 0;${act&&i<act.step?'text-decoration:line-through;color:var(--muted)':''}${act&&i===act.step?'font-weight:800':''}">${esc(s)}</li>`).join('')}</ol>
+      <div style="margin-top:16px">${act
+        ? `<div class="hint">Läuft – der nächste Schritt steht in deiner Tagesliste.</div><button class="btn ghost block" style="margin-top:8px" data-action="stopMission" data-id="${mi.id}">Mission pausieren</button>`
+        : missing.length ? `<button class="btn block" disabled>Ausstattung fehlt</button><div class="note" style="margin-top:6px">Unter „${COPY[tier].tabs[4]}“ → Ausstattung ergänzen.</div>`
+        : `<button class="btn block" data-action="startMission" data-id="${mi.id}">${tier==='kid'?'Los geht’s! 🚀':'Mission starten'}</button>${mi.coop?`<button class="btn ghost block" style="margin-top:8px" data-action="startMission" data-id="${mi.id}" data-coop="1">Mit Freund:in starten</button>`:''}`}</div>`;
+  } else if (md.type === 'missionDone'){
+    inner = `<div style="text-align:center"><div style="font-size:64px">${tier==='teen'?'✓':'🏆'}</div><h1>Mission geschafft!</h1><p>${esc(md.mi.title)}<br><b>+100 XP · +30 ${COPY[tier].coins}</b><br>Neues Abzeichen im Profil.</p><button class="btn block" data-action="close">${tier==='kid'?'Juhu!':'Weiter'}</button></div>`;
+  } else if (md.type === 'addOwn'){
+    inner = `<h1 style="font-size:1.3em">${tier==='kid'?'Dein eigenes Ziel ✨':'Eigenes Ziel anlegen'}</h1>
+      <form data-form="own">
+        <label class="f">Was willst du schaffen?</label><input class="in" name="title" placeholder="${tier==='kid'?'z. B. Purzelbaum üben':'z. B. 20 Liegestütze'}" required>
+        <label class="f">Art</label><select class="in" name="type"><option value="habit">⚡ Mikro-Habit</option><option value="termin">📅 Termin</option><option value="haushalt">🧹 Haushalt</option></select>
+        <label class="f">Uhrzeit</label><input class="in" type="time" name="time" value="17:00">
+        <label class="f">Wie oft?</label><select class="in" name="freq"><option value="all">Jeden Tag</option><option value="wd">Mo–Fr</option><option value="today">Nur heute</option></select>
+        <button class="btn block" style="margin-top:14px">Hinzufügen</button>
+      </form>`;
+  } else if (md.type === 'invite'){
+    inner = `<div style="text-align:center"><h1 style="font-size:1.3em">Freund:in verbinden</h1><p class="small muted">Lass deine Freundin / deinen Freund diesen Code <b>persönlich</b> scannen. So verbinden sich nur Leute, die sich wirklich kennen.</p>
+      <div style="display:flex;justify-content:center">${qrSvg(m.name)}</div>
+      <div class="hint">Unter 16: Eltern beider Kinder bestätigen die Verbindung.</div>
+      <button class="btn block" style="margin-top:12px" data-action="close">Fertig</button></div>`;
+  } else if (md.type === 'about'){
+    inner = `<h1 style="font-size:1.3em">LifeQuest – Prinzipien</h1>
+      <ol style="padding-left:20px;line-height:1.5">
+        <li><b>Echte Welt statt Bildschirm.</b> Die App ist nur Startrampe: kurz abhaken, raus. Erfolg = Offline-Minuten, nicht App-Zeit.</li>
+        <li><b>Wächst mit.</b> Je jünger, desto bunter & verspielter; mit dem Alter klarer, cooler – und mit mehr Selbstbestimmung.</li>
+        <li><b>Missionen wie Trainingspläne.</b> Rubriken durchsuchen, Ausstattung angeben, passende mehrwöchige Pläne bekommen.</li>
+        <li><b>Streaks ohne Stress.</b> Wochen-Serie (5/7 Tage), Joker, Familien-Serie.</li>
+        <li><b>Gemeinsam statt gegeneinander.</b> Freunde nur aus dem echten Leben, Koop-Missionen, anonymer Altersvergleich.</li>
+        <li><b>Belohnungen mit Augenmaß.</b> Eltern definieren – am besten Erlebnisse und Privilegien.</li>
+      </ol>
+      <h2>Fragen fürs Familiengespräch</h2>
+      <ul style="padding-left:20px;line-height:1.5" class="small">
+        <li>Welche Mission würdest du als Erstes starten – und warum?</li>
+        <li>Was würde dich nach 6 Wochen noch dranbleiben lassen?</li>
+        <li>Was wäre dir peinlich oder nervig?</li>
+        <li>Eltern: Wie viel Kontrolle wollt ihr – und wie viel braucht es wirklich?</li>
+        <li>Eltern: Was wäre euch so eine App im Monat wert?</li>
+      </ul>
+      <div class="note">Demonstrator mit Beispieldaten. Alles bleibt lokal in diesem Browser. „↺ Reset“ stellt den Ausgangszustand her.</div>
+      <button class="btn block" style="margin-top:12px" data-action="close">Schließen</button>`;
+  }
+  return `<div class="scrim" data-action="scrim"><div class="sheet" data-stop="1"><div class="grab"></div>${inner}</div></div>`;
+}
+
+// ---------- Onboarding ----------
+function onbTier(o){ return o.role === 'parent' ? 'parent' : o.age <= 9 ? 'kid' : o.age <= 13 ? 'tween' : 'teen'; }
+function onbPreview(o){
+  const t = onbTier(o);
+  const sample = {kid:'Hallo! 🌞 Lass uns Abenteuer erleben!', tween:'Hey! Bereit für deine Quests? 👋', teen:'Deine Ziele. Dein Tempo.', parent:''}[t];
+  return `<div class="card" style="margin-top:14px">
+    <div class="small muted" style="margin-bottom:8px">Vorschau: <b>${TIER_NAME[t]}</b></div>
+    <div class="bubble" style="box-shadow:none;background:var(--surface2)">${sample}</div>
+    <div class="item" style="margin-top:10px;box-shadow:none"><div class="ico">${typeIcon('haushalt', t)}</div><div class="grow"><div class="t">Spülmaschine ausräumen</div><div class="s">18:30 Uhr · Haushalt</div></div><span class="check"></span></div>
+    <div class="item" style="box-shadow:none"><div class="ico">${catIcon('sport', t)}</div><div class="grow"><div class="t">Fahrrad-Entdecker:in</div><div class="s">Mission · Schritt 1/4</div></div><span class="check"></span></div>
+  </div>`;
+}
+function renderOnb(){
+  const o = UI.onb;
+  const kidSteps = 6;
+  const back = o.step > 0 ? `<button class="btn ghost" data-action="onbBack">Zurück</button>` : '';
+  let c = '';
+  if (o.step === 0){
+    c = `<div class="step">Willkommen bei LifeQuest</div><h1>Wer bist du?</h1><p class="muted">Eltern und Kinder nutzen dieselbe App – jede:r mit der passenden Ansicht.</p>
+      <div class="choice"><button class="${o.role==='kid'?'on':''}" data-action="onbRole" data-id="kid"><span class="e">🧒</span>Kind / Jugendliche:r</button>
+      <button class="${o.role==='parent'?'on':''}" data-action="onbRole" data-id="parent"><span class="e">👩‍👧</span>Elternteil</button></div>`;
+  } else if (o.role === 'parent'){
+    c = `<div class="step">Schritt 2 von 2</div><h1>Wie heißt du?</h1>
+      <input class="in" style="margin-top:14px" data-input="onbName" value="${esc(o.name)}" placeholder="z. B. Papa">
+      <div class="hint">Danach: Kinder per Familien-Code verbinden, Agenda und Belohnungen festlegen. Kinder unter 16 brauchen deine Einwilligung (DSGVO Art. 8).</div>`;
+  } else if (o.step === 1){
+    c = `<div class="step">Schritt 1 von ${kidSteps-1}</div><h1>Wie heißt du – und wie alt bist du?</h1>
+      <input class="in" style="margin-top:14px" data-input="onbName" value="${esc(o.name)}" placeholder="Dein Name">
+      <div class="agebig" id="ageVal">${o.age}</div><input type="range" min="6" max="17" value="${o.age}" data-input="onbAge">
+      <div class="tierinfo" id="tierName">Jahre · ${TIER_NAME[onbTier(o)]}</div>
+      <div id="onbPrev">${onbPreview(o)}</div>
+      <div class="hint">👉 Schieb den Regler: Die ganze App verändert sich live – bunter für Jüngere, klarer und cooler für Ältere.</div>`;
+  } else if (o.step === 2){
+    const t = onbTier(o);
+    c = `<div class="step">Schritt 2 von ${kidSteps-1}</div><h1>Wie dürfen wir dich ansprechen?</h1>
+      <div class="choice c4" style="font-size:16px">${[['w','Mädchen'],['m','Junge'],['x','Divers'],['n','Keine Angabe']].map(([k,l]) => `<button class="${o.gender===k?'on':''}" data-action="onbGender" data-id="${k}" style="font-size:14px">${l}</button>`).join('')}</div>
+      <div class="hint">Freiwillig. Nur für Ansprache und Avatar – alle Missionen sind für alle da.</div>
+      <h2>Dein Avatar</h2>
+      <div class="choice c4">${(t==='teen' ? [o.name?.[0]?.toUpperCase()||'A','★','◆','●','▲','✦','♪','⚡'] : KID_AVATARS.slice(0,8)).map(a => `<button class="${o.avatar===a?'on':''}" data-action="onbAvatar" data-id="${esc(a)}">${esc(a)}</button>`).join('')}</div>`;
+  } else if (o.step === 3){
+    c = `<div class="step">Schritt 3 von ${kidSteps-1}</div><h1>Was hast du zuhause?</h1><p class="muted">Wie bei einem Trainingsplan: Wir schlagen nur Missionen vor, die du wirklich machen kannst.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">${Object.entries(EQUIP).map(([k,e]) => `<button class="chip ${o.equip.includes(k)?'on':''}" data-action="onbEquip" data-id="${k}">${e.e} ${e.n}</button>`).join('')}</div>`;
+  } else if (o.step === 4){
+    c = `<div class="step">Schritt 4 von ${kidSteps-1}</div><h1>Was interessiert dich?</h1><p class="muted">Wähle so viele du willst.</p>
+      <div class="catgrid">${Object.entries(CATS).map(([k,cc]) => `<button class="catbtn" style="--c:${cc.c};${o.interests.includes(k)?'outline:3px solid var(--accent)':''}" data-action="onbInterest" data-id="${k}"><span class="e">${onbTier(o)==='teen'?cc.t:cc.e}</span>${cc.n}</button>`).join('')}</div>`;
+  } else if (o.step === 5){
+    const tmp = {age:o.age, equip:o.equip, interests:o.interests};
+    const rec = MISSIONS.filter(x => o.age >= x.age[0] && o.age <= x.age[1] && x.needs.every(n => o.equip.includes(n))).sort((a,b) => (o.interests.includes(b.cat)?1:0)-(o.interests.includes(a.cat)?1:0));
+    const t = onbTier(o);
+    c = `<div class="step">Fertig!</div><h1>${t==='kid'?'Super, '+esc(o.name||'du')+'! 🎉':'Alles klar, '+esc(o.name||'du')+'.'}</h1>
+      <p class="muted">${rec.length} Missionen passen zu dir. Hier sind deine Top 3:</p>
+      ${rec.slice(0,3).map(x => `<div class="mcard" style="--c:${CATS[x.cat].c}"><div class="mi">${catIcon(x.cat,t)}</div><div class="grow"><div class="t">${esc(x.title)}</div><div class="d">${CATS[x.cat].n} · ${x.weeks} Wo.</div></div></div>`).join('')}
+      <div class="hint">Als Nächstes verbindet ein Elternteil dein Profil mit der Familie.</div>`;
+  }
+  const isLast = (o.role==='parent' && o.step===1) || o.step===5;
+  const canNext = o.step===0 ? !!o.role : true;
+  return `<div class="app onb">${c}<div class="onbfoot">${back}<button class="btn grow" ${canNext?'':'disabled'} data-action="${isLast?'onbFinish':'onbNext'}">${isLast?'Los geht’s':'Weiter'}</button></div></div>`;
+}
+function finishOnb(){
+  const o = UI.onb, id = 'u'+uid();
+  if (o.role === 'parent'){
+    S.members.push({id, role:'parent', name:o.name||'Elternteil', age:40, avatar:'🧑'});
+  } else {
+    const t = onbTier(o), all=[0,1,2,3,4,5,6];
+    const agenda = {
+      kid:[['Zähne putzen','habit','07:10'],['Schulranzen packen','habit','19:00'],['5 Minuten lesen','habit','19:15']],
+      tween:[['Wasser trinken 💧','habit','07:00'],['Zimmer 5 Min aufräumen','haushalt','18:00'],['Handy um 20 Uhr weglegen','habit','20:00']],
+      teen:[['10 Min Bewegung','habit','07:00'],['Wochenplan checken','habit','19:00'],['Handy ab 22 Uhr aus dem Zimmer','habit','22:00']],
+    }[t].map(([title,type,time]) => ({id:uid(), title, type, days:all, time, by:'kid'}));
+    S.members.push({id, role:'kid', name:o.name||'Neu', age:o.age, gender:o.gender, avatar:o.avatar||(t==='teen'?(o.name?.[0]||'A').toUpperCase():'🐸'),
+      equip:o.equip, interests:o.interests.length?o.interests:['sport'], xp:0, coins:10, streakWeeks:0, jokers:1, offline:{week:0}, activeDays:[],
+      catXP:{}, missions:[], badges:[t==='teen'?'Start':'🌟 Erster Schritt'], friends:[], coop:{mission:'Noch keine – lade Freund:innen ein',partner:'–',progress:0,total:1}, agenda, log:{}});
+  }
+  S.activeId = id; UI.onb = null; save(); render();
+  toast('Profil angelegt');
+}
+
+// ---------- Haupt-Render ----------
+function render(){
+  const scrollY = window.scrollY;
+  const m = me();
+  document.body.dataset.tier = UI.onb ? onbTier(UI.onb) : tierOf(m);
+  const main = UI.onb ? renderOnb() : (m.role === 'parent' ? renderParent(m) : renderKid(m));
+  $('#root').innerHTML = renderDemoBar() + main + renderModal();
+  if (UI.keepScroll) window.scrollTo(0, scrollY); else window.scrollTo(0, 0);
+  UI.keepScroll = true;
+}
+
+// ---------- Events ----------
+document.addEventListener('click', e => {
+  const sheet = e.target.closest('[data-stop]');
+  const a = e.target.closest('[data-action]');
+  if (!a) return;
+  if (a.dataset.action === 'scrim' && sheet) return;
+  const id = a.dataset.id, m = me();
+  const fresh = () => { UI.keepScroll = false; };
+  switch (a.dataset.action){
+    case 'persona': S.activeId = id; UI.onb = null; UI.modal = null; save(); fresh(); render(); break;
+    case 'tab': UI.tab[m.id] = +id; fresh(); render(); break;
+    case 'ptab': UI.tab[m.id] = +id; fresh(); render(); break;
+    case 'toggle': { const it = todayItems(m).find(i => i.id === id); if (it) toggleItem(m, it); break; }
+    case 'cat': UI.missionCat = id || null; render(); break;
+    case 'mission': openModal({type:'mission', id}); break;
+    case 'startMission': {
+      m.missions = m.missions || []; if (!m.missions.find(x => x.id===id)) m.missions.push({id, step:0});
+      const mi = missionById(id);
+      if (a.dataset.coop) m.coop = {mission:mi.title, partner:(m.friends[0]||{}).name||'Freund:in', progress:0, total:mi.steps.length};
+      save(); UI.modal = null; render(); celebrate(tierOf(m)); toast(a.dataset.coop ? 'Einladung gesendet – Mission gestartet' : 'Mission gestartet – Schritt 1 steht in „Heute“'); break; }
+    case 'stopMission': m.missions = m.missions.filter(x => x.id !== id); save(); closeModal(); break;
+    case 'equip': m.equip = m.equip.includes(id) ? m.equip.filter(x => x!==id) : [...m.equip, id]; save(); render(); break;
+    case 'interest': m.interests = m.interests.includes(id) ? m.interests.filter(x => x!==id) : [...m.interests, id]; save(); render(); break;
+    case 'redeem': {
+      const r = S.rewards.find(x => x.id===id); if (!r || m.coins < r.cost) break;
+      m.coins -= r.cost; S.redemptions.push({id:uid(), memberId:m.id, rewardId:id, status:'pending'}); save(); render();
+      toast(tierOf(m)==='kid' ? 'Wunsch geschickt! 💌' : 'Anfrage an Eltern gesendet'); break; }
+    case 'cheer': toast(`👏 an ${id} geschickt`); break;
+    case 'invite': openModal({type:'invite'}); break;
+    case 'addOwn': openModal({type:'addOwn'}); break;
+    case 'about': openModal({type:'about'}); break;
+    case 'close': closeModal(); break;
+    case 'scrim': closeModal(); break;
+    case 'reset': if (confirm('Demo auf Ausgangszustand zurücksetzen?')){ S = seed(); UI.onb = null; UI.modal = null; UI.tab = {}; save(); fresh(); render(); } break;
+    case 'startOnb': UI.onb = {step:0, role:null, name:'', age:10, gender:'n', avatar:null, equip:[], interests:[]}; UI.modal = null; fresh(); render(); break;
+    case 'onbRole': UI.onb.role = id; render(); break;
+    case 'onbNext': UI.onb.step++; fresh(); render(); break;
+    case 'onbBack': UI.onb.step--; fresh(); render(); break;
+    case 'onbGender': UI.onb.gender = id; render(); break;
+    case 'onbAvatar': UI.onb.avatar = id; render(); break;
+    case 'onbEquip': { const o = UI.onb; o.equip = o.equip.includes(id) ? o.equip.filter(x => x!==id) : [...o.equip, id]; render(); break; }
+    case 'onbInterest': { const o = UI.onb; o.interests = o.interests.includes(id) ? o.interests.filter(x => x!==id) : [...o.interests, id]; render(); break; }
+    case 'onbFinish': fresh(); finishOnb(); break;
+    // Eltern
+    case 'planKid': UI.planKid = id; render(); break;
+    case 'ptype': UI.planForm.type = id; render(); break;
+    case 'pday': { const d = +id, f = UI.planForm; f.days = f.days.includes(d) ? f.days.filter(x => x!==d) : [...f.days, d]; render(); break; }
+    case 'delAgenda': { const k = S.members.find(x => x.id===UI.planKid); k.agenda = k.agenda.filter(x => x.id!==id); save(); render(); toast('Entfernt'); break; }
+    case 'approveTask': { const [kid, itemId] = id.split('|'); const k = S.members.find(x => x.id===kid); const it = k.agenda.find(x => x.id===itemId);
+      k.log[TODAY_KEY][itemId] = 'done'; award(k, it.type, null, 1); save(); render(); toast(`Bestätigt – ${k.name} bekommt +${TYPES[it.type].xp} XP`); break; }
+    case 'approveRw': { const r = S.redemptions.find(x => x.id===id); r.status = 'approved'; save(); render(); toast('Freigegeben 🎉'); break; }
+    case 'declineRw': { const r = S.redemptions.find(x => x.id===id); const rw = S.rewards.find(x => x.id===r.rewardId); const k = S.members.find(x => x.id===r.memberId);
+      k.coins += rw ? rw.cost : 0; S.redemptions = S.redemptions.filter(x => x.id!==id); save(); render(); toast('Coins zurückgegeben – ein andermal'); break; }
+    case 'delReward': S.rewards = S.rewards.filter(x => x.id!==id); save(); render(); break;
+    case 'setting': {
+      const s = S.settings;
+      if (id==='streakMode') s.streakMode = s.streakMode==='week' ? 'day' : 'week';
+      else if (id==='compare') s.compare = s.compare==='age' ? 'friends' : 'age';
+      else s[id] = !s[id];
+      save(); render(); break; }
+  }
+});
+document.addEventListener('input', e => {
+  const k = e.target.dataset.input; if (!k) return;
+  if (k === 'search'){ UI.search = e.target.value; const pos = e.target.selectionStart; render(); const inp = document.querySelector('[data-input="search"]'); inp.focus(); inp.setSelectionRange(pos,pos); }
+  else if (k === 'onbName'){ UI.onb.name = e.target.value; }
+  else if (k === 'onbAge'){
+    UI.onb.age = +e.target.value; const t = onbTier(UI.onb);
+    document.body.dataset.tier = t;
+    $('#ageVal').textContent = UI.onb.age; $('#tierName').textContent = `Jahre · ${TIER_NAME[t]}`;
+    $('#onbPrev').innerHTML = onbPreview(UI.onb);
+  }
+});
+document.addEventListener('submit', e => {
+  const f = e.target.dataset.form; if (!f) return; e.preventDefault();
+  const fd = new FormData(e.target), m = me();
+  if (f === 'plan'){
+    const k = S.members.find(x => x.id===UI.planKid);
+    if (!UI.planForm.days.length){ toast('Bitte mindestens einen Tag wählen'); return; }
+    k.agenda.push({id:uid(), title:fd.get('title').trim(), type:UI.planForm.type, days:[...UI.planForm.days], time:fd.get('time')||'', by:'parent', confirm:fd.get('confirm')==='1'});
+    k.agenda.sort((a,b) => (a.time||'').localeCompare(b.time||''));
+    save(); render(); toast(`Für ${k.name} hinzugefügt`);
+  } else if (f === 'reward'){
+    S.rewards.push({id:uid(), title:fd.get('title').trim(), e:fd.get('e')||'🎁', cost:Math.max(10, +fd.get('cost')||100), kind:fd.get('kind')});
+    S.rewards.sort((a,b) => a.cost-b.cost); save(); render(); toast('Belohnung hinzugefügt');
+  } else if (f === 'own'){
+    const freq = fd.get('freq');
+    const days = freq==='all' ? [0,1,2,3,4,5,6] : freq==='wd' ? [1,2,3,4,5] : [WD];
+    m.agenda.push({id:uid(), title:fd.get('title').trim(), type:fd.get('type'), days, time:fd.get('time')||'', by:'kid'});
+    m.agenda.sort((a,b) => (a.time||'').localeCompare(b.time||''));
+    UI.modal = null; save(); render(); toast(tierOf(m)==='kid' ? 'Dein Ziel ist drin! ✨' : 'Ziel hinzugefügt');
+  }
+});
+
+render();
+</script>
+</body>
+</html>
