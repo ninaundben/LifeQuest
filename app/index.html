@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Chakra+Petch:wght@500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
-/* LifeQuest – Look angelehnt an „Mission Morgenstart“: dunkles Weltraum-Cockpit */
+/* LifeQuest – Stil angelehnt an „Mission Morgenstart“: dunkles Navy, Panels, klare Schriften */
 :root{
   --space:#0a0f24; --panel:#141b38; --panel2:#1c2550; --lineC:#2c3770;
   --cyan:#62e3ff; --orange:#ff8a3d; --gold:#ffd166; --good:#5ff2a0; --warn:#ffb347; --bad:#ff5d6c; --violet:#b388ff;
@@ -32,10 +32,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
 body{font-family:var(--font);font-size:var(--fs);line-height:1.45;color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;overscroll-behavior:none;
   background-color:var(--space);
-  background-image:radial-gradient(1px 1px at 12% 18%,#fff8 50%,transparent 51%),radial-gradient(1px 1px at 72% 9%,#fff6 50%,transparent 51%),
-  radial-gradient(1.5px 1.5px at 38% 62%,#fff5 50%,transparent 51%),radial-gradient(1px 1px at 88% 44%,#fff7 50%,transparent 51%),
-  radial-gradient(1px 1px at 22% 84%,#fff5 50%,transparent 51%),radial-gradient(1.5px 1.5px at 60% 30%,#fff4 50%,transparent 51%),
-  radial-gradient(1px 1px at 93% 78%,#fff6 50%,transparent 51%),var(--nebula);
+  background-image:var(--nebula);
   background-attachment:fixed}
 h1,h2,h3,.head{font-family:var(--font-head);letter-spacing:.01em}
 
@@ -81,7 +78,7 @@ body[data-tier="teen"] .btn{border-color:#a7f2ff}
 .chip.qr{color:var(--good);border-color:#2f7d58}
 .back{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--cyan);margin:18px 0 4px;font-family:var(--f-mono);font-size:.85rem;letter-spacing:.06em;text-transform:uppercase}
 
-/* Hero = Cockpit-Kopf */
+/* Kopfbereich */
 .hero{position:relative;margin:0 -16px;padding:14px 18px 20px;background:var(--hero);color:var(--hero-text);border-radius:0 0 22px 22px;overflow:hidden;border-bottom:1px solid var(--line)}
 .hero .deco{position:absolute;inset:0;pointer-events:none;width:100%;height:100%}
 .hero>*:not(.deco){position:relative}
@@ -152,7 +149,7 @@ body[data-tier="kid"] .qbtn{width:48px;height:48px;border-radius:14px;font-size:
 .rg svg{position:absolute;inset:0}
 .rg .av{position:absolute;inset:6px;border-radius:50%;display:grid;place-items:center;font-size:22px;background:var(--panel2);font-weight:700;color:var(--gold);font-family:var(--f-display)}
 .pact{border-radius:var(--r);padding:18px;background:linear-gradient(160deg,#ffd16614,var(--panel));border:1px solid #7d6a2f;position:relative}
-.pact::before{content:"MISSIONS-BRIEFING";display:block;font-family:var(--f-mono);font-size:.68rem;letter-spacing:.16em;color:var(--gold);margin-bottom:6px}
+.pact::before{content:"FAMILIEN-PAKT";display:block;font-family:var(--f-mono);font-size:.68rem;letter-spacing:.16em;color:var(--gold);margin-bottom:6px}
 .pact h3{margin:0 0 6px;font-size:1.35rem}
 .pact ul{margin:10px 0;padding-left:20px;line-height:1.6}
 .pact .sig{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
@@ -379,7 +376,7 @@ const TYPES = {
   termin:  {n:'Termin',      e:'📅', c1:'#3E7BFA', c2:'#7AA7FF', xp:10, coins:2},
   haushalt:{n:'Haushalt',    e:'🧹', c1:'#FF8A3D', c2:'#FFC15C', xp:15, coins:5},
   habit:   {n:'Mikro-Habit', e:'⚡', c1:'#10B981', c2:'#6EE7B7', xp:5,  coins:1},
-  mission: {n:'Mission',     e:'🚀', c1:'#7C5CFF', c2:'#B39CFF', xp:30, coins:10},
+  mission: {n:'Mission',     e:'🎯', c1:'#7C5CFF', c2:'#B39CFF', xp:30, coins:10},
   goal:    {n:'Familienziel',e:'👪', c1:'#F43F5E', c2:'#FB7185', xp:10, coins:3},
 };
 const CHECKS = {
@@ -455,7 +452,7 @@ const mById = id => MISSIONS.find(m => m.id === id) || S?.customMissions?.[id];
 const stepT = s => typeof s === 'string' ? s : s.t;
 const stepCheck = s => typeof s === 'string' ? 'self' : (s.check || 'self');
 const COPY = {
-  kid:{hello:n=>`Hallo ${n}!`, sub:'Was erleben wir heute? 🌞', done:['Super gemacht! 🎉','Wow, toll! ⭐','Du bist spitze! 🚀'], tabs:['Heute','Abenteuer','Scan','Familie','Schatz'], coin:'⭐', coins:'Sterne'},
+  kid:{hello:n=>`Hallo ${n}!`, sub:'Was erleben wir heute? 🌞', done:['Super gemacht! 🎉','Wow, toll! ⭐','Du bist spitze! 🎯'], tabs:['Heute','Abenteuer','Scan','Familie','Schatz'], coin:'⭐', coins:'Sterne'},
   tween:{hello:n=>`Hey ${n}!`, sub:'Bereit für deine Quests?', done:['Stark! 💪','Nice! +XP','Läuft bei dir! 🔥'], tabs:['Heute','Missionen','Scan','Familie','Shop'], coin:'🪙', coins:'Coins'},
   teen:{hello:n=>n, sub:null, done:['Erledigt.','Done ✓','Gespeichert'], tabs:['Heute','Missionen','Scan','Familie','Rewards'], coin:'◆', coins:'Credits'},
   parent:{hello:n=>`Hallo ${n}`, sub:null, done:['Erledigt ✓','Gut gemacht ✓','Vorbild ✓'], tabs:['Heute','Familie','Scan','Checks','Mehr'], coin:'🪙', coins:'Coins'},
@@ -685,7 +682,7 @@ function celebrate(big){
   for (let i=0;i<(tier==='kid'?40:22);i++){ const c = document.createElement('i'); c.className = 'confetti'; c.style.left = Math.random()*100+'vw'; c.style.background = cols[i%cols.length]; c.style.animationDelay = Math.random()*.3+'s'; c.style.animationDuration = (1+Math.random()*.9)+'s'; document.body.appendChild(c); setTimeout(() => c.remove(), 2600); }
 }
 function showWin(o={}){
-  o = {kicker:'Mission Control meldet', em:'🏆', title:'MISSION ERFÜLLT', chips:['+100 XP','+30 Coins'], ...o};
+  o = {kicker:'Geschafft', em:'🏆', title:'MISSION GESCHAFFT', chips:['+100 XP','+30 Coins'], ...o};
   document.getElementById('win')?.remove();
   const w = document.createElement('div'); w.id = 'win';
   w.innerHTML = `<div class="rays"></div><div class="kicker">${esc(o.kicker)}</div><div class="em">${o.em}</div><h1>${esc(o.title)}</h1>${o.chips.length?`<div class="xps">${o.chips.map(c => `<span>${esc(c)}</span>`).join(' ')}</div>`:''}<div class="tap">Tippen zum Weitermachen</div>`;
@@ -698,11 +695,8 @@ function resetForm(x={}){ UI.form = {title:'', time:'', type:'habit', freq:'all'
 
 // ---------- Bausteine ----------
 function heroDeco(tier){
-  const stars = `<g fill="#fff">${[[30,30,1],[120,18,.8],[200,50,1.2],[260,20,.7],[330,90,1],[90,120,.7],[170,150,1],[380,160,.8],[60,190,1],[300,200,.7]].map(([x,y,r]) => `<circle cx="${x}" cy="${y}" r="${r}" opacity=".6"/>`).join('')}</g>`;
-  if (tier === 'kid') return `<svg class="deco" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice">${stars}<circle cx="262" cy="34" r="20" fill="#ff8ac0"/><circle cx="256" cy="28" r="6" fill="#ffffff55"/><ellipse cx="262" cy="34" rx="36" ry="8" fill="none" stroke="#ffd166" stroke-width="2.5" transform="rotate(-18 262 34)"/><circle cx="40" cy="185" r="16" fill="#62e3ff" opacity=".8"/><text x="190" y="30" font-size="13">✨</text></svg>`;
-  if (tier === 'tween') return `<svg class="deco" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice">${stars}<circle cx="265" cy="32" r="17" fill="#ff8a3d" opacity=".9"/><ellipse cx="265" cy="32" rx="30" ry="6" fill="none" stroke="#62e3ff" stroke-width="2" opacity=".7" transform="rotate(-15 265 32)"/><path d="M0 210 Q200 150 400 205" stroke="#62e3ff" stroke-opacity=".25" fill="none" stroke-dasharray="3 6"/></svg>`;
-  if (tier === 'teen') return `<svg class="deco" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice">${stars}<g fill="none" stroke="#62e3ff" stroke-opacity=".18"><circle cx="360" cy="30" r="40"/><circle cx="360" cy="30" r="70"/><circle cx="360" cy="30" r="100"/></g><circle cx="300" cy="62" r="3" fill="#62e3ff"/></svg>`;
-  return `<svg class="deco" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice">${stars}<g fill="none" stroke="#ff8a3d" stroke-opacity=".22"><circle cx="370" cy="20" r="50"/><circle cx="370" cy="20" r="85"/></g><circle cx="327" cy="48" r="4" fill="#ffd166"/></svg>`;
+  const col = {kid:['#ff8ac0','#ffd166'], tween:['#ff8a3d','#62e3ff'], teen:['#62e3ff','#62e3ff'], parent:['#ff8a3d','#ffd166']}[tier] || ['#ff8a3d','#62e3ff'];
+  return `<svg class="deco" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice"><circle cx="390" cy="-10" r="${tier==='kid'?110:90}" fill="${col[0]}" opacity="${tier==='kid'?.16:.1}"/><circle cx="330" cy="190" r="46" fill="${col[1]}" opacity=".07"/><path d="M0 214 H400" stroke="${col[1]}" stroke-opacity=".25" stroke-dasharray="2 8"/></svg>`;
 }
 const avStyle = a => isEmoji(a) ? '' : 'font-size:16px';
 function avRing(p, size=66){ return `<button class="avring" style="width:${size}px;height:${size}px" data-a="profile">${ringSvg(size, 6, lvlPct(p.xp), 'var(--ring)', 'var(--ring-track)')}<span class="av" style="${isEmoji(p.avatar)?'':'font-size:22px'}">${esc(p.avatar)}</span><span class="lv">LV ${level(p.xp)}</span></button>`; }
@@ -728,7 +722,7 @@ function goalCard(p, g){
 }
 function questList(p){
   const items = todayItems(p);
-  const groups = [['🚀','Missionen',i => i.type==='mission'],['🌅','Morgens',i => i.type!=='mission' && i.time < '12:00'],['☀️','Nachmittags',i => i.type!=='mission' && i.time >= '12:00' && i.time < '17:30'],['🌙','Abends',i => i.type!=='mission' && i.time >= '17:30']];
+  const groups = [['🎯','Missionen',i => i.type==='mission'],['🌅','Morgens',i => i.type!=='mission' && i.time < '12:00'],['☀️','Nachmittags',i => i.type!=='mission' && i.time >= '12:00' && i.time < '17:30'],['🌙','Abends',i => i.type!=='mission' && i.time >= '17:30']];
   return groups.map(([e,n,f]) => { const g = items.filter(f); return g.length ? `<div class="tod">${e} ${n}</div>${g.map(i => questCard(p,i)).join('')}` : ''; }).join('') || `<div class="card muted small" style="text-align:center">Keine persönlichen Quests für heute.</div>`;
 }
 function streakCard(p){
@@ -754,7 +748,7 @@ function reqCard(r, v){
 // ---------- Screens: Start / Onboarding ----------
 function renderWelcome(){
   document.body.dataset.tier = 'tween';
-  return `<div class="app onb"><div class="hero" style="margin:-20px -16px 0;padding:40px 22px 30px;text-align:center">${heroDeco('parent')}<div class="eyebrow" style="color:var(--cyan)">Mission Control · Familie</div><div style="font-size:64px;margin:6px 0">🚀</div><div class="brand" style="font-size:2rem">Life<b>Quest</b></div><div class="hsub">Alltags-Abenteuer für die ganze Familie</div></div>
+  return `<div class="app onb"><div class="hero" style="margin:-20px -16px 0;padding:40px 22px 30px;text-align:center">${heroDeco('parent')}<div class="eyebrow" style="color:var(--cyan)">Familien-App</div><div style="font-size:60px;margin:6px 0">🧭</div><div class="brand" style="font-size:2rem">Life<b>Quest</b></div><div class="hsub">Alltags-Abenteuer für die ganze Familie</div></div>
     ${!UI.ready ? '<div class="hint">Verbinde mit dem Server …</div>' : ''}
     <div class="sec"><h2>Neue Familie gründen</h2></div>
     <div class="card"><p class="small muted" style="margin:0 0 12px">Nur einmal – auf dem Gerät eines Elternteils. Setzt euch dafür am besten zusammen: Ihr legt gemeinsam eure Familienziele fest.</p>
@@ -806,7 +800,7 @@ function finishOnb(){
   o.members.forEach(m => { const id = 'P'+uid6(); st.profiles[id] = {id, name:m.name.trim(), role:m.role, age:+m.age||9, avatar:m.avatar||(m.role==='parent'?'🧑':'🐸'), xp:0, coins:0, equip:[], interests:[], missions:[], badges:[], pact:null}; });
   o.goals.filter(g => g.on).forEach(g => { const id = uid6(); st.goals[id] = {id, title:g.title, e:g.e, days:g.days, time:g.time, mode:g.mode, check:g.check, status:'active', by:pid, since:today()}; });
   o.rewards.filter(r => r.on).forEach(r => { const id = uid6(); st.rewards[id] = {id, title:r.title, e:r.e, cost:r.cost, kind:r.kind}; });
-  DB.createFamily(st, pid).then(() => { UI.onb = null; UI.tab = 1; UI.page = 'devices'; render(); showWin({kicker:'Familie gegründet', em:'🚀', title:'START FREI', chips:[]}); }).catch(e => { syncErr(e); toast('Gründen fehlgeschlagen: '+(e.code||e.message)); });
+  DB.createFamily(st, pid).then(() => { UI.onb = null; UI.tab = 1; UI.page = 'devices'; render(); showWin({kicker:'Familie gegründet', em:'🧭', title:'LOS GEHT’S', chips:[]}); }).catch(e => { syncErr(e); toast('Gründen fehlgeschlagen: '+(e.code||e.message)); });
 }
 
 // ---------- Screens: Heute ----------
@@ -970,13 +964,13 @@ function renderModal(){
     const mi = mById(md.id); if (!mi) { UI.modal = null; return ''; }
     const ms = (p.missions||[]).find(a => a.id === mi.id), eq = equipAll();
     const missing = (mi.needs||[]).filter(n => !(p.equip||[]).includes(n));
-    h = `<div class="mhead" style="--c:${CATS[mi.cat].c}"><div class="small" style="opacity:.85;font-weight:700">${CATS[mi.cat].e} ${CATS[mi.cat].n} · ${mi.age[0]}–${mi.age[1]} Jahre${mi.custom?' · 🏠 eigene':''}</div><h1>${esc(mi.title)}</h1><div class="meta"><span>⏱ ${mi.weeks} Wo.</span><span>🚀 ${mi.steps.length} Schritte</span><span>+${mi.steps.length*30+100} XP</span></div><span class="me">${esc(mi.e||CATS[mi.cat].e)}</span></div>
+    h = `<div class="mhead" style="--c:${CATS[mi.cat].c}"><div class="small" style="opacity:.85;font-weight:700">${CATS[mi.cat].e} ${CATS[mi.cat].n} · ${mi.age[0]}–${mi.age[1]} Jahre${mi.custom?' · 🏠 eigene':''}</div><h1>${esc(mi.title)}</h1><div class="meta"><span>⏱ ${mi.weeks} Wo.</span><span>🎯 ${mi.steps.length} Schritte</span><span>+${mi.steps.length*30+100} XP</span></div><span class="me">${esc(mi.e||CATS[mi.cat].e)}</span></div>
       ${mi.desc?`<p style="margin:0 2px 12px;line-height:1.5">${esc(mi.desc)}</p>`:''}
       ${(mi.needs||[]).length ? `<div class="qs" style="margin:0 2px 8px">${mi.needs.map(n => `<span class="chip">${(p.equip||[]).includes(n)?'✅':'❌'} ${esc(eq[n]?.e||'')} ${esc(eq[n]?.n||n)}</span>`).join('')}</div>` : ''}
       <div class="sec" style="margin-top:14px"><h2>Pfad</h2></div>
       <div class="path">${mi.steps.map((s,i) => { const cls = ms ? (i < ms.step ? 'done' : i === ms.step ? 'cur' : '') : ''; const c = stepCheck(s); return `<div class="node ${cls}"><div class="nd">${cls==='done'?'✓':i+1}</div><div class="nt">${esc(stepT(s))} ${c!=='self'?checkChip(c):''}</div></div>`; }).join('')}</div>
       <div style="margin-top:18px">${ms ? `<div class="hint">Läuft – der nächste Schritt steht in deiner Tagesliste.</div><button class="btn soft block" style="margin-top:10px" data-a="stopMission" data-id="${mi.id}">Mission pausieren</button>`
-        : missing.length && p.role === 'kid' ? `<button class="btn block" disabled>Ausstattung fehlt</button>` : `<button class="btn block" data-a="startMission" data-id="${mi.id}">${tier==='kid'?'Los geht’s! 🚀':'Mission starten'}</button>`}
+        : missing.length && p.role === 'kid' ? `<button class="btn block" disabled>Ausstattung fehlt</button>` : `<button class="btn block" data-a="startMission" data-id="${mi.id}">${tier==='kid'?'Los geht’s! 🎯':'Mission starten'}</button>`}
       ${isParent() ? `<div class="row" style="margin-top:10px;gap:8px">${mi.custom ? `<button class="btn soft sm grow" data-a="editMission" data-id="${mi.id}">✏️ Bearbeiten</button><button class="btn danger sm" data-a="delMission" data-id="${mi.id}">Löschen</button>` : `<button class="btn soft sm grow" data-a="copyMission" data-id="${mi.id}">✏️ Kopie anpassen</button><button class="btn soft sm grow" data-a="hideMission" data-id="${mi.id}">Ausblenden</button>`}</div>` : ''}
       ${isParent() && p.role === 'parent' ? `<div class="note" style="margin-top:10px">Eltern starten Missionen für sich selbst. Für Kinder: auf deren Gerät starten – oder gemeinsam.</div>` : ''}</div>`;
   } else if (md.type === 'missionEdit'){
@@ -1197,7 +1191,7 @@ document.addEventListener('click', async e => {
     case 'editGoal': resetForm({...S.goals[id]}); openModal({type:'goal', id}); break;
     case 'delGoal': if (confirm('Familienziel entfernen?')){ DB.mutate(st => { delete st.goals[id]; }); closeModal(); } break;
     case 'pact': openModal({type:'pact'}); break;
-    case 'signPact': DB.mutate(st => { st.profiles[p.id].pact = Date.now(); }); UI.modal = null; render(); showWin({kicker:'Familien-Pakt', em:'📜', title:'UNTERSCHRIEBEN', chips:['Willkommen an Bord']}); break;
+    case 'signPact': DB.mutate(st => { st.profiles[p.id].pact = Date.now(); }); UI.modal = null; render(); showWin({kicker:'Familien-Pakt', em:'📜', title:'UNTERSCHRIEBEN', chips:['Willkommen im Team']}); break;
     // Missionen
     case 'cat': UI.cat = id || null; render(); break;
     case 'mission': openModal({type:'mission', id}); break;
@@ -1285,7 +1279,7 @@ document.addEventListener('submit', e => {
     let a0 = +F.ageMin, a1 = +F.ageMax; if (a0 > a1) [a0, a1] = [a1, a0];
     const id = UI.modal.id || 'c'+uid6().toLowerCase(), par = isParent();
     DB.mutate(st => { const old = st.customMissions[id] || {}; st.customMissions[id] = {id, custom:true, title, e:F.e||CATS[F.cat].e, desc:(F.desc||'').trim(), cat:F.cat, age:[a0, a1], weeks:+F.weeks, needs:[...F.needs], steps, status:old.status === 'active' || par ? 'active' : 'proposed', by:old.by||p.id}; });
-    UI.modal = null; render(); toast(par ? 'Mission gespeichert 🚀' : 'Vorschlag an die Eltern geschickt'); }
+    UI.modal = null; render(); toast(par ? 'Mission gespeichert 🎯' : 'Vorschlag an die Eltern geschickt'); }
 });
 
 DB.init();
